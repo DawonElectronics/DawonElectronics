@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>CancelMoveLineReceive</messagename>
+		<transactionid>20211224083613496274</transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<FACTORYNAME>1150</FACTORYNAME>
+		<SITEID>1150</SITEID>
+		<CANCELMOVELINERECEIVELIST>
+			<CANCELMOVELINERECEIVE>
+				<SITEID>1150</SITEID>
+				<USERID>103518</USERID>
+				<LOTID>12844290001F</LOTID>
+				<FROMLOCATION>103518</FROMLOCATION>
+				<TOLOCATION />
+				<COMMENTS />
+			</CANCELMOVELINERECEIVE>
+		</CANCELMOVELINERECEIVELIST>
+	</body>
+	<return>
+		<returncode>0</returncode>
+		<returnmessage />
+	</return>
+</message>

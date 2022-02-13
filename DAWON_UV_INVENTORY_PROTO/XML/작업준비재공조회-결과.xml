@@ -1,0 +1,978 @@
+<message>
+	<header>
+		<messagename>GetStoredProcedureResult</messagename>
+		<sourcesubject></sourcesubject>
+		<targetsubject></targetsubject>
+		<transactionid>20210607182754022678</transactionid>
+	</header>
+	<body>
+		<QUERYID>GetLotList</QUERYID>
+		<VERSION>35</VERSION>
+		<DATASET>
+			<DATALIST>
+				<DATA>
+					<CHK>
+						<![CDATA[0]]>
+					</CHK>
+					<LOTNAME>
+						<![CDATA[1270432-0A02F]]>
+					</LOTNAME>
+					<COMMENT_COUNT>
+						<![CDATA[0]]>
+					</COMMENT_COUNT>
+					<ISSUE_LOT_ID>
+						<![CDATA[N]]>
+					</ISSUE_LOT_ID>
+					<MAX_CREATETIME>
+						<![CDATA[]]>
+					</MAX_CREATETIME>
+					<MIN_CREATETIME>
+						<![CDATA[]]>
+					</MIN_CREATETIME>
+					<LOTTYPE>
+						<![CDATA[MAIN]]>
+					</LOTTYPE>
+					<PLANEQUIPMENTID>
+						<![CDATA[]]>
+					</PLANEQUIPMENTID>
+					<PLANEQUIPMENT>
+						<![CDATA[]]>
+					</PLANEQUIPMENT>
+					<PRODUCTIONREMAININGTIME>
+						<![CDATA[]]>
+					</PRODUCTIONREMAININGTIME>
+					<MESPROCESSSTATENAME>
+						<![CDATA[Lot 보류]]>
+					</MESPROCESSSTATENAME>
+					<LOTNO>
+						<![CDATA[]]>
+					</LOTNO>
+					<ORDERTYPE>
+						<![CDATA[양산]]>
+					</ORDERTYPE>
+					<PROCCD>
+						<![CDATA[RB402]]>
+					</PROCCD>
+					<PROCESSSEGMENTNAME>
+						<![CDATA[LD_DIRECT]]>
+					</PROCESSSEGMENTNAME>
+					<HOTTYPE>
+						<![CDATA[정책]]>
+					</HOTTYPE>
+					<WINDOWTIME>
+						<![CDATA[]]>
+					</WINDOWTIME>
+					<WO_CHG>
+						<![CDATA[]]>
+					</WO_CHG>
+					<RELIABILITY_INSP>
+						<![CDATA[]]>
+					</RELIABILITY_INSP>
+					<DESTROY_INSP>
+						<![CDATA[]]>
+					</DESTROY_INSP>
+					<PRIORITY>
+						<![CDATA[]]>
+					</PRIORITY>
+					<KUNNR>
+						<![CDATA[10019]]>
+					</KUNNR>
+					<KNAME>
+						<![CDATA[(주)파트론]]>
+					</KNAME>
+					<PRODUCTDEFINITIONID>
+						<![CDATA[FC04-04682-18]]>
+					</PRODUCTDEFINITIONID>
+					<MODEL>
+						<![CDATA[R8_12M]]>
+					</MODEL>
+					<REV>
+						<![CDATA[MP00(R02);]]>
+					</REV>
+					<SPECNR>
+						<![CDATA[FSA03365-17]]>
+					</SPECNR>
+					<COMMONTOOL>
+						<![CDATA[]]>
+					</COMMONTOOL>
+					<PIECEQTY>
+						<![CDATA[420]]>
+					</PIECEQTY>
+					<STRIPQTY>
+						<![CDATA[4]]>
+					</STRIPQTY>
+					<PANNELQTY>
+						<![CDATA[1]]>
+					</PANNELQTY>
+					<SQAREMETER>
+						<![CDATA[0.208]]>
+					</SQAREMETER>
+					<LAYERNR>
+						<![CDATA[4]]>
+					</LAYERNR>
+					<PRSEQNR>
+						<![CDATA[1]]>
+					</PRSEQNR>
+					<LAYERSTR>
+						<![CDATA[4-2-4]]>
+					</LAYERSTR>
+					<ISINOUT>
+						<![CDATA[외층]]>
+					</ISINOUT>
+					<USR02>
+						<![CDATA[1]]>
+					</USR02>
+					<USR03>
+						<![CDATA[4]]>
+					</USR03>
+					<SPECTYPE2>
+						<![CDATA[RF]]>
+					</SPECTYPE2>
+					<SPECTYPE>
+						<![CDATA[ANY LVH]]>
+					</SPECTYPE>
+					<VTEXT>
+						<![CDATA[FPC-Mobile ; Camera Module (M)]]>
+					</VTEXT>
+					<WORK_FTRMI>
+						<![CDATA[2021-04-27]]>
+					</WORK_FTRMI>
+					<SUPDA>
+						<![CDATA[2021-05-14]]>
+					</SUPDA>
+					<TRIMSIZE>
+						<![CDATA[495 / 410]]>
+					</TRIMSIZE>
+					<KITSIZE>
+						<![CDATA[194.000 × 237.000]]>
+					</KITSIZE>
+					<WORKSIZE>
+						<![CDATA[500 × 415]]>
+					</WORKSIZE>
+					<NEXTPROCCD>
+						<![CDATA[RE112]]>
+					</NEXTPROCCD>
+					<NEXTPROCESSSEGMENTNAME>
+						<![CDATA[S_ETCH]]>
+					</NEXTPROCESSSEGMENTNAME>
+					<RUNNINGTIME>
+						<![CDATA[41/16:1]]>
+					</RUNNINGTIME>
+					<WAITINGTIME>
+						<![CDATA[22/1:44]]>
+					</WAITINGTIME>
+					<LOCATION>
+						<![CDATA[103518]]>
+					</LOCATION>
+					<EQUIPMENTNAME>
+						<![CDATA[]]>
+					</EQUIPMENTNAME>
+					<PROCESSINGSTATENAME>
+						<![CDATA[공정룰 대기]]>
+					</PROCESSINGSTATENAME>
+					<LOTID>
+						<![CDATA[12704320A02F]]>
+					</LOTID>
+					<MESPROCESSSTATE>
+						<![CDATA[Wait]]>
+					</MESPROCESSSTATE>
+					<PROCESSSEGMENTRULEID>
+						<![CDATA[TrackInLot]]>
+					</PROCESSSEGMENTRULEID>
+					<HOLD>
+						<![CDATA[Y]]>
+					</HOLD>
+					<AUFNR>
+						<![CDATA[12704320A02F]]>
+					</AUFNR>
+					<PARENTBUMLOTID>
+						<![CDATA[12704320002F]]>
+					</PARENTBUMLOTID>
+					<EQUIPMENTID>
+						<![CDATA[]]>
+					</EQUIPMENTID>
+					<PROCESSINGSPEED>
+						<![CDATA[4]]>
+					</PROCESSINGSPEED>
+					<PROCESSINGSTATE>
+						<![CDATA[WaitForRule]]>
+					</PROCESSINGSTATE>
+					<PROCESSSEGMENTSEQ>
+						<![CDATA[2]]>
+					</PROCESSSEGMENTSEQ>
+					<WORKCENTERID>
+						<![CDATA[FPCBB4]]>
+					</WORKCENTERID>
+					<STATE>
+						<![CDATA[Active]]>
+					</STATE>
+					<PROCESSSEGMENTID>
+						<![CDATA[RB402]]>
+					</PROCESSSEGMENTID>
+					<VORNR>
+						<![CDATA[1900]]>
+					</VORNR>
+					<ISREPAIR>
+						<![CDATA[]]>
+					</ISREPAIR>
+					<COMMENTS>
+						<![CDATA[제조 불량처리]]>
+					</COMMENTS>
+					<PLATTIKNR>
+						<![CDATA[ViaFill도금 : 16]]>
+					</PLATTIKNR>
+					<PRDHA>
+						<![CDATA[F0000C000011000000]]>
+					</PRDHA>
+					<PRODUCTFAMILYNAME>
+						<![CDATA[FPC-Camera Module]]>
+					</PRODUCTFAMILYNAME>
+					<WIPLOCATION>
+						<![CDATA[]]>
+					</WIPLOCATION>
+					<LOTSTAMPID>
+						<![CDATA[]]>
+					</LOTSTAMPID>
+					<LDIBARCD>
+						<![CDATA[]]>
+					</LDIBARCD>
+					<LDIBARCD1>
+						<![CDATA[]]>
+					</LDIBARCD1>
+					<LDIBARCD2>
+						<![CDATA[]]>
+					</LDIBARCD2>
+					<LDIBARCD3>
+						<![CDATA[]]>
+					</LDIBARCD3>
+					<LDIBARCD4>
+						<![CDATA[]]>
+					</LDIBARCD4>
+					<LDIBARCD5>
+						<![CDATA[]]>
+					</LDIBARCD5>
+					<PREVPROCESSSEGMENTID>
+						<![CDATA[RH102]]>
+					</PREVPROCESSSEGMENTID>
+					<SVH>
+						<![CDATA[]]>
+					</SVH>
+					<ZSUM>
+						<![CDATA[]]>
+					</ZSUM>
+					<PLATINGSAMPLE>
+						<![CDATA[]]>
+					</PLATINGSAMPLE>
+					<MAKTX>
+						<![CDATA[]]>
+					</MAKTX>
+					<MAIN_LOT_SPEC1>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC1>
+					<MAIN_LOT_SPEC2>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC2>
+					<MAIN_LOT_SPEC3>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC3>
+					<MAIN_LOT_SPEC4>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC4>
+					<MAIN_LOT_SPEC5>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC5>
+					<MAIN_LOT_SPEC6>
+						<![CDATA[]]>
+					</MAIN_LOT_SPEC6>
+					<LOTID1>
+						<![CDATA[]]>
+					</LOTID1>
+					<REPROCESSYN>
+						<![CDATA[]]>
+					</REPROCESSYN>
+					<PALTARTOP>
+						<![CDATA[]]>
+					</PALTARTOP>
+					<PALTARBOT>
+						<![CDATA[]]>
+					</PALTARBOT><도금면적TOP비율>
+					<![CDATA[]]>
+				</도금면적TOP비율><도금면적BOT비율>
+				<![CDATA[]]>
+			</도금면적BOT비율>
+		</DATA>
+		<DATA>
+			<CHK>
+				<![CDATA[0]]>
+			</CHK>
+			<LOTNAME>
+				<![CDATA[1271406-0002F]]>
+			</LOTNAME>
+			<COMMENT_COUNT>
+				<![CDATA[0]]>
+			</COMMENT_COUNT>
+			<ISSUE_LOT_ID>
+				<![CDATA[N]]>
+			</ISSUE_LOT_ID>
+			<MAX_CREATETIME>
+				<![CDATA[]]>
+			</MAX_CREATETIME>
+			<MIN_CREATETIME>
+				<![CDATA[]]>
+			</MIN_CREATETIME>
+			<LOTTYPE>
+				<![CDATA[MAIN]]>
+			</LOTTYPE>
+			<PLANEQUIPMENTID>
+				<![CDATA[]]>
+			</PLANEQUIPMENTID>
+			<PLANEQUIPMENT>
+				<![CDATA[]]>
+			</PLANEQUIPMENT>
+			<PRODUCTIONREMAININGTIME>
+				<![CDATA[-10]]>
+			</PRODUCTIONREMAININGTIME>
+			<MESPROCESSSTATENAME>
+				<![CDATA[공정진행]]>
+			</MESPROCESSSTATENAME>
+			<LOTNO>
+				<![CDATA[]]>
+			</LOTNO>
+			<ORDERTYPE>
+				<![CDATA[양산]]>
+			</ORDERTYPE>
+			<PROCCD>
+				<![CDATA[RB402]]>
+			</PROCCD>
+			<PROCESSSEGMENTNAME>
+				<![CDATA[LD_DIRECT]]>
+			</PROCESSSEGMENTNAME>
+			<HOTTYPE>
+				<![CDATA[]]>
+			</HOTTYPE>
+			<WINDOWTIME>
+				<![CDATA[]]>
+			</WINDOWTIME>
+			<WO_CHG>
+				<![CDATA[리비전]]>
+			</WO_CHG>
+			<RELIABILITY_INSP>
+				<![CDATA[Y]]>
+			</RELIABILITY_INSP>
+			<DESTROY_INSP>
+				<![CDATA[]]>
+			</DESTROY_INSP>
+			<PRIORITY>
+				<![CDATA[]]>
+			</PRIORITY>
+			<KUNNR>
+				<![CDATA[20003]]>
+			</KUNNR>
+			<KNAME>
+				<![CDATA[TNHH Samsung Electronics Vi?t Nam]]>
+			</KNAME>
+			<PRODUCTDEFINITIONID>
+				<![CDATA[FW06-00045-02]]>
+			</PRODUCTDEFINITIONID>
+			<MODEL>
+				<![CDATA[GH41-05725A]]>
+			</MODEL>
+			<REV>
+				<![CDATA[0.5B]]>
+			</REV>
+			<SPECNR>
+				<![CDATA[FSE00554-04]]>
+			</SPECNR>
+			<COMMONTOOL>
+				<![CDATA[]]>
+			</COMMONTOOL>
+			<PIECEQTY>
+				<![CDATA[12000]]>
+			</PIECEQTY>
+			<STRIPQTY>
+				<![CDATA[1500]]>
+			</STRIPQTY>
+			<PANNELQTY>
+				<![CDATA[50]]>
+			</PANNELQTY>
+			<SQAREMETER>
+				<![CDATA[9.501]]>
+			</SQAREMETER>
+			<LAYERNR>
+				<![CDATA[6]]>
+			</LAYERNR>
+			<PRSEQNR>
+				<![CDATA[2]]>
+			</PRSEQNR>
+			<LAYERSTR>
+				<![CDATA[6-2-6]]>
+			</LAYERSTR>
+			<ISINOUT>
+				<![CDATA[외층]]>
+			</ISINOUT>
+			<USR02>
+				<![CDATA[1]]>
+			</USR02>
+			<USR03>
+				<![CDATA[6]]>
+			</USR03>
+			<SPECTYPE2>
+				<![CDATA[RF]]>
+			</SPECTYPE2>
+			<SPECTYPE>
+				<![CDATA[ANY LVH]]>
+			</SPECTYPE>
+			<VTEXT>
+				<![CDATA[FPC-Wearable ; Watch]]>
+			</VTEXT>
+			<WORK_FTRMI>
+				<![CDATA[2021-05-11]]>
+			</WORK_FTRMI>
+			<SUPDA>
+				<![CDATA[2021-06-01]]>
+			</SUPDA>
+			<TRIMSIZE>
+				<![CDATA[495 / 375]]>
+			</TRIMSIZE>
+			<KITSIZE>
+				<![CDATA[91.000 × 57.000]]>
+			</KITSIZE>
+			<WORKSIZE>
+				<![CDATA[500 × 380]]>
+			</WORKSIZE>
+			<NEXTPROCCD>
+				<![CDATA[RE112]]>
+			</NEXTPROCCD>
+			<NEXTPROCESSSEGMENTNAME>
+				<![CDATA[S_ETCH]]>
+			</NEXTPROCESSSEGMENTNAME>
+			<RUNNINGTIME>
+				<![CDATA[27/3:58]]>
+			</RUNNINGTIME>
+			<WAITINGTIME>
+				<![CDATA[]]>
+			</WAITINGTIME>
+			<LOCATION>
+				<![CDATA[103518]]>
+			</LOCATION>
+			<EQUIPMENTNAME>
+				<![CDATA[가상설비]]>
+			</EQUIPMENTNAME>
+			<PROCESSINGSTATENAME>
+				<![CDATA[공정룰 진행]]>
+			</PROCESSINGSTATENAME>
+			<LOTID>
+				<![CDATA[12714060002F]]>
+			</LOTID>
+			<MESPROCESSSTATE>
+				<![CDATA[Processing]]>
+			</MESPROCESSSTATE>
+			<PROCESSSEGMENTRULEID>
+				<![CDATA[TrackOutLot]]>
+			</PROCESSSEGMENTRULEID>
+			<HOLD>
+				<![CDATA[N]]>
+			</HOLD>
+			<AUFNR>
+				<![CDATA[12714060002F]]>
+			</AUFNR>
+			<PARENTBUMLOTID>
+				<![CDATA[12714060002F]]>
+			</PARENTBUMLOTID>
+			<EQUIPMENTID>
+				<![CDATA[103518]]>
+			</EQUIPMENTID>
+			<PROCESSINGSPEED>
+				<![CDATA[4]]>
+			</PROCESSINGSPEED>
+			<PROCESSINGSTATE>
+				<![CDATA[ProcessingRule]]>
+			</PROCESSINGSTATE>
+			<PROCESSSEGMENTSEQ>
+				<![CDATA[2]]>
+			</PROCESSSEGMENTSEQ>
+			<WORKCENTERID>
+				<![CDATA[FPCBB4]]>
+			</WORKCENTERID>
+			<STATE>
+				<![CDATA[Active]]>
+			</STATE>
+			<PROCESSSEGMENTID>
+				<![CDATA[RB402]]>
+			</PROCESSSEGMENTID>
+			<VORNR>
+				<![CDATA[3300]]>
+			</VORNR>
+			<ISREPAIR>
+				<![CDATA[]]>
+			</ISREPAIR>
+			<COMMENTS>
+				<![CDATA[]]>
+			</COMMENTS>
+			<PLATTIKNR>
+				<![CDATA[ViaFill도금 : 18]]>
+			</PLATTIKNR>
+			<PRDHA>
+				<![CDATA[F0000W000011000000]]>
+			</PRDHA>
+			<PRODUCTFAMILYNAME>
+				<![CDATA[FPC-Wearable : Watch]]>
+			</PRODUCTFAMILYNAME>
+			<WIPLOCATION>
+				<![CDATA[]]>
+			</WIPLOCATION>
+			<LOTSTAMPID>
+				<![CDATA[]]>
+			</LOTSTAMPID>
+			<LDIBARCD>
+				<![CDATA[]]>
+			</LDIBARCD>
+			<LDIBARCD1>
+				<![CDATA[]]>
+			</LDIBARCD1>
+			<LDIBARCD2>
+				<![CDATA[]]>
+			</LDIBARCD2>
+			<LDIBARCD3>
+				<![CDATA[]]>
+			</LDIBARCD3>
+			<LDIBARCD4>
+				<![CDATA[]]>
+			</LDIBARCD4>
+			<LDIBARCD5>
+				<![CDATA[]]>
+			</LDIBARCD5>
+			<PREVPROCESSSEGMENTID>
+				<![CDATA[RH102]]>
+			</PREVPROCESSSEGMENTID>
+			<SVH>
+				<![CDATA[]]>
+			</SVH>
+			<ZSUM>
+				<![CDATA[]]>
+			</ZSUM>
+			<PLATINGSAMPLE>
+				<![CDATA[]]>
+			</PLATINGSAMPLE>
+			<MAKTX>
+				<![CDATA[]]>
+			</MAKTX>
+			<MAIN_LOT_SPEC1>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC1>
+			<MAIN_LOT_SPEC2>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC2>
+			<MAIN_LOT_SPEC3>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC3>
+			<MAIN_LOT_SPEC4>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC4>
+			<MAIN_LOT_SPEC5>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC5>
+			<MAIN_LOT_SPEC6>
+				<![CDATA[]]>
+			</MAIN_LOT_SPEC6>
+			<LOTID1>
+				<![CDATA[]]>
+			</LOTID1>
+			<REPROCESSYN>
+				<![CDATA[]]>
+			</REPROCESSYN>
+			<PALTARTOP>
+				<![CDATA[]]>
+			</PALTARTOP>
+			<PALTARBOT>
+				<![CDATA[]]>
+			</PALTARBOT><도금면적TOP비율>
+			<![CDATA[]]>
+		</도금면적TOP비율><도금면적BOT비율>
+		<![CDATA[]]>
+	</도금면적BOT비율>
+</DATA>
+<DATA>
+	<CHK>
+		<![CDATA[0]]>
+	</CHK>
+	<LOTNAME>
+		<![CDATA[1271955-0A05F]]>
+	</LOTNAME>
+	<COMMENT_COUNT>
+		<![CDATA[0]]>
+	</COMMENT_COUNT>
+	<ISSUE_LOT_ID>
+		<![CDATA[N]]>
+	</ISSUE_LOT_ID>
+	<MAX_CREATETIME>
+		<![CDATA[]]>
+	</MAX_CREATETIME>
+	<MIN_CREATETIME>
+		<![CDATA[]]>
+	</MIN_CREATETIME>
+	<LOTTYPE>
+		<![CDATA[MAIN]]>
+	</LOTTYPE>
+	<PLANEQUIPMENTID>
+		<![CDATA[]]>
+	</PLANEQUIPMENTID>
+	<PLANEQUIPMENT>
+		<![CDATA[]]>
+	</PLANEQUIPMENT>
+	<PRODUCTIONREMAININGTIME>
+		<![CDATA[]]>
+	</PRODUCTIONREMAININGTIME>
+	<MESPROCESSSTATENAME>
+		<![CDATA[Lot 보류]]>
+	</MESPROCESSSTATENAME>
+	<LOTNO>
+		<![CDATA[]]>
+	</LOTNO>
+	<ORDERTYPE>
+		<![CDATA[양산]]>
+	</ORDERTYPE>
+	<PROCCD>
+		<![CDATA[RB402]]>
+	</PROCCD>
+	<PROCESSSEGMENTNAME>
+		<![CDATA[LD_DIRECT]]>
+	</PROCESSSEGMENTNAME>
+	<HOTTYPE>
+		<![CDATA[정책]]>
+	</HOTTYPE>
+	<WINDOWTIME>
+		<![CDATA[]]>
+	</WINDOWTIME>
+	<WO_CHG>
+		<![CDATA[]]>
+	</WO_CHG>
+	<RELIABILITY_INSP>
+		<![CDATA[]]>
+	</RELIABILITY_INSP>
+	<DESTROY_INSP>
+		<![CDATA[]]>
+	</DESTROY_INSP>
+	<PRIORITY>
+		<![CDATA[]]>
+	</PRIORITY>
+	<KUNNR>
+		<![CDATA[11121]]>
+	</KUNNR>
+	<KNAME>
+		<![CDATA[주식회사 대양코리아]]>
+	</KNAME>
+	<PRODUCTDEFINITIONID>
+		<![CDATA[FU04-00003-00]]>
+	</PRODUCTDEFINITIONID>
+	<MODEL>
+		<![CDATA[SZ4460H]]>
+	</MODEL>
+	<REV>
+		<![CDATA[MP03]]>
+	</REV>
+	<SPECNR>
+		<![CDATA[FET01393-02]]>
+	</SPECNR>
+	<COMMONTOOL>
+		<![CDATA[]]>
+	</COMMONTOOL>
+	<PIECEQTY>
+		<![CDATA[320]]>
+	</PIECEQTY>
+	<STRIPQTY>
+		<![CDATA[8]]>
+	</STRIPQTY>
+	<PANNELQTY>
+		<![CDATA[1]]>
+	</PANNELQTY>
+	<SQAREMETER>
+		<![CDATA[0.204]]>
+	</SQAREMETER>
+	<LAYERNR>
+		<![CDATA[4]]>
+	</LAYERNR>
+	<PRSEQNR>
+		<![CDATA[1]]>
+	</PRSEQNR>
+	<LAYERSTR>
+		<![CDATA[4-2-2]]>
+	</LAYERSTR>
+	<ISINOUT>
+		<![CDATA[외층]]>
+	</ISINOUT>
+	<USR02>
+		<![CDATA[1]]>
+	</USR02>
+	<USR03>
+		<![CDATA[4]]>
+	</USR03>
+	<SPECTYPE2>
+		<![CDATA[RF]]>
+	</SPECTYPE2>
+	<SPECTYPE>
+		<![CDATA[BUM-B]]>
+	</SPECTYPE>
+	<VTEXT>
+		<![CDATA[FPC-Actuator]]>
+	</VTEXT>
+	<WORK_FTRMI>
+		<![CDATA[2021-05-13]]>
+	</WORK_FTRMI>
+	<SUPDA>
+		<![CDATA[2021-05-16]]>
+	</SUPDA>
+	<TRIMSIZE>
+		<![CDATA[495 / 402]]>
+	</TRIMSIZE>
+	<KITSIZE>
+		<![CDATA[118.000 × 189.000]]>
+	</KITSIZE>
+	<WORKSIZE>
+		<![CDATA[500 × 407]]>
+	</WORKSIZE>
+	<NEXTPROCCD>
+		<![CDATA[RE112]]>
+	</NEXTPROCCD>
+	<NEXTPROCESSSEGMENTNAME>
+		<![CDATA[S_ETCH]]>
+	</NEXTPROCESSSEGMENTNAME>
+	<RUNNINGTIME>
+		<![CDATA[25/20:58]]>
+	</RUNNINGTIME>
+	<WAITINGTIME>
+		<![CDATA[17/3:23]]>
+	</WAITINGTIME>
+	<LOCATION>
+		<![CDATA[103518]]>
+	</LOCATION>
+	<EQUIPMENTNAME>
+		<![CDATA[]]>
+	</EQUIPMENTNAME>
+	<PROCESSINGSTATENAME>
+		<![CDATA[공정룰 대기]]>
+	</PROCESSINGSTATENAME>
+	<LOTID>
+		<![CDATA[12719550A05F]]>
+	</LOTID>
+	<MESPROCESSSTATE>
+		<![CDATA[Wait]]>
+	</MESPROCESSSTATE>
+	<PROCESSSEGMENTRULEID>
+		<![CDATA[TrackInLot]]>
+	</PROCESSSEGMENTRULEID>
+	<HOLD>
+		<![CDATA[Y]]>
+	</HOLD>
+	<AUFNR>
+		<![CDATA[12719550A05F]]>
+	</AUFNR>
+	<PARENTBUMLOTID>
+		<![CDATA[12719550005F]]>
+	</PARENTBUMLOTID>
+	<EQUIPMENTID>
+		<![CDATA[]]>
+	</EQUIPMENTID>
+	<PROCESSINGSPEED>
+		<![CDATA[4]]>
+	</PROCESSINGSPEED>
+	<PROCESSINGSTATE>
+		<![CDATA[WaitForRule]]>
+	</PROCESSINGSTATE>
+	<PROCESSSEGMENTSEQ>
+		<![CDATA[2]]>
+	</PROCESSSEGMENTSEQ>
+	<WORKCENTERID>
+		<![CDATA[FPCBB4]]>
+	</WORKCENTERID>
+	<STATE>
+		<![CDATA[Active]]>
+	</STATE>
+	<PROCESSSEGMENTID>
+		<![CDATA[RB402]]>
+	</PROCESSSEGMENTID>
+	<VORNR>
+		<![CDATA[1500]]>
+	</VORNR>
+	<ISREPAIR>
+		<![CDATA[]]>
+	</ISREPAIR>
+	<COMMENTS>
+		<![CDATA[1PNL 점 미옥사이드 분할진행 (불량)]]>
+	</COMMENTS>
+	<PLATTIKNR>
+		<![CDATA[ViaFill도금 : 22]]>
+	</PLATTIKNR>
+	<PRDHA>
+		<![CDATA[F0000U000011000000]]>
+	</PRDHA>
+	<PRODUCTFAMILYNAME>
+		<![CDATA[FPC-Actuator]]>
+	</PRODUCTFAMILYNAME>
+	<WIPLOCATION>
+		<![CDATA[]]>
+	</WIPLOCATION>
+	<LOTSTAMPID>
+		<![CDATA[]]>
+	</LOTSTAMPID>
+	<LDIBARCD>
+		<![CDATA[]]>
+	</LDIBARCD>
+	<LDIBARCD1>
+		<![CDATA[]]>
+	</LDIBARCD1>
+	<LDIBARCD2>
+		<![CDATA[]]>
+	</LDIBARCD2>
+	<LDIBARCD3>
+		<![CDATA[]]>
+	</LDIBARCD3>
+	<LDIBARCD4>
+		<![CDATA[]]>
+	</LDIBARCD4>
+	<LDIBARCD5>
+		<![CDATA[]]>
+	</LDIBARCD5>
+	<PREVPROCESSSEGMENTID>
+		<![CDATA[RH102]]>
+	</PREVPROCESSSEGMENTID>
+	<SVH>
+		<![CDATA[]]>
+	</SVH>
+	<ZSUM>
+		<![CDATA[]]>
+	</ZSUM>
+	<PLATINGSAMPLE>
+		<![CDATA[]]>
+	</PLATINGSAMPLE>
+	<MAKTX>
+		<![CDATA[]]>
+	</MAKTX>
+	<MAIN_LOT_SPEC1>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC1>
+	<MAIN_LOT_SPEC2>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC2>
+	<MAIN_LOT_SPEC3>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC3>
+	<MAIN_LOT_SPEC4>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC4>
+	<MAIN_LOT_SPEC5>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC5>
+	<MAIN_LOT_SPEC6>
+		<![CDATA[]]>
+	</MAIN_LOT_SPEC6>
+	<LOTID1>
+		<![CDATA[]]>
+	</LOTID1>
+	<REPROCESSYN>
+		<![CDATA[]]>
+	</REPROCESSYN>
+	<PALTARTOP>
+		<![CDATA[]]>
+	</PALTARTOP>
+	<PALTARBOT>
+		<![CDATA[]]>
+	</PALTARBOT><도금면적TOP비율>
+	<![CDATA[]]>
+</도금면적TOP비율><도금면적BOT비율>
+<![CDATA[]]>undefined</도금면적BOT비율>undefined</DATA>undefined<DATA>undefined<CHK>
+<![CDATA[0]]>undefined</CHK>undefined<LOTNAME>
+<![CDATA[1272159-0007F]]>undefined</LOTNAME>undefined<COMMENT_COUNT>
+<![CDATA[0]]>undefined</COMMENT_COUNT>undefined<ISSUE_LOT_ID>
+<![CDATA[N]]>undefined</ISSUE_LOT_ID>undefined<MAX_CREATETIME>
+<![CDATA[]]>undefined</MAX_CREATETIME>undefined<MIN_CREATETIME>
+<![CDATA[]]>undefined</MIN_CREATETIME>undefined<LOTTYPE>
+<![CDATA[MAIN]]>undefined</LOTTYPE>undefined<PLANEQUIPMENTID>
+<![CDATA[]]>undefined</PLANEQUIPMENTID>undefined<PLANEQUIPMENT>
+<![CDATA[]]>undefined</PLANEQUIPMENT>undefined<PRODUCTIONREMAININGTIME>
+<![CDATA[-141]]>undefined</PRODUCTIONREMAININGTIME>undefined<MESPROCESSSTATENAME>
+<![CDATA[공정진행]]>undefined</MESPROCESSSTATENAME>undefined<LOTNO>
+<![CDATA[]]>undefined</LOTNO>undefined<ORDERTYPE>
+<![CDATA[양산]]>undefined</ORDERTYPE>undefined<PROCCD>
+<![CDATA[RB402]]>undefined</PROCCD>undefined<PROCESSSEGMENTNAME>
+<![CDATA[LD_DIRECT]]>undefined</PROCESSSEGMENTNAME>undefined<HOTTYPE>
+<![CDATA[]]>undefined</HOTTYPE>undefined<WINDOWTIME>
+<![CDATA[]]>undefined</WINDOWTIME>undefined<WO_CHG>
+<![CDATA[리비전]]>undefined</WO_CHG>undefined<RELIABILITY_INSP>
+<![CDATA[Y]]>undefined</RELIABILITY_INSP>undefined<DESTROY_INSP>
+<![CDATA[]]>undefined</DESTROY_INSP>undefined<PRIORITY>
+<![CDATA[]]>undefined</PRIORITY>undefined<KUNNR>
+<![CDATA[20003]]>undefined</KUNNR>undefined<KNAME>
+<![CDATA[TNHH Samsung Electronics Vi?t Nam]]>undefined</KNAME>undefined<PRODUCTDEFINITIONID>
+<![CDATA[FW06-00045-02]]>undefined</PRODUCTDEFINITIONID>undefined<MODEL>
+<![CDATA[GH41-05725A]]>undefined</MODEL>undefined<REV>
+<![CDATA[0.5B]]>undefined</REV>undefined<SPECNR>
+<![CDATA[FSE00554-04]]>undefined</SPECNR>undefined<COMMONTOOL>
+<![CDATA[]]>undefined</COMMONTOOL>undefined<PIECEQTY>
+<![CDATA[12000]]>undefined</PIECEQTY>undefined<STRIPQTY>
+<![CDATA[1500]]>undefined</STRIPQTY>undefined<PANNELQTY>
+<![CDATA[50]]>undefined</PANNELQTY>undefined<SQAREMETER>
+<![CDATA[9.501]]>undefined</SQAREMETER>undefined<LAYERNR>
+<![CDATA[6]]>undefined</LAYERNR>undefined<PRSEQNR>
+<![CDATA[2]]>undefined</PRSEQNR>undefined<LAYERSTR>
+<![CDATA[6-2-6]]>undefined</LAYERSTR>undefined<ISINOUT>
+<![CDATA[외층]]>undefined</ISINOUT>undefined<USR02>
+<![CDATA[1]]>undefined</USR02>undefined<USR03>
+<![CDATA[6]]>undefined</USR03>undefined<SPECTYPE2>
+<![CDATA[RF]]>undefined</SPECTYPE2>undefined<SPECTYPE>
+<![CDATA[ANY LVH]]>undefined</SPECTYPE>undefined<VTEXT>
+<![CDATA[FPC-Wearable ; Watch]]>undefined</VTEXT>undefined<WORK_FTRMI>
+<![CDATA[2021-05-15]]>undefined</WORK_FTRMI>undefined<SUPDA>
+<![CDATA[2021-06-17]]>undefined</SUPDA>undefined<TRIMSIZE>
+<![CDATA[495 / 375]]>undefined</TRIMSIZE>undefined<KITSIZE>
+<![CDATA[91.000 × 57.000]]>undefined</KITSIZE>undefined<WORKSIZE>
+<![CDATA[500 × 380]]>undefined</WORKSIZE>undefined<NEXTPROCCD>
+<![CDATA[RE112]]>undefined</NEXTPROCCD>undefined<NEXTPROCESSSEGMENTNAME>
+<![CDATA[S_ETCH]]>undefined</NEXTPROCESSSEGMENTNAME>undefined<RUNNINGTIME>
+<![CDATA[23/7:22]]>undefined</RUNNINGTIME>undefined<WAITINGTIME>
+<![CDATA[]]>undefined</WAITINGTIME>undefined<LOCATION>
+<![CDATA[103518]]>undefined</LOCATION>undefined<EQUIPMENTNAME>
+<![CDATA[가상설비]]>undefined</EQUIPMENTNAME>undefined<PROCESSINGSTATENAME>
+<![CDATA[공정룰 진행]]>undefined</PROCESSINGSTATENAME>undefined<LOTID>
+<![CDATA[12721590007F]]>undefined</LOTID>undefined<MESPROCESSSTATE>
+<![CDATA[Processing]]>undefined</MESPROCESSSTATE>undefined<PROCESSSEGMENTRULEID>
+<![CDATA[TrackOutLot]]>undefined</PROCESSSEGMENTRULEID>undefined<HOLD>
+<![CDATA[N]]>undefined</HOLD>undefined<AUFNR>
+<![CDATA[12721590007F]]>undefined</AUFNR>undefined<PARENTBUMLOTID>
+<![CDATA[12721590007F]]>undefined</PARENTBUMLOTID>undefined<EQUIPMENTID>
+<![CDATA[103518]]>undefined</EQUIPMENTID>undefined<PROCESSINGSPEED>
+<![CDATA[4]]>undefined</PROCESSINGSPEED>undefined<PROCESSINGSTATE>
+<![CDATA[ProcessingRule]]>undefined</PROCESSINGSTATE>undefined<PROCESSSEGMENTSEQ>
+<![CDATA[2]]>undefined</PROCESSSEGMENTSEQ>undefined<WORKCENTERID>
+<![CDATA[FPCBB4]]>undefined</WORKCENTERID>undefined<STATE>
+<![CDATA[Active]]>undefined</STATE>undefined<PROCESSSEGMENTID>
+<![CDATA[RB402]]>undefined</PROCESSSEGMENTID>undefined<VORNR>
+<![CDATA[3300]]>undefined</VORNR>undefined<ISREPAIR>
+<![CDATA[]]>undefined</ISREPAIR>undefined<COMMENTS>
+<![CDATA[]]>undefined</COMMENTS>undefined<PLATTIKNR>
+<![CDATA[ViaFill도금 : 18]]>undefined</PLATTIKNR>undefined<PRDHA>
+<![CDATA[F0000W000011000000]]>undefined</PRDHA>undefined<PRODUCTFAMILYNAME>
+<![CDATA[FPC-Wearable : Watch]]>undefined</PRODUCTFAMILYNAME>undefined<WIPLOCATION>
+<![CDATA[]]>undefined</WIPLOCATION>undefined<LOTSTAMPID>
+<![CDATA[]]>undefined</LOTSTAMPID>undefined<LDIBARCD>
+<![CDATA[]]>undefined</LDIBARCD>undefined<LDIBARCD1>
+<![CDATA[]]>undefined</LDIBARCD1>undefined<LDIBARCD2>
+<![CDATA[]]>undefined</LDIBARCD2>undefined<LDIBARCD3>
+<![CDATA[]]>undefined</LDIBARCD3>undefined<LDIBARCD4>
+<![CDATA[]]>undefined</LDIBARCD4>undefined<LDIBARCD5>
+<![CDATA[]]>undefined</LDIBARCD5>undefined<PREVPROCESSSEGMENTID>
+<![CDATA[RH102]]>undefined</PREVPROCESSSEGMENTID>undefined<SVH>
+<![CDATA[]]>undefined</SVH>undefined<ZSUM>
+<![CDATA[]]>undefined</ZSUM>undefined<PLATINGSAMPLE>
+<![CDATA[]]>undefined</PLATINGSAMPLE>undefined<MAKTX>
+<![CDATA[]]>undefined</MAKTX>undefined<MAIN_LOT_SPEC1>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC1>undefined<MAIN_LOT_SPEC2>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC2>undefined<MAIN_LOT_SPEC3>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC3>undefined<MAIN_LOT_SPEC4>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC4>undefined<MAIN_LOT_SPEC5>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC5>undefined<MAIN_LOT_SPEC6>
+<![CDATA[]]>undefined</MAIN_LOT_SPEC6>undefined<LOTID1>
+<![CDATA[]]>undefined</LOTID1>undefined<REPROCESSYN>
+<![CDATA[]]>undefined</REPROCESSYN>undefined<PALTARTOP>
+<![CDATA[]]>undefined</PALTARTOP>undefined<PALTARBOT>
+<![CDATA[]]>undefined</PALTARBOT><도금면적TOP비율>undefined<![CDATA[]]>undefined</도금면적TOP비율><도금면적BOT비율>undefined<![CDATA[]]>undefined</도금면적BOT비율>undefined</DATA>undefined<DATA>undefined<CHK>undefined<![CDATA[0]]>undefined</CHK>undefined<LOTNAME>undefined<![CDATA[L202101-0083F]]>undefined</LOTNAME>undefined<COMMENT_COUNT>undefined<![CDATA[0]]>undefined</COMMENT_COUNT>undefined<ISSUE_LOT_ID>undefined<![CDATA[N]]>undefined</ISSUE_LOT_ID>undefined<MAX_CREATETIME>undefined<![CDATA[]]>undefined</MAX_CREATETIME>undefined<MIN_CREATETIME>undefined<![CDATA[]]>undefined</MIN_CREATETIME>undefined<LOTTYPE>undefined<![CDATA[MAIN]]>undefined</LOTTYPE>undefined<PLANEQUIPMENTID>undefined<![CDATA[]]>undefined</PLANEQUIPMENTID>undefined<PLANEQUIPMENT>undefined<![CDATA[]]>undefined</PLANEQUIPMENT>undefined<PRODUCTIONREMAININGTIME>undefined<![CDATA[]]>undefined</PRODUCTIONREMAININGTIME>undefined<MESPROCESSSTATENAME>undefined<![CDATA[공정대기]]>undefined</MESPROCESSSTATENAME>undefined<LOTNO>undefined<![CDATA[]]>undefined</LOTNO>undefined<ORDERTYPE>undefined<![CDATA[L-TEST]]>undefined</ORDERTYPE>undefined<PROCCD>undefined<![CDATA[RB402]]>undefined</PROCCD>undefined<PROCESSSEGMENTNAME>undefined<![CDATA[LD_DIRECT]]>undefined</PROCESSSEGMENTNAME>undefined<HOTTYPE>undefined<![CDATA[]]>undefined</HOTTYPE>undefined<WINDOWTIME>undefined<![CDATA[]]>undefined</WINDOWTIME>undefined<WO_CHG>undefined<![CDATA[일반]]>undefined</WO_CHG>undefined<RELIABILITY_INSP>undefined<![CDATA[]]>undefined</RELIABILITY_INSP>undefined<DESTROY_INSP>undefined<![CDATA[]]>undefined</DESTROY_INSP>undefined<PRIORITY>undefined<![CDATA[]]>undefined</PRIORITY>undefined<KUNNR>undefined<![CDATA[0]]>undefined</KUNNR>undefined<KNAME>undefined<![CDATA[]]>undefined</KNAME>undefined<PRODUCTDEFINITIONID>undefined<![CDATA[LF202102-4560]]>undefined</PRODUCTDEFINITIONID>undefined<MODEL>undefined<![CDATA[저뎁스 UV->CO2 전환 평가 件;]]>undefined</MODEL>undefined<REV>undefined<![CDATA[]]>undefined</REV>undefined<SPECNR>undefined<![CDATA[FDD01202-01]]>undefined</SPECNR>undefined<COMMONTOOL>undefined<![CDATA[]]>undefined</COMMONTOOL>undefined<PIECEQTY>undefined<![CDATA[1792]]>undefined</PIECEQTY>undefined<STRIPQTY>undefined<![CDATA[32]]>undefined</STRIPQTY>undefined<PANNELQTY>undefined<![CDATA[4]]>undefined</PANNELQTY>undefined<SQAREMETER>undefined<![CDATA[0.840]]>undefined</SQAREMETER>undefined<LAYERNR>undefined<![CDATA[4]]>undefined</LAYERNR>undefined<PRSEQNR>undefined<![CDATA[1]]>undefined</PRSEQNR>undefined<LAYERSTR>undefined<![CDATA[4-2-4]]>undefined</LAYERSTR>undefined<ISINOUT>undefined<![CDATA[외층]]>undefined</ISINOUT>undefined<USR02>undefined<![CDATA[1]]>undefined</USR02>undefined<USR03>undefined<![CDATA[4]]>undefined</USR03>undefined<SPECTYPE2>undefined<![CDATA[RF]]>undefined</SPECTYPE2>undefined<SPECTYPE>undefined<![CDATA[BUM-B]]>undefined</SPECTYPE>undefined<VTEXT>undefined<![CDATA[]]>undefined</VTEXT>undefined<WORK_FTRMI>undefined<![CDATA[2021-02-22]]>undefined</WORK_FTRMI>undefined<SUPDA>undefined<![CDATA[2021-02-23]]>undefined</SUPDA>undefined<TRIMSIZE>undefined<![CDATA[495 / 415]]>undefined</TRIMSIZE>undefined<KITSIZE>undefined<![CDATA[118.000 × 192.000]]>undefined</KITSIZE>undefined<WORKSIZE>undefined<![CDATA[500 × 420]]>undefined</WORKSIZE>undefined<NEXTPROCCD>undefined<![CDATA[RE112]]>undefined</NEXTPROCCD>undefined<NEXTPROCESSSEGMENTNAME>undefined<![CDATA[S_ETCH]]>undefined</NEXTPROCESSSEGMENTNAME>undefined<RUNNINGTIME>undefined<![CDATA[105/1:3]]>undefined</RUNNINGTIME>undefined<WAITINGTIME>undefined<![CDATA[48/2:59]]>undefined</WAITINGTIME>undefined<LOCATION>undefined<![CDATA[103518]]>undefined</LOCATION>undefined<EQUIPMENTNAME>undefined<![CDATA[]]>undefined</EQUIPMENTNAME>undefined<PROCESSINGSTATENAME>undefined<![CDATA[공정룰 대기]]>undefined</PROCESSINGSTATENAME>undefined<LOTID>undefined<![CDATA[L2021010083F]]>undefined</LOTID>undefined<MESPROCESSSTATE>undefined<![CDATA[Wait]]>undefined</MESPROCESSSTATE>undefined<PROCESSSEGMENTRULEID>undefined<![CDATA[TrackInLot]]>undefined</PROCESSSEGMENTRULEID>undefined<HOLD>undefined<![CDATA[N]]>undefined</HOLD>undefined<AUFNR>undefined<![CDATA[L2021010083F]]>undefined</AUFNR>undefined<PARENTBUMLOTID>undefined<![CDATA[L2021010083F]]>undefined</PARENTBUMLOTID>undefined<EQUIPMENTID>undefined<![CDATA[]]>undefined</EQUIPMENTID>undefined<PROCESSINGSPEED>undefined<![CDATA[4]]>undefined</PROCESSINGSPEED>undefined<PROCESSINGSTATE>undefined<![CDATA[WaitForRule]]>undefined</PROCESSINGSTATE>undefined<PROCESSSEGMENTSEQ>undefined<![CDATA[2]]>undefined</PROCESSSEGMENTSEQ>undefined<WORKCENTERID>undefined<![CDATA[FPCBB4]]>undefined</WORKCENTERID>undefined<STATE>undefined<![CDATA[Active]]>undefined</STATE>undefined<PROCESSSEGMENTID>undefined<![CDATA[RB402]]>undefined</PROCESSSEGMENTID>undefined<VORNR>undefined<![CDATA[1800]]>undefined</VORNR>undefined<ISREPAIR>undefined<![CDATA[]]>undefined</ISREPAIR>undefined<COMMENTS>undefined<![CDATA[]]>undefined</COMMENTS>undefined<PLATTIKNR>undefined<![CDATA[ViaFill도금 : 18]]>undefined</PLATTIKNR>undefined<PRDHA>undefined<![CDATA[]]>undefined</PRDHA>undefined<PRODUCTFAMILYNAME>undefined<![CDATA[]]>undefined</PRODUCTFAMILYNAME>undefined<WIPLOCATION>undefined<![CDATA[]]>undefined</WIPLOCATION>undefined<LOTSTAMPID>undefined<![CDATA[]]>undefined</LOTSTAMPID>undefined<LDIBARCD>undefined<![CDATA[]]>undefined</LDIBARCD>undefined<LDIBARCD1>undefined<![CDATA[]]>undefined</LDIBARCD1>undefined<LDIBARCD2>undefined<![CDATA[]]>undefined</LDIBARCD2>undefined<LDIBARCD3>undefined<![CDATA[]]>undefined</LDIBARCD3>undefined<LDIBARCD4>undefined<![CDATA[]]>undefined</LDIBARCD4>undefined<LDIBARCD5>undefined<![CDATA[]]>undefined</LDIBARCD5>undefined<PREVPROCESSSEGMENTID>undefined<![CDATA[RH102]]>undefined</PREVPROCESSSEGMENTID>undefined<SVH>undefined<![CDATA[]]>undefined</SVH>undefined<ZSUM>undefined<![CDATA[]]>undefined</ZSUM>undefined<PLATINGSAMPLE>undefined<![CDATA[]]>undefined</PLATINGSAMPLE>undefined<MAKTX>undefined<![CDATA[]]>undefined</MAKTX>undefined<MAIN_LOT_SPEC1>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC1>undefined<MAIN_LOT_SPEC2>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC2>undefined<MAIN_LOT_SPEC3>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC3>undefined<MAIN_LOT_SPEC4>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC4>undefined<MAIN_LOT_SPEC5>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC5>undefined<MAIN_LOT_SPEC6>undefined<![CDATA[]]>undefined</MAIN_LOT_SPEC6>undefined<LOTID1>undefined<![CDATA[]]>undefined</LOTID1>undefined<REPROCESSYN>undefined<![CDATA[]]>undefined</REPROCESSYN>undefined<PALTARTOP>undefined<![CDATA[]]>undefined</PALTARTOP>undefined<PALTARBOT>undefined<![CDATA[]]>undefined</PALTARBOT><도금면적TOP비율>undefined<![CDATA[]]>undefined</도금면적TOP비율><도금면적BOT비율>undefined<![CDATA[]]>undefined</도금면적BOT비율>undefined</DATA>undefined</DATALIST>undefined</DATASET>undefined</body>undefined<return>undefined<returncode>0</returncode>undefined<returnmessage></returnmessage>undefined</return>undefined</message>

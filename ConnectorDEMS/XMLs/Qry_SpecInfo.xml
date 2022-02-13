@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>GetQueryResult</messagename>
+		<transactionid>20211213105609964763</transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetLotSpecInfoList</QUERYID>
+		<VERSION>10</VERSION>
+		<BINDV>
+			<SPECNR>FET01374-09</SPECNR>
+			<SEQNR>7</SEQNR>
+		</BINDV>
+	</body>
+</message>

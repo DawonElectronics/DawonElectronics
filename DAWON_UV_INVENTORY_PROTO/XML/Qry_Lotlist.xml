@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>GetStoredProcedureResult</messagename>
+		<transactionid></transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetLotList</QUERYID>
+		<VERSION>35</VERSION>
+		<BINDV>
+			<LANGUAGE>Korean</LANGUAGE>
+			<SITEID>1150</SITEID>
+			<FACTORYID>FPC</FACTORYID>
+			<WORKCENTERID>FPCBB4</WORKCENTERID>
+			<PROCESSSEGMENTID></PROCESSSEGMENTID>
+			<LOTID></LOTID>
+			<EQUIPMENTID></EQUIPMENTID>
+			<INPUTFORMID>FORMREADYTOWORK</INPUTFORMID>
+			<COMPANYID>103518</COMPANYID>
+			<ORDERTYPE></ORDERTYPE>
+		</BINDV>
+	</body>
+</message>

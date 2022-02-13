@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icon\Excel-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icon\Excel-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FastMember" Version="1.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Licensing" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Themes.Office2016White.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="19.4.0.40" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.Private.ServiceModel" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConnectorDEMS\ConnectorDEMS.csproj" />
+    <ProjectReference Include="..\ConnectorDEPKG\ConnectorDEPKG.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resource1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource1.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

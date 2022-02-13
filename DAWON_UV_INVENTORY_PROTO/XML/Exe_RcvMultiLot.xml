@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>MoveLineReceive</messagename>
+		<transactionid>20211216101848443232</transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<FACTORYNAME>1150</FACTORYNAME>
+		<SITEID>1150</SITEID>
+		<MOVELINERECEIVELIST>
+		</MOVELINERECEIVELIST>
+	</body>
+</message>

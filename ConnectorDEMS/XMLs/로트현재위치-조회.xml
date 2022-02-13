@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>GetQueryResult</messagename>
+		<transactionid>20211216101848443232</transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetLotCurrentLocationInform</QUERYID>
+		<VERSION>1</VERSION>
+		<BINDV>
+			<LOTID>12838640038F</LOTID>
+		</BINDV>
+	</body>
+</message>

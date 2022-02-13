@@ -1,0 +1,66 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "Db_Uv_InventoryContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "ProjectRootNamespace": "DAWON_UV_INVENTORY_PROTO",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[tb_customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tb_machine]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tb_prctype]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tb_users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tb_uv_toolinfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tb_uv_workorder]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[view_uv_workorder]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[view_uv_workorder_done]",
+         "ObjectType": 3
+      }
+   ],
+   "UiHint": "u20mariadb-vm.db_uv_inventory.dbo",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false
+}

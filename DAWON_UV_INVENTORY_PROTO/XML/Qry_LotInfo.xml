@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>GetQueryResult</messagename>
+		<transactionid></transactionid>
+	</header>
+	<body>
+		<EVENTUSER>FPCBB4</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetLot</QUERYID>
+		<VERSION>2</VERSION>
+		<BINDV>
+			<LOTID></LOTID>
+		</BINDV>
+	</body>
+</message>

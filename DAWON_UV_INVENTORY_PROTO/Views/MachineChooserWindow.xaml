@@ -1,0 +1,55 @@
+﻿<syncfusion:ChromelessWindow x:Class="DAWON_UV_INVENTORY_PROTO.Views.MachineChooserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+        xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        syncfusion:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=FluentLight}"
+        mc:Ignorable="d"
+        Title="설비선택화면" Height="320" Width="500">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+        <Label Content="선택된 LOT:" FontSize="16"/>
+            <Label x:Name="lbl_lotid"  FontSize="16"/>
+        </StackPanel>
+        <syncfusion:CheckListBox Grid.Row="1" Grid.Column="0" x:Name="chkListBox" Margin="5,5"
+                                 VerticalContentAlignment="Center" IsSelectAllEnabled="False" 
+                                 ItemsSource="{Binding Machines}"
+                                 SelectedItems="{Binding SelectedMachine}"
+                                 DisplayMemberPath="MachineShortname"
+                                 SelectedValuePath="MachineShortname"
+                                 FontSize="15" FontWeight="Bold">
+            
+            <syncfusion:CheckListBox.ItemsPanel>
+              <ItemsPanelTemplate>
+                    <UniformGrid Columns="5" IsItemsHost="True" VerticalAlignment="Center"/>
+              </ItemsPanelTemplate>
+          </syncfusion:CheckListBox.ItemsPanel>
+        </syncfusion:CheckListBox>
+        
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+            
+            <RadioButton x:Name="rdoCs" Content="CS 설비" IsChecked="True" GroupName="grpSide" Checked="RdoCs_OnChecked" HorizontalAlignment="Center" Margin="5,5"/>
+            <RadioButton x:Name="rdoSs" Content="SS 설비" GroupName="grpSide" Checked="RdoSs_OnChecked" HorizontalAlignment="Center"
+                         Margin="5,5"/>
+            
+            <Button Content="선택취소" Margin="5,5" Padding="6,6" Click="ButtonBase_OnClick" />
+            <Button x:Name="BtnCsAssign" Content="CS 설비배정" Margin="5,5" Padding="6,6" Click="BtnCsAssign_OnClick"/>
+            <Button x:Name="BtnSsAssign" Content="SS 설비배정" Margin="5,5" Padding="6,6" Click="BtnSsAssign_OnClick"/>
+            <Label x:Name="lbl_csResult" Content="CS:"/>
+            <Label x:Name="lbl_ssResult" Content="SS:"/>
+        </StackPanel> 
+        
+    </Grid>
+</syncfusion:ChromelessWindow>

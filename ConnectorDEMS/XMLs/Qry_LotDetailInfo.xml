@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><message>
+	<header>
+		<messagename>GetQueryResult</messagename>
+		<transactionid></transactionid>
+	</header>
+	<body>
+		<EVENTUSER>FPCBB4</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetLotDetailInfoList</QUERYID>
+		<VERSION>14</VERSION>
+		<BINDV>
+			<PLANT>1150</PLANT>
+			<LOTID>12838390006F</LOTID>
+			<ITS_LOTID></ITS_LOTID>
+			<DELIVERYLOTID></DELIVERYLOTID>
+			<SPECNR></SPECNR>
+		</BINDV>
+	</body>
+</message>

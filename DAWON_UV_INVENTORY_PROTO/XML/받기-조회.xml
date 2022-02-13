@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+	<header>
+		<messagename>GetStoredProcedureResult</messagename>
+		<transactionid>20211216101844247519</transactionid>
+	</header>
+	<body>
+		<EVENTUSER>103518</EVENTUSER>
+		<EVENTCOMMENT />
+		<LANGUAGE>KOR</LANGUAGE>
+		<QUERYID>GetRecieveLot</QUERYID>
+		<VERSION>9</VERSION>
+		<BINDV>
+			<SITEID>1150</SITEID>
+			<LANG>Korean</LANG>
+			<USERFACTORYID>103518</USERFACTORYID>
+			<USERID>103518</USERID>
+			<FACTORY>FPC</FACTORY>
+			<WORKCENTER>FPCBB2</WORKCENTER>
+			<PROCESSSEGMENT></PROCESSSEGMENT>
+			<PREVPROCESSID></PREVPROCESSID>
+			<VENDORID></VENDORID>
+			<RECEIVEFACTORY></RECEIVEFACTORY>
+			<LOTID></LOTID>
+		</BINDV>
+	</body>
+</message>
