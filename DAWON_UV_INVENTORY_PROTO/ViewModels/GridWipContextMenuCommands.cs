@@ -41,7 +41,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                             if (result != null)
                             {
-                                var trackoutuser = db.TbUsers.Where(x => x.UserName == MainWindow.MainwindowViewModel.SelectedUser).FirstOrDefault();
+                                var trackoutuser = db.TbUsers.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).FirstOrDefault();
 
                                 result.TrackoutTime = DateTime.Now;
                                 result.TrackoutUser = trackoutuser;
@@ -173,6 +173,76 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                     mcWindow.Topmost = true;
                     mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                     mcWindow.Show();
+                }
+            }
+        }
+        #endregion
+
+        #region CCL 클립보드 복사
+
+        static BaseCommand _copyCCLInfoCommand;
+        public static BaseCommand CopyCCLInfoCommand
+        {
+            get
+            {
+                _copyCCLInfoCommand = new BaseCommand(CopyCCLInfo);
+                return _copyCCLInfoCommand;
+            }
+        }
+        private static void CopyCCLInfo(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo && MainWindow._mainwindowViewModel.SelectedCustomerWo.Contains("PKG"))
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var insulinfo = MainWindow._mainwindowViewModel.ToolInfos.Where(x=>x.ProductId == record.ProductId).Select(x=>x.InsulInfo).First().Split(',');
+                
+                
+                var cclinfo = string.Format("{0} {1} {2}T {3}", insulinfo[3], insulinfo[5], Convert.ToDouble(insulinfo[10]), insulinfo[9]);
+                try
+                {
+                    Clipboard.SetText(cclinfo);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        #endregion
+
+        #region 초도품 캠 완료처리
+
+        static BaseCommand _executeCamFinishCommand;
+        public static BaseCommand ExecuteCamFinishCommand
+        {
+            get
+            {
+                _executeCamFinishCommand = new BaseCommand(ExecuteCamFinish);
+                return _executeCamFinishCommand;
+            }
+        }
+        private static void ExecuteCamFinish(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var lot = record.Lotid;
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvToolinfo.SingleOrDefault(x => x.ProductId == record.ProductId);
+
+                        if (result != null)
+                        {
+                            result.CamFinished = true;
+                            db.SaveChanges();
+                            mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
                 }
             }
         }

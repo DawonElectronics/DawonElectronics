@@ -25,6 +25,7 @@ using System.ServiceModel;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using ConnectorDEMS;
+using ConnectorDEMS.Models;
 using DAWON_UV_INVENTORY_PROTO.Helper;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
@@ -178,10 +179,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 var lot = pC.GetValue(rowdata, "LOTID") as String;
                 var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
                 var workcenter = TrackinDemsViewmodel.WorkcenterId;
-                var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY") as String);
+                var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
                 var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
                 var fromlayer = pC.GetValue(rowdata, "USR02") as String;
-
+                var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
                 bool issample = false;
                 if (Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p"))
                 {
@@ -204,22 +205,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     inputTemp.CustId = cust.CustId;
 
                     //작성자 선택, 필수항목으로 입력 여부 체크
-
-                    var usr = new TbUsers();
-                    var seluser = MainWindow.MainwindowViewModel.SelectedUser;
-                    usr = context.TbUsers.Where(x => x.UserName == seluser).FirstOrDefault();
-                    inputTemp.TrackinUser = usr;
+                    inputTemp.TrackinUserId = user.UserId;
 
                     //LOT입력, 필수항목으로 입력 여부 체크
-
                     inputTemp.Lotid = lot;
 
                     //툴입력, 필수항목으로 입력 여부 체크
                     string pid = string.Empty;
                     if (fromlayer == null)
-                        pid = MainWindow.MainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool).Select(x => x.ProductId).FirstOrDefault();
+                        pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool).Select(x => x.ProductId).FirstOrDefault();
                     else if (fromlayer != null)
-                        pid = MainWindow.MainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool&&w.PrcLayerFrom1 == fromlayer).Select(x => x.ProductId).FirstOrDefault();
+                        pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool&&w.PrcLayerFrom1 == fromlayer).Select(x => x.ProductId).FirstOrDefault();
 
                     inputTemp.ProductId = pid;
                     inputTemp.SampleOrder = issample;
@@ -230,16 +226,15 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     var lotcount = context.TbUvWorkorder.Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
                     if (lotcount == 0)
                     {
-                        context.TbUvWorkorder.AddAsync(inputTemp);
+                        context.TbUvWorkorder.Add(inputTemp);
                         context.SaveChanges();
                         ExecuteRcv(lot);
-                        
                     }
                     else if (lotcount != 0)
                     {
                         if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            context.TbUvWorkorder.AddAsync(inputTemp);
+                            context.TbUvWorkorder.Add(inputTemp);
                             context.SaveChanges();
                             ExecuteRcv(lot);
                         }
@@ -255,83 +250,71 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             UpdateFiltered_WorkorderList();
         }
 
-        
-        //여러로트 받기
-        private void btn_exe_rcv_Click(object sender, RoutedEventArgs e)
+
+        private void BtnAddOnly_OnClick(object sender, RoutedEventArgs e)
         {
             BtnExeRcv.IsEnabled = false;
+            BtnAddOnly.IsEnabled = false;
             var selectedlist = GridRcv.SelectionController.SelectedRows;
             var rcvlist = new List<string>();
             string lot = string.Empty;
             var tool_prcname = string.Empty;
-            var dbUser = new List<TbUsers>();
-            var dbCustomer = new List<TbCustomer>();
-            using (var db = new Db_Uv_InventoryContext())
+            var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
+            using (var context = new Db_Uv_InventoryContext())
             {
-                dbUser = db.TbUsers.ToList<TbUsers>();
-                dbCustomer = db.TbCustomer.ToList<TbCustomer>();
-            }
-
-            foreach (var item in selectedlist)
-            {
-                try
+                foreach (var item in selectedlist)
                 {
-                    var rowdata = item.RowData;
-                    var pC = GridRcv.View.GetPropertyAccessProvider();
-                    var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
-                    lot = pC.GetValue(rowdata, "LOTID") as String;
-
-                    var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
-                    var workcenter = TrackinDemsViewmodel.WorkcenterId;
-                    var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
-                    var fromlayer = pC.GetValue(rowdata, "USR02") as String;
-
-
-
-                    var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
-                    bool issample = false;
-                    if (Char.IsLetter(lot, 0) && (!lot.ToLower().StartsWith("p") || !lot.ToLower().StartsWith("w")))
+                    try
                     {
-                        issample = true;
-                    }
+                        var rowdata = item.RowData;
+                        var pC = GridRcv.View.GetPropertyAccessProvider();
+                        var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
+                        lot = pC.GetValue(rowdata, "LOTID") as String;
+                        var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
+                        var workcenter = TrackinDemsViewmodel.WorkcenterId;
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
+                        var fromlayer = pC.GetValue(rowdata, "USR02") as String;
+                        var lotdetailinfo = new MesLotDetailInfo();
+                        bool issample = false;
 
-                    if (tool_prcname != tool + prcname)
-                    {
-                        if (!IsToolExist(tool, prcname))
+                        if (Char.IsLetter(lot, 0) && (!lot.ToLower().StartsWith("p") || !lot.ToLower().StartsWith("w")))
                         {
-                            RegistTool(tool, workcenter, lot, issample, lotdetailinfo.Seqnr);
+                            issample = true;
                         }
-                    }
 
-                    tool_prcname = tool + prcname;
+                        if (tool_prcname != tool + prcname)
+                        {
+                            lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
+                            if (!IsToolExist(tool, prcname))
+                            {
+                                RegistTool(tool, workcenter, lot, issample, lotdetailinfo.Seqnr);
+                            }
+                        }
 
-                    using (var context = new Db_Uv_InventoryContext())
-                    {
+                        tool_prcname = tool + prcname;
+
                         var inputTemp = new TbUvWorkorder();
-
                         //고객사 선택, 필수항목으로 입력 여부 체크
 
-                        
                         var selcust = "대덕전자(MS)";
-                        inputTemp.CustId = MainWindow.MainwindowViewModel.ToolInfos.Where(x => x.CustName == selcust).FirstOrDefault().CustId;
+                        inputTemp.CustId = MainWindow._mainwindowViewModel.ToolInfos.Where(x => x.CustName == selcust)
+                            .FirstOrDefault().CustId;
                         
-
                         //작성자 선택, 필수항목으로 입력 여부 체크
-
-                        var seluser = MainWindow.MainwindowViewModel.SelectedUser;
-                        inputTemp.TrackinUser = dbUser.Where(x => x.UserName == seluser).FirstOrDefault();
+                        inputTemp.TrackinUserId = user.UserId;
                         
-
                         //LOT입력, 필수항목으로 입력 여부 체크
-
                         inputTemp.Lotid = lot;
 
                         //툴입력, 필수항목으로 입력 여부 체크                
                         string pid = string.Empty;
                         if (fromlayer == null)
-                            pid = MainWindow.MainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool).Select(x => x.ProductId).FirstOrDefault();
+                            pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool)
+                                .Select(x => x.ProductId).FirstOrDefault();
                         else if (fromlayer != null)
-                            pid = MainWindow.MainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool && w.PrcLayerFrom1 == fromlayer).Select(x => x.ProductId).FirstOrDefault();
+                            pid = MainWindow._mainwindowViewModel.ToolInfos
+                                .Where(w => w.CustToolno == tool && w.PrcLayerFrom1 == fromlayer)
+                                .Select(x => x.ProductId).FirstOrDefault();
 
                         inputTemp.ProductId = pid;
                         inputTemp.SampleOrder = issample;
@@ -339,54 +322,170 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         inputTemp.CreateTime = DateTime.Now;
                         inputTemp.TrackinTime = DateTime.Now;
                         inputTemp.Txid = Guid.NewGuid();
-                        var lotcount = context.TbUvWorkorder.Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
+                        var lotcount = context.TbUvWorkorder
+                            .Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
                         if (lotcount == 0)
                         {
-                            context.TbUvWorkorder.AddAsync(inputTemp);
+                            context.TbUvWorkorder.Add(inputTemp);
                             context.SaveChanges();
                             //ExecuteRcv(lot);
                             rcvlist.Add(lot);
                         }
                         else if (lotcount != 0)
                         {
-                            if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) ==
+                                MessageBoxResult.Yes)
                             {
-                                context.TbUvWorkorder.AddAsync(inputTemp);
+                                context.TbUvWorkorder.Add(inputTemp);
                                 context.SaveChanges();
-                                //ExecuteRcv(lot);
                                 rcvlist.Add(lot);
                             }
-                            else if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                            else if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) ==
+                                     MessageBoxResult.No)
                             {
-                                //ExecuteRcv(lot);
+                                rcvlist.Add(lot);
+                            }
+                        }
+
+                    }
+
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                }
+            }
+
+            GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+            UpdateFiltered_WorkorderList();
+            BtnExeRcv.IsEnabled = true;
+            BtnAddOnly.IsEnabled = true;
+        }
+
+        //여러로트 받기
+        private void btn_exe_rcv_Click(object sender, RoutedEventArgs e)
+        {
+            BtnExeRcv.IsEnabled = false;
+            BtnAddOnly.IsEnabled = false;
+            var selectedlist = GridRcv.SelectionController.SelectedRows;
+            var rcvlist = new List<string>();
+            string lot = string.Empty;
+            var tool_prcname = string.Empty;
+            var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
+            using (var context = new Db_Uv_InventoryContext())
+            {
+                foreach (var item in selectedlist)
+                {
+                    try
+                    {
+                        var rowdata = item.RowData;
+                        var pC = GridRcv.View.GetPropertyAccessProvider();
+                        var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
+                        lot = pC.GetValue(rowdata, "LOTID") as String;
+                        var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
+                        var workcenter = TrackinDemsViewmodel.WorkcenterId;
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
+                        var fromlayer = pC.GetValue(rowdata, "USR02") as String;
+
+                        var lotdetailinfo = new MesLotDetailInfo();
+                        bool issample = false;
+                        if (Char.IsLetter(lot, 0) && (!lot.ToLower().StartsWith("p") || !lot.ToLower().StartsWith("w")))
+                        {
+                            issample = true;
+                        }
+
+                        if (tool_prcname != tool + prcname)
+                        {
+                            lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
+                            if (!IsToolExist(tool, prcname))
+                            {
+                                RegistTool(tool, workcenter, lot, issample, lotdetailinfo.Seqnr);
+                            }
+                        }
+
+                        tool_prcname = tool + prcname;
+
+                        var inputTemp = new TbUvWorkorder();
+                        //고객사 선택, 필수항목으로 입력 여부 체크
+
+                        var selcust = "대덕전자(MS)";
+                        inputTemp.CustId = MainWindow._mainwindowViewModel.ToolInfos.Where(x => x.CustName == selcust)
+                            .FirstOrDefault().CustId;
+
+
+                        //작성자 선택, 필수항목으로 입력 여부 체크
+                        inputTemp.TrackinUserId = user.UserId;
+
+                        //LOT입력, 필수항목으로 입력 여부 체크
+                        inputTemp.Lotid = lot;
+
+                        //툴입력, 필수항목으로 입력 여부 체크                
+                        string pid = string.Empty;
+                        if (fromlayer == null)
+                            pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool)
+                                .Select(x => x.ProductId).FirstOrDefault();
+                        else if (fromlayer != null)
+                            pid = MainWindow._mainwindowViewModel.ToolInfos
+                                .Where(w => w.CustToolno == tool && w.PrcLayerFrom1 == fromlayer)
+                                .Select(x => x.ProductId).FirstOrDefault();
+
+                        inputTemp.ProductId = pid;
+                        inputTemp.SampleOrder = issample;
+                        inputTemp.Pnlqty = pnlqty;
+                        inputTemp.CreateTime = DateTime.Now;
+                        inputTemp.TrackinTime = DateTime.Now;
+                        inputTemp.Txid = Guid.NewGuid();
+                        var lotcount = context.TbUvWorkorder
+                            .Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
+                        if (lotcount == 0)
+                        {
+                            context.TbUvWorkorder.Add(inputTemp);
+                            context.SaveChanges();
+                            rcvlist.Add(lot);
+                        }
+                        else if (lotcount != 0)
+                        {
+                            if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) ==
+                                MessageBoxResult.Yes)
+                            {
+                                context.TbUvWorkorder.Add(inputTemp);
+                                context.SaveChanges();
+                                rcvlist.Add(lot);
+                            }
+                            else if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) ==
+                                     MessageBoxResult.No)
+                            {
                                 rcvlist.Add(lot);
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
             }
             if (rcvlist.Count == 1)
                 ExecuteRcv(lot);
-            else if (rcvlist.Count >1)
+            else if (rcvlist.Count > 1)
                 ExecuteMultiRcv(rcvlist);
 
             GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
             UpdateFiltered_WorkorderList();
             BtnExeRcv.IsEnabled = true;
+            BtnAddOnly.IsEnabled = true;
         }
         public void UpdateFiltered_WorkorderList()
         {
             using (var db = new Db_Uv_InventoryContext())
             {
-                var customer = MainWindow.MainwindowViewModel.SelectedCustomerWo;
+                var customer = MainWindow._mainwindowViewModel.SelectedCustomerWo;
                 var issample = false;
-                if (MainWindow.MainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
-                else if (MainWindow.MainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
-                MainWindow.MainwindowViewModel.WorkOrderList =
+                if (MainWindow._mainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
+                else if (MainWindow._mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
+                MainWindow._mainwindowViewModel.WorkOrderList =
                     new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder.Where(x =>
                         x.CustName == customer && x.SampleOrder == issample));
             }
@@ -510,7 +609,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq,issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow.MainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -526,7 +625,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS_lbcut(tool, workcenter, lot, seq, issample, seqnr);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow.MainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -752,5 +851,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
             return tempTool;
         }
+
+        
     }
 }

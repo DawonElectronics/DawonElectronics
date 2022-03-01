@@ -26,6 +26,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public DateTime? TrackoutTime { get; set; }
         public string LotType { get; set; }
         public bool? WaitTrackout { get; set; }
+        public string FormatBg { get; set; }
+        public string FormatFg { get; set; }
+        public bool? FormatBold { get; set; }
         public string LotNotes { get; set; }
         public string HoleCount { get; set; }
         public string MachineCs { get; set; }
@@ -51,5 +54,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public long Id { get; set; }
         public string CustName { get; set; }
         public bool? SampleOrder { get; set; }
+        public bool? CamFinished { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         public MachineChooserViewModel()
         {
             //Machines = MainWindow.mainwindowViewModel.Machines.Select(x=>x.MachineShortname).ToObservableCollection();
-            Machines = MainWindow.MainwindowViewModel.Machines;
+            Machines = MainWindow._mainwindowViewModel.Machines;
         }
         private ObservableCollection<TbMachine>? _machines;
         public ObservableCollection<TbMachine>? Machines

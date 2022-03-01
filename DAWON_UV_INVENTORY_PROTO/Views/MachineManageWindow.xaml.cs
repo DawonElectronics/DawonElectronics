@@ -128,7 +128,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     TboxInputMachineMaker.Clear();
                     TboxInputMachineModelname.Clear();
                     qry_machine();
-                    MainWindow.MainwindowViewModel.Machines = new ObservableCollection<TbMachine>(context.TbMachine);
+                    MainWindow._mainwindowViewModel.Machines = new ObservableCollection<TbMachine>(context.TbMachine);
                 EXIT:
                     MessageBox.Show("이미 있는 호기 입니다 다른 호기를 입력해주세요");
 

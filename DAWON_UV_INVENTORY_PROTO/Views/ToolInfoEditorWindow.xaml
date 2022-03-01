@@ -1,0 +1,68 @@
+﻿<syncfusion:ChromelessWindow x:Class="DAWON_UV_INVENTORY_PROTO.Views.ToolInfoEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+        xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        syncfusion:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=FluentLight}"
+        mc:Ignorable="d"
+        Title="모델 정보 수정" Height="160" Width="1400" Left="0" WindowStartupLocation="Manual">
+    
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+        <Label Content="관리번호:" FontSize="16" HorizontalAlignment="Left"/>
+        <Label x:Name="lbl_pid"  FontSize="16" Margin="10,2"/>
+        </StackPanel>
+        <syncfusion:SfDataGrid x:Name="GridToolinfoEdit" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3" Grid.Row="1" MaxWidth="2560" 
+                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowResizingColumns="True" 
+                                       ColumnSizer="Auto" 
+                                       SelectionMode="Extended"
+                                       SelectionUnit="Cell"
+                                       HorizontalContentAlignment="Center"
+                                       VerticalContentAlignment="Center">
+
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn MappingName="ProductId" HeaderText="다원관리번호" Width="110"  TextAlignment="Center" />
+                <syncfusion:GridTextColumn MappingName="CustToolno" HeaderText="TOOL" Width="110"  TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="CustModelname" HeaderText="모델명" Width="180" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="CustRevision" HeaderText="REV" Width="100" TextAlignment="Center" />
+                <syncfusion:GridDateTimeColumn MappingName="CreateDate" HeaderText="툴생성일" Width="90" TextAlignment="Center" Pattern="ShortDate"/>
+                <syncfusion:GridTextColumn MappingName="CustName" HeaderText="고객사" Width="100" TextAlignment="Center" />
+                <syncfusion:GridTextColumn MappingName="PrcName" HeaderText="공법" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="WorksizeX" HeaderText="사이즈X" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="WorksizeY" HeaderText="사이즈Y" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="ArrayBlk" HeaderText="블록_PNL" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="Pcs" HeaderText="PCS_PNL" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="Layer" HeaderText="층" Width="50" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="StackType" HeaderText="스택타입" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="LayerStructure" HeaderText="적층구조" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="HoleCount" HeaderText="홀수" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="PrcLayerFrom1" HeaderText="레이어From1" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="PrcLayerTo1" HeaderText="레이어To1" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="PrcLayerFrom2" HeaderText="레이어From2" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="PrcLayerTo2" HeaderText="레이어To2" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="PrdCategory" HeaderText="제품구분" Width="120" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="MesPrcCode" HeaderText="MES공정코드" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="MesPrcName" HeaderText="MES공정명" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="MesSeqCode" HeaderText="MES공순" Width="100" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="EndCustomer" HeaderText="최종고객" Width="180" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="ProductType" HeaderText="제품타입" Width="80" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="Depth" HeaderText="뎁스" Width="80" TextAlignment="Center"/>
+            </syncfusion:SfDataGrid.Columns>
+
+        </syncfusion:SfDataGrid>
+
+
+    </Grid>
+</syncfusion:ChromelessWindow>

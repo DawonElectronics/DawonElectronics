@@ -132,7 +132,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     TboxInputUsername.Clear();
                     TboxInputUserrole.Clear();
                     qry_user();
-                    MainWindow.MainwindowViewModel.Users = context.TbUsers.Select(x => x.UserName).ToList<string>();
+                    MainWindow._mainwindowViewModel.Users = context.TbUsers.Select(x => x.UserName).ToList<string>();
                 EXIT:
                     MessageBox.Show("이미 있는 사용자 ID 입니다 다른 ID를 입력해주세요");
 

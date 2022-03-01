@@ -58,6 +58,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public int? StriparrayCol { get; set; }
         public int? StriparrayRow { get; set; }
         public int? StriparrayBlk { get; set; }
+        public bool? CamFinished { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbPrctype PrcCodeNavigation { get; set; }

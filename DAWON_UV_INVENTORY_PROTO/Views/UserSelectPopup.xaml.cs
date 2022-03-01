@@ -26,13 +26,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             InitializeComponent();
 
-            CmbUserlist.ItemsSource = MainWindow.MainwindowViewModel.Users;
+            CmbUserlist.ItemsSource = MainWindow._mainwindowViewModel.Users;
             CmbUserlist.SelectedIndex = 0;
         }
 
         private void btn_select_user_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.MainwindowViewModel.SelectedUser = CmbUserlist.SelectedValue.ToString();
+            MainWindow._mainwindowViewModel.SelectedUser = CmbUserlist.SelectedValue.ToString();
             this.Close();
         }
     }

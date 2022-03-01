@@ -25,7 +25,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             InitializeComponent();
 
-            ToolinfoautoViewmodel.Customer = MainWindow.MainwindowViewModel.Customer;
+            ToolinfoautoViewmodel.Customer = MainWindow._mainwindowViewModel.Customer;
             ToolinfoautoViewmodel.SegementDataTable = de_ms_qry_workcenter();
             this.DataContext = ToolinfoautoViewmodel;
         }
@@ -434,7 +434,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq, issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow.MainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -452,7 +452,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS_lbcut(tool, workcenter, lot, seq, issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow.MainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)

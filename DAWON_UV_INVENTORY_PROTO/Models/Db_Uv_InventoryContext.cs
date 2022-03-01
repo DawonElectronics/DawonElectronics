@@ -156,6 +156,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.ArrayBlk).HasColumnName("array_blk");
 
+                entity.Property(e => e.CamFinished).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("create_date");
@@ -342,6 +344,18 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(10)
                     .HasColumnName("cust_id");
 
+                entity.Property(e => e.FormatBg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_bg");
+
+                entity.Property(e => e.FormatBold).HasColumnName("Format_bold");
+
+                entity.Property(e => e.FormatFg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_fg");
+
                 entity.Property(e => e.IsDone)
                     .HasColumnName("isDone")
                     .HasDefaultValueSql("((0))");
@@ -464,6 +478,18 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.EndCustomer)
                     .HasMaxLength(100)
                     .HasColumnName("end_customer");
+
+                entity.Property(e => e.FormatBg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_bg");
+
+                entity.Property(e => e.FormatBold).HasColumnName("Format_bold");
+
+                entity.Property(e => e.FormatFg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_fg");
 
                 entity.Property(e => e.HoleCount)
                     .HasMaxLength(50)

@@ -11,8 +11,17 @@ using DAWON_UV_INVENTORY_PROTO.Models;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
+    
     public class GridWipColorConverter : IValueConverter
     {
+        public SolidColorBrush ToBrush(string HexColorString)
+        {
+            return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
+        }
+        public SolidColorBrush BrushFromHex(string hexColorString)
+        {
+            return (SolidColorBrush)(new BrushConverter().ConvertFrom(hexColorString));
+        }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -22,8 +31,11 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 if (data.WaitTrackout == true)
                     result = new SolidColorBrush(Colors.YellowGreen);
+                else if (data.CamFinished == false)
+                    result = BrushFromHex("#FFD966");
                 else
                     result = DependencyProperty.UnsetValue;
+
             }
 
             return result;

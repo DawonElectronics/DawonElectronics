@@ -26,6 +26,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public long Id { get; set; }
         public string LotType { get; set; }
         public bool? WaitTrackout { get; set; }
+        public string FormatBg { get; set; }
+        public string FormatFg { get; set; }
+        public bool? FormatBold { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbUvToolinfo Product { get; set; }

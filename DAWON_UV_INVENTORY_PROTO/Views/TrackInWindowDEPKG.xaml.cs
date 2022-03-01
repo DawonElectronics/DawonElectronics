@@ -70,7 +70,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
                 var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                 bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
-
+                var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
                 if (!IsToolExist(tool))
                 {
                     RegistTool(tool,  lot, issample);
@@ -89,9 +89,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     //작성자 선택, 필수항목으로 입력 여부 체크
 
                     var usr = new TbUsers();
-                    var seluser = MainWindow.MainwindowViewModel.SelectedUser;
+                    var seluser = MainWindow._mainwindowViewModel.SelectedUser;
                     usr = context.TbUsers.Where(x => x.UserName == seluser).FirstOrDefault();
-                    inputTemp.TrackinUser = usr;
+                    inputTemp.TrackinUserId = user.UserId;
 
                     //LOT입력, 필수항목으로 입력 여부 체크
 
@@ -134,12 +134,97 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             }
 }
 
+        private void BtnAddOnly_OnClick(object sender, RoutedEventArgs e)
+        {
+            var selectedlist = GridRcv.SelectionController.SelectedRows;
+            BtnAddOnly.IsEnabled = false;
+            BtnExeRcv.IsEnabled = false;
+            foreach (var item in selectedlist)
+            {
+                try
+                {
+                    if (item.RowData != null)
+                    {
+                        var rowdata = item.RowData;
 
+                        var pC = GridRcv.View.GetPropertyAccessProvider();
+
+                        var tool = pC.GetValue(rowdata, "SPECNR") as String;
+                        var lot = pC.GetValue(rowdata, "LOTID") as String;
+
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
+                        var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
+                        bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
+                        var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
+                        if (!IsToolExist(tool))
+                        {
+                            RegistTool(tool, lot, issample);
+                        }
+                        using (var context = new Db_Uv_InventoryContext())
+                        {
+                            var inputTemp = new TbUvWorkorder();
+
+                            //고객사 선택, 필수항목으로 입력 여부 체크
+
+                            var cust = new TbCustomer();
+                            var selcust = "대덕전자(PKG)";
+                            cust = context.TbCustomer.Where(x => x.CustName == selcust).FirstOrDefault();
+                            inputTemp.CustId = cust.CustId;
+
+                            //작성자 선택, 필수항목으로 입력 여부 체크
+
+                            inputTemp.TrackinUserId = user.UserId;
+
+                            //LOT입력, 필수항목으로 입력 여부 체크
+
+                            inputTemp.Lotid = lot;
+
+                            //툴입력, 필수항목으로 입력 여부 체크                
+                            var pid = context.TbUvToolinfo.Where(w => w.CustToolno == tool).Select(x => x.ProductId).FirstOrDefault();
+
+                            inputTemp.ProductId = pid;
+                            inputTemp.SampleOrder = issample;
+                            inputTemp.Pnlqty = pnlqty;
+                            inputTemp.CreateTime = DateTime.Now;
+                            inputTemp.TrackinTime = DateTime.Now;
+                            inputTemp.Txid = Guid.NewGuid();
+                            var lotcount = context.TbUvWorkorder.Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
+                            if (lotcount == 0)
+                            {
+                                context.TbUvWorkorder.AddAsync(inputTemp);
+                                context.SaveChanges();
+                            }
+                            else if (lotcount != 0)
+                            {
+                                if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                                {
+                                    context.TbUvWorkorder.AddAsync(inputTemp);
+                                    context.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                }
+
+            }
+            GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+            BtnAddOnly.IsEnabled = true;
+            BtnExeRcv.IsEnabled = true;
+        }
         //여러로트 받기
         private async void btn_exe_rcv_Click(object sender, RoutedEventArgs e)
         {
+            BtnAddOnly.IsEnabled = false;
+            BtnExeRcv.IsEnabled = false;
             var selectedlist = GridRcv.SelectionController.SelectedRows;
-
+            var rcvlist = new List<string>();
+            string lot = string.Empty;
+            var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
             foreach (var item in selectedlist)
             {
                 try
@@ -151,9 +236,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     var pC = GridRcv.View.GetPropertyAccessProvider();
 
                     var tool = pC.GetValue(rowdata, "SPECNR") as String;
-                    var lot = pC.GetValue(rowdata, "LOTID") as String;
+                    lot = pC.GetValue(rowdata, "LOTID") as String;
                     
-                    var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty") as String);
+                    var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
                     var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                     bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
 
@@ -173,11 +258,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         inputTemp.CustId = cust.CustId;
 
                         //작성자 선택, 필수항목으로 입력 여부 체크
-
-                        var usr = new TbUsers();
-                        var seluser = MainWindow.MainwindowViewModel.SelectedUser;
-                        usr = context.TbUsers.Where(x => x.UserName == seluser).FirstOrDefault();
-                        inputTemp.TrackinUser = usr;
+                        inputTemp.TrackinUserId = user.UserId;
 
                         //LOT입력, 필수항목으로 입력 여부 체크
 
@@ -197,19 +278,18 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         {
                             context.TbUvWorkorder.AddAsync(inputTemp);
                             context.SaveChanges();
-                            await ExecuteRcv(lot);
-                        }
+                            rcvlist.Add(lot);
+                                //await ExecuteRcv(lot);
+                            }
                         else if (lotcount != 0)
                         {
                             if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                             {
                                 context.TbUvWorkorder.AddAsync(inputTemp);
                                 context.SaveChanges();
-                                await ExecuteRcv(lot);
-                            }
-                        }
-                    }
-                    }
+                                rcvlist.Add(lot);
+                                    //await ExecuteRcv(lot);
+                                } } } }
                 }
                 catch (Exception ex)
                 {
@@ -218,7 +298,15 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 }
                 
             }
+            if (rcvlist.Count == 1)
+                ExecuteRcv(lot);
+            else if (rcvlist.Count > 1)
+                ExecuteMultiRcv(rcvlist);
+
             GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+
+            BtnAddOnly.IsEnabled = true;
+            BtnExeRcv.IsEnabled = true;
         }
 
         private async Task<bool> ExecuteRcv(string lot)
@@ -375,7 +463,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DEPKG(tool, lot, seq, layerfr,layerto, issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            //MainWindow.MainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            //MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (dbtools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -507,9 +595,24 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         tempTool.Depth = Convert.ToDecimal(linfo.InsulThickness) + Convert.ToDecimal(layerinfo.Where(x => x.MaterialInfo.FromLayer == from).First().CopperThickness);
                         tempTool.MainHoleSize = ldrillinfo2.Where(t => t.ProcSeq == seq).First().HoleSize.Trim();
                 }
+                    var laserprctype = ldrillinfo2.Where(t => t.ProcSeq == seq).GroupBy(x => x.LaserProcType).Select(k => k.Key).First();
 
-                    
-                    
+                    if (laserprctype.Contains("VIP"))
+                    {
+                        tempTool.PrcCode = "UV_SHT_DR_002";
+                        tempTool.PrcName = "드릴(PTH)";
+                    }
+
+                    else if (laserprctype.Contains("LVH"))
+                    {
+                        tempTool.PrcCode = "UV_SHT_DR_001";
+                        tempTool.PrcName = "드릴(BVH)";
+                    }
+                    else
+                    {
+                        tempTool.PrcCode = "UV_SHT_DR_002";
+                        tempTool.PrcName = "드릴(PTH)";
+                    }
 
                     if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 1)
                     {
@@ -530,8 +633,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         tempTool.PrcLayerTo2 = ldrillinfo.Where(t => t.ProcSeq == seq).Skip(1).First().ProcLayerTo;
                         tempTool.HoleCount2 = ldrillinfo.Where(t => t.ProcSeq == seq).Skip(1).First().HoleCount;
 
-                        tempTool.HoleCount = "CS:" + tempTool.HoleCount1 + " SS:" + tempTool.HoleCount2;
-                    }
+                        if(tempTool.PrcName.Contains("BVH"))
+                            tempTool.HoleCount = "CS:" + tempTool.HoleCount1 + " SS:" + tempTool.HoleCount2;
+                        else if (tempTool.PrcName.Contains("PTH"))
+                            tempTool.HoleCount = tempTool.HoleCount2;
+                }
                     
 
                     if (issample == true)
@@ -539,24 +645,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     else if (issample != true)
                     { tempTool.Sample = false; }
 
-                    var laserprctype = ldrillinfo2.Where(t => t.ProcSeq == seq).GroupBy(x => x.LaserProcType).Select(k => k.Key).First();
                     
-                    if (laserprctype.Contains("VIP"))
-                    {
-                        tempTool.PrcCode = "UV_SHT_DR_002";
-                        tempTool.PrcName = "드릴(PTH)";
-                    }
-
-                    else if (laserprctype.Contains("LVH"))
-                    {
-                        tempTool.PrcCode = "UV_SHT_DR_001";
-                        tempTool.PrcName = "드릴(BVH)";
-                    }
-                    else 
-                    {
-                    tempTool.PrcCode = "UV_SHT_DR_002";
-                    tempTool.PrcName = "드릴(PTH)";
-                }
+                
 
                 var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-DEP-UV-";
                     var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
@@ -576,5 +666,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             
         }
+
+      
     }
 }
