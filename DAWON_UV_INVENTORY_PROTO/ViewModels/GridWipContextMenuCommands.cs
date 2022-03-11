@@ -1,9 +1,9 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using DAWON_UV_INVENTORY_PROTO.Views;
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Linq;
 using System.Windows;
-using DAWON_UV_INVENTORY_PROTO.Views;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -194,9 +194,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (obj is GridRecordContextMenuInfo && MainWindow._mainwindowViewModel.SelectedCustomerWo.Contains("PKG"))
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
-                var insulinfo = MainWindow._mainwindowViewModel.ToolInfos.Where(x=>x.ProductId == record.ProductId).Select(x=>x.InsulInfo).First().Split(',');
-                
-                
+                var insulinfo = MainWindow._mainwindowViewModel.ToolInfos.Where(x => x.ProductId == record.ProductId).Select(x => x.InsulInfo).First().Split(',');
+
+
                 var cclinfo = string.Format("{0} {1} {2}T {3}", insulinfo[3], insulinfo[5], Convert.ToDouble(insulinfo[10]), insulinfo[9]);
                 try
                 {
@@ -247,6 +247,50 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
         #endregion
+
+        #region 행 글씨 굵게
+
+        static BaseCommand _rowFontBoldCommand;
+        public static BaseCommand RowFontBoldCommand
+        {
+            get
+            {
+                _rowFontBoldCommand = new BaseCommand(RowFontBold);
+                return _rowFontBoldCommand;
+            }
+        }
+        private static void RowFontBold(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            if (result.FormatBold == true)
+                                result.FormatBold = false;
+                            else if (result.FormatBold == false || result.FormatBold == null)
+                                result.FormatBold = true;
+
+                            db.SaveChanges();
+                            mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
     }
 
 }

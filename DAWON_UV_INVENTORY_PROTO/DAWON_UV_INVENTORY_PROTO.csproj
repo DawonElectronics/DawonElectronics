@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86;x64</Platforms>
+    <Company>다원전자</Company>
+    <Product>UV 장부</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,19 +33,21 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.Licensing" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.SfColorPalette.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.Themes.Office2016White.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.53" />
-    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="19.4.0.53" />
+    <PackageReference Include="ObjectsComparer" Version="1.4.1" />
+    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.Licensing" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfColorPalette.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.Themes.Office2016White.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.54" />
+    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="19.4.0.54" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="System.Private.ServiceModel" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />

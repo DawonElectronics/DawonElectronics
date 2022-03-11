@@ -1,6 +1,8 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Controls.Input;
 using Syncfusion.Windows.Shared;
+using Syncfusion.Windows.Tools.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using Syncfusion.UI.Xaml.Grid;
+using System.Windows.Media;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -18,6 +20,12 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
     {
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged(String info)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
         private MainWindow mainWindow;
 
         public void OnViewInitialized(MainWindow mainWindow)
@@ -35,9 +43,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         }
 
         #region 로트검색 엔터키 명령
-        
+
         public ICommand WipLotSearchCommand { get; set; }
-        
+
         private void OnWipLotSearchRecordClicked(object obj)
         {
             mainWindow.GridWip.SelectedItems.Clear();
@@ -70,7 +78,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
         #endregion
-            #region 그리드 버튼(출고처리)
+        #region 그리드 버튼(출고처리)
 
         private BaseCommand? _trackoutRecord;
         public BaseCommand? TrackoutRecord
@@ -99,7 +107,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
             if (selData != null)
             {
-                if (((selData.PrcLayer2.Length>1)&&(selData.PrcName.Contains("BVH"))))
+                if (((selData.PrcLayer2.Length > 1) && (selData.PrcName.Contains("BVH"))))
                 {
                     if (selData.MachineSs == null || selData.MachineCs == null)
                     {
@@ -123,7 +131,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                 result.WaitTrackout = false;
                                 db.SaveChanges();
                                 mainWindow.UpdateFiltered_WorkorderList();
-                                
+
                                 MessageBox.Show("처리되었습니다");
                             }
                         }
@@ -181,9 +189,29 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         }
         #endregion
 
-
+        #region Tool 자동완성
         public ICommand AutoCompleteLoaded { get; set; }
-
+        private void AutoCompleteLoadedMethod(object obj)
+        {
+            var autocomplete = obj as SfTextBoxExt;
+            if (autocomplete != null)
+            {
+                autocomplete.Filter = CustomFilter;
+            }
+        }
+        public bool CustomFilter(string search, object item)
+        {
+            var model = item as TbUvToolinfo;
+            if (model != null)
+            {
+                if ((model.ProductId.ToLower().Contains(search.ToLower())) || ((model.CustToolno).ToString().ToLower().Contains(search.ToLower())))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
         private ObservableCollection<TbPrctype>? _prctypes;
         public ObservableCollection<TbPrctype>? PrcTypes
         {
@@ -212,8 +240,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _workOrderlist; }
             set
             {
-                
-                _workOrderlist = value;                
+
+                _workOrderlist = value;
                 OnPropertyChanged(nameof(WorkOrderList));
             }
         }
@@ -241,50 +269,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-
-
-        
-        private void AutoCompleteLoadedMethod(object obj)
-        {
-            var autocomplete = obj as SfTextBoxExt;
-            if (autocomplete != null)
-            {
-                autocomplete.Filter = CustomFilter;
-            }
-        }
-        public bool CustomFilter(string search, object item)
-        {
-            var model = item as TbUvToolinfo;
-            if (model != null)
-            {
-                if ((model.ProductId.ToLower().Contains(search.ToLower())) || ((model.CustToolno).ToString().ToLower().Contains(search.ToLower())))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private ICommand _lottypeChangedCommand;
-
-        public ICommand LottypeChangedCommand
-        {
-            get => _lottypeChangedCommand;
-            set
-            {
-                _lottypeChangedCommand = value;
-                OnPropertyChanged(nameof(LottypeChangedCommand));
-            }
-        }
-
         private ObservableCollection<TbCustomer>? _customer;
-        public ObservableCollection<TbCustomer>? Customer 
+        public ObservableCollection<TbCustomer>? Customer
         {
             get { return _customer; }
             set
@@ -372,8 +358,6 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 OnPropertyChanged(nameof(SelectedIsSampleWo));
             }
         }
-
-        
 
         private string? _selectedIsSampleWoSearch;
         public string? SelectedIsSampleWoSearch
@@ -481,15 +465,115 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         public string Toolno2Pid
         {
-            get { return _toolno2pid;}
+            get { return _toolno2pid; }
             set
             {
                 _toolno2pid = ToolInfos.Where(w => w.CustToolno == value).Select(s => s.ProductId).FirstOrDefault();
                 OnPropertyChanged(nameof(Toolno2Pid));
             }
         }
+
+       
+
+        #region 업체별 재공 수량 표시
+
+        private string _wipCount_Dems;
+
+        public string WipCount_Dems
+        {
+            get { return _wipCount_Dems; }
+            set
+            {
+                _wipCount_Dems = $"대덕MS({value})";
+                OnPropertyChanged(nameof(WipCount_Dems));
+            }
+        }
+
+        private string _wipCount_Depkg;
+
+        public string WipCount_Depkg
+        {
+            get { return _wipCount_Depkg; }
+            set
+            {
+                _wipCount_Depkg = $"대덕PKG({value})";
+                OnPropertyChanged(nameof(WipCount_Depkg));
+            }
+        }
+
+        private string _wipCount_Yp;
+
+        public string WipCount_Yp
+        {
+            get { return _wipCount_Yp; }
+            set
+            {
+                _wipCount_Yp = $"영풍전자({value})";
+                OnPropertyChanged(nameof(WipCount_Yp));
+            }
+        }
+        private string _wipCount_Bh;
+
+        public string WipCount_Bh
+        {
+            get { return _wipCount_Bh; }
+            set
+            {
+                _wipCount_Bh = $"BH({value})";
+                OnPropertyChanged(nameof(WipCount_Bh));
+            }
+        }
+        private string _wipCount_Ifx;
+
+        public string WipCount_Ifx
+        {
+            get { return _wipCount_Ifx; }
+            set
+            {
+                _wipCount_Ifx = $"인터({value})";
+                OnPropertyChanged(nameof(WipCount_Ifx));
+            }
+        }
+        private string _wipCount_Semco;
+
+        public string WipCount_Semco
+        {
+            get { return _wipCount_Semco; }
+            set
+            {
+                _wipCount_Semco = $"삼성전기({value})";
+                OnPropertyChanged(nameof(WipCount_Semco));
+            }
+        }
+
+        private string _wipCount_Nft;
+
+        public string WipCount_Nft
+        {
+            get { return _wipCount_Nft; }
+            set
+            {
+                _wipCount_Nft = $"뉴프렉스({value})";
+                OnPropertyChanged(nameof(WipCount_Nft));
+            }
+        }
+
+        private string _wipCount_Si;
+
+        public string WipCount_Si
+        {
+            get { return _wipCount_Si; }
+            set
+            {
+                _wipCount_Si = $"SI({value})";
+                OnPropertyChanged(nameof(WipCount_Si));
+            }
+        }
+
+        #endregion
+
     }
 
-    
+
 
 }

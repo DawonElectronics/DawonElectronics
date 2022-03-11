@@ -42,6 +42,25 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         }
         #endregion
 
-        
+        #region 모델 정보 새로고침 컨텍스트 메뉴
+
+        static BaseCommand _refreshToolinfoCommand;
+        public static BaseCommand RefreshToolinfoCommand
+        {
+            get
+            {
+                _refreshToolinfoCommand = new BaseCommand(RefreshToolinfo);
+                return _refreshToolinfoCommand;
+            }
+        }
+
+        private static void RefreshToolinfo(object obj)
+        {
+            var mw = new MainWindow();
+            mw.UpdateToolInfoList();
+        }
+        #endregion
+
+
     }
 }

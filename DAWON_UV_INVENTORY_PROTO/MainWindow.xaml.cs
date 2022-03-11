@@ -2,7 +2,7 @@
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using DAWON_UV_INVENTORY_PROTO.Views;
 using Microsoft.Win32;
-using Syncfusion.Windows.Controls.Media;
+using ObjectsComparer;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Cells;
 using Syncfusion.UI.Xaml.Grid.Converter;
@@ -17,11 +17,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using MessageBox = System.Windows.MessageBox;
-
 
 namespace DAWON_UV_INVENTORY_PROTO
 {
@@ -38,7 +37,8 @@ namespace DAWON_UV_INVENTORY_PROTO
             get { return _scrollbarValue; }
             set { _scrollbarValue = value; }
         }
-
+        DateTime starttime1;
+        DateTime endtime1;
         public static MainWindowViewModel _mainwindowViewModel = new MainWindowViewModel();
         public List<TbMachine> Tbmachine = new List<TbMachine>();
         public List<TbPrctype> Tbprctype = new List<TbPrctype>();
@@ -56,6 +56,17 @@ namespace DAWON_UV_INVENTORY_PROTO
             InitializeComponent();
             this.Loaded += OnLoaded;
             _mainwindowViewModel.OnViewInitialized(this);
+
+            System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor> colors = new System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor>();
+            colors.Add(new CustomColor() { Color = Colors.White, ColorName = "White" });
+            colors.Add(new CustomColor() { Color = Colors.Yellow, ColorName = "Yellow" });
+            colors.Add(new CustomColor() { Color = Colors.LightCoral, ColorName = "Light Coral" });
+            colors.Add(new CustomColor() { Color = Color.FromRgb(255, 192, 0) });
+            colors.Add(new CustomColor() { Color = Color.FromRgb(83, 141, 213) });
+            colors.Add(new CustomColor() { Color = Color.FromRgb(220, 120, 120) });
+
+            ((ColorPickerPalette)GridWip.RecordContextMenu.Items[7]).CustomColorsCollection = colors;
+
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -93,7 +104,19 @@ namespace DAWON_UV_INVENTORY_PROTO
                 CmbWipOrdertype.SelectedIndex = 0;
             }
 
+            GridWip.ItemsSourceChanged += GridWip_ItemsSourceChanged;
+
         }
+
+        private void GridWip_ItemsSourceChanged(object? sender, GridItemsSourceChangedEventArgs e)
+        {
+            var time2 = DateTime.Now;
+
+            Debug.WriteLine("grid rendered  " + (time2 - starttime1).TotalMilliseconds);
+
+        }
+
+
 
         void update_db()
         {
@@ -151,6 +174,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                 }
             }
         }
+
+        //수기 입력 버튼
         private void btn_input_proceed_Click(object sender, RoutedEventArgs e)
         {
             btn_input_proceed.IsEnabled = false;
@@ -162,7 +187,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 //고객사 선택, 필수항목으로 입력 여부 체크
                 var cust = new TbCustomer();
-                
+
                 cust = _mainwindowViewModel.Customer.Where(x => x.CustName == _mainwindowViewModel.SelectedCustomerWo).FirstOrDefault();
                 input_temp.CustId = cust.CustId;
 
@@ -173,10 +198,12 @@ namespace DAWON_UV_INVENTORY_PROTO
                 {
                     input_temp.Lotid = tbox_lotid.Text;
                 }
-                else if (tbox_lotid.Text == null || tbox_lotid.Text.Length<2) 
-                { 
+                else if (tbox_lotid.Text == null || tbox_lotid.Text.Length < 2)
+                {
                     MessageBox.Show("LOT를 입력해주세요");
                     isvalid = false;
+                    btn_input_proceed.IsEnabled = true;
+                    return;
                 }
 
                 //툴입력, 필수항목으로 입력 여부 체크
@@ -184,12 +211,19 @@ namespace DAWON_UV_INVENTORY_PROTO
                 {
                     input_temp.ProductId = tblk_productid.Text;
                 }
-                else if (tblk_productid.Text.Length <7) { MessageBox.Show("툴번호를 입력해주세요. 없는 경우 신규 등록 필요"); isvalid = false; }
+                else if (tblk_productid.Text.Length < 7) 
+                {
+                    MessageBox.Show("툴번호를 입력해주세요. 없는 경우 신규 등록 필요"); 
+                    isvalid = false;
+                    btn_input_proceed.IsEnabled = true;
+                    return; 
+                }
 
                 if (!tblk_productid.Text.Contains(cust.CustCode))
                 {
                     MessageBox.Show("로트 업체명과 툴 업체가 일치 하지 않습니다");
                     isvalid = false;
+                    return;
                 }
 
                 if (chkbox_issample.IsChecked == true)
@@ -197,7 +231,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 else if (chkbox_issample.IsChecked != true)
                 { input_temp.SampleOrder = false; }
 
-                input_temp.Pnlqty = Convert.ToInt16(tbox_pnlqty.Text);
+                if(tbox_pnlqty.Text.Length>0) input_temp.Pnlqty = Convert.ToInt16(tbox_pnlqty.Text);
                 input_temp.LotNotes = tbox_lot_notes.Text;
                 input_temp.CreateTime = DateTime.Now;
                 input_temp.TrackinTime = DateTime.Now;
@@ -205,7 +239,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 var pid = tblk_productid.Text;
                 var lot = tbox_lotid.Text;
-                
+
                 var lotcount = context.TbUvWorkorder.Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
                 if (lotcount == 0 && isvalid)
                 {
@@ -220,16 +254,13 @@ namespace DAWON_UV_INVENTORY_PROTO
                         context.SaveChanges();
                     }
                 }
-                clearlot();
+                tbox_lotid.Text = string.Empty;
                 UpdateFiltered_WorkorderList();
             }
             btn_input_proceed.IsEnabled = true;
         }
 
-        private void clearlot()
-        {
-            tbox_lotid.Text=string.Empty;
-        }
+
 
         private void btn_rib_customer_manage_Click(object sender, RoutedEventArgs e)
         {
@@ -266,7 +297,6 @@ namespace DAWON_UV_INVENTORY_PROTO
             if (TabToolinfo.Visibility == Visibility.Hidden || TabToolinfo.Visibility == Visibility.Collapsed)
             {
                 TabToolinfo.Visibility = Visibility.Visible;
-
             }
 
             TabControl.SelectedItem = TabToolinfo;
@@ -279,7 +309,6 @@ namespace DAWON_UV_INVENTORY_PROTO
 
         private void btn_rib_model_regist_manual_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void btn_rib_model_regist_auto_Click(object sender, RoutedEventArgs e)
@@ -303,7 +332,6 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var cell = (grid.SelectionController.CurrentCellManager.CurrentCell.Renderer as GridCellRendererBase)
                     .CurrentCellElement;
 
-
                 if (cell != null)
                 {
                     object? rowdata = ((SfDataGrid)sender).View.Records.GetItemAt(e.RowColumnIndex.RowIndex - 1);
@@ -325,6 +353,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                                 db.SaveChanges();
                                 UpdateFiltered_WorkorderList();
                             }
+
+                            //호기 규칙(D/I/R 00) 또는 빈칸(배정삭제)시 적용
                             else if (result != null && mappingName == "MachineCs")
                             {
 
@@ -343,12 +373,21 @@ namespace DAWON_UV_INVENTORY_PROTO
                             {
                                 Regex regex = new Regex("^[DIR][0-9]{2}");
 
-                                if (regex.IsMatch(newCellValue.ToString())|| newCellValue.ToString().Length<1)
+                                if (regex.IsMatch(newCellValue.ToString()) || newCellValue.ToString().Length < 1)
                                 {
                                     result.MachineSs = newCellValue.ToString();
                                     db.SaveChanges();
                                 }
 
+                                UpdateFiltered_WorkorderList();
+                            }
+
+                            else if (result != null && mappingName == "Pnlqty")
+                            {
+                                result.LotHistory += "\n" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:sss") + "\t" + _mainwindowViewModel.SelectedUser + "\t[수량변경]\t변경 전:" + result.Pnlqty + "\t변경 후:" + Convert.ToInt16(newCellValue.ToString());
+                                result.Pnlqty = Convert.ToInt16(newCellValue.ToString());
+
+                                db.SaveChanges();
                                 UpdateFiltered_WorkorderList();
                             }
                         }
@@ -362,19 +401,72 @@ namespace DAWON_UV_INVENTORY_PROTO
 
         public void UpdateFiltered_WorkorderList()
         {
+            starttime1 = DateTime.Now;
             using (var db = new Db_Uv_InventoryContext())
             {
                 var customer = _mainwindowViewModel.SelectedCustomerWo;
                 var issample = false;
                 if (_mainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
                 else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
-                _mainwindowViewModel.WorkOrderList =
-                    new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder.Where(x =>
-                        x.CustName == customer && x.SampleOrder == issample));
-            }
+                Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                var tmpwolist = db.ViewUvWorkorder.ToList<ViewUvWorkorder>();
+                Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
+                _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
+                _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
+                _mainwindowViewModel.WipCount_Bh = tmpwolist.Where(w => w.CustName == "BHFLEX").Count().ToString();
+                _mainwindowViewModel.WipCount_Ifx = tmpwolist.Where(w => w.CustName == "인터플렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Semco = tmpwolist.Where(w => w.CustName == "삼성전기").Count().ToString();
+                _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
+                Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                if (GridWip != null && GridWip.View != null)
+                {
 
-            //if (isGridWIPSelectionChanged)
-            //    GridWip.SelectedIndex = grid_wip_selectedRowIdx;
+
+                    var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime));
+
+                    var comparer = new ObjectsComparer.Comparer<ObservableCollection<ViewUvWorkorder>>();
+
+                    //Compare objects
+                    IEnumerable<Difference> differences;
+                    var isEqual = comparer.Compare(dbWorkOrderList, _mainwindowViewModel.WorkOrderList, out differences);
+
+                    //Print results
+                    Debug.WriteLine(isEqual ? "Objects are equal" : string.Join(Environment.NewLine, differences));
+
+                    if (!isEqual)
+                    {
+                        GridWip.View.BeginInit();
+                        _mainwindowViewModel.WorkOrderList = dbWorkOrderList;
+                        GridWip.View.EndInit();
+                    }
+
+                }
+
+
+                Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                if (GridWip != null && GridWip.View != null)
+                {
+                    GridWip.View.BeginInit();
+                    GridWip.Columns.Clear();
+
+                    if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
+                    {
+                        GridWipColumnDems();
+                    }
+                    else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
+                    {
+                        GridWipColumnDepkg();
+                    }
+                    GridWip.View.EndInit();
+
+                }
+
+                var time2 = DateTime.Now;
+
+                Debug.WriteLine(_mainwindowViewModel.WipCount_Dems + "  " + (time2 - starttime1).TotalMilliseconds);
+            }
         }
 
         public void UpdateFiltered_WorkorderSearchList()
@@ -465,26 +557,25 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
+        public void UpdateToolInfoList()
+        {
+            using (var db = new Db_Uv_InventoryContext())
+            {
+                _mainwindowViewModel.ToolInfos =
+                    new ObservableCollection<TbUvToolinfo>(db.TbUvToolinfo);
+            }
+        }
         private void cmb_wip_cust_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             UpdateFiltered_WorkorderList();
         }
-
         private void cmb_wip_ordertype_SelectionChanged(object sender,
             System.Windows.Controls.SelectionChangedEventArgs e)
         {
             UpdateFiltered_WorkorderList();
         }
-
-        private void cmb_finish_ordertype_SelectionChanged(object sender,
-            System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void btn_qry_search_Click(object sender, RoutedEventArgs e)
         {
-
             UpdateFiltered_WorkorderSearchList();
         }
 
@@ -497,71 +588,6 @@ namespace DAWON_UV_INVENTORY_PROTO
 
             TabControl.SelectedItem = TabQryFinish;
             _mainwindowViewModel.RefreshDate();
-        }
-
-        private void tbox_wip_selected_tool_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (((TextBox)sender).Text == string.Empty)
-                return;
-            else
-            {
-                try
-                {
-                    Clipboard.SetText(((TextBox)sender).Text);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        private void tbox_wip_selected_lot_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (((TextBox)sender).Text == string.Empty)
-                return;
-            else
-            {
-                try
-                {
-                    Clipboard.SetText(((TextBox)sender).Text);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-
-        }
-
-        private void SfMultiColumnDropDownControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Combo_Lottype_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
-            if (GridWip.SelectedItem != null && ((ComboBox)sender).IsDropDownOpen)
-            {
-                var rowdata = GridWip.SelectedItem;
-                var pC = GridWip.View.GetPropertyAccessProvider();
-
-                var qryid = Convert.ToInt64(pC.GetValue(rowdata, "Id").ToString());
-                var changevalue = ((ComboBoxItem)((ComboBox)sender).SelectedItem).Content;
-
-                using (var db = new Db_Uv_InventoryContext())
-                {
-                    var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
-
-                    if (result != null)
-                    {
-                        result.LotType = (string)changevalue;
-                        Debug.WriteLine(changevalue);
-                        db.SaveChanges();
-                    }
-                }
-            }
         }
 
         private void btn_search_wip_cond_qry_Click(object sender, RoutedEventArgs e)
@@ -577,8 +603,6 @@ namespace DAWON_UV_INVENTORY_PROTO
             var excelEngine = GridWip.ExportToExcel(GridWip.View, options);
             var workBook = excelEngine.Excel.Workbooks[0];
             string filePath = string.Empty;
-
-
 
             SaveFileDialog saveDlg = new SaveFileDialog();
             saveDlg.InitialDirectory = System.Environment.CurrentDirectory;
@@ -631,18 +655,8 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-        private void BtnInputLotDEMS_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (!Application.Current.Windows.OfType<TrackInWindowDems>().Any())
-            {
-                var trackinwindow = new TrackInWindowDems();
-                trackinwindow.Topmost = true;
-                trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-                trackinwindow.Show();
-            }
-        }
-
-
+        
+        #region 업체별 인수등록
         private void BtnInputLot_OnClick(object sender, RoutedEventArgs e)
         {
             if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
@@ -666,57 +680,57 @@ namespace DAWON_UV_INVENTORY_PROTO
                 }
             }
         }
-
+        #endregion
 
 
         #region 업체별 재공현황 버튼
 
-        private void BtnWipDEMS_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnWipDEMS_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainwindowViewModel.SelectedCustomerWo = "대덕전자(MS)";
-            UpdateFiltered_WorkorderList();
+            _mainwindowViewModel.SelectedCustomerWo = "대덕전자(MS)";           
+            
         }
 
-        private void BtnWipDEPKG_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnWipDEPKG_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "대덕전자(PKG)";
-            UpdateFiltered_WorkorderList();
+           
         }
 
         private void BtnWipYPE_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "영풍전자";
-            UpdateFiltered_WorkorderList();
+            
         }
 
         private void BtnWipBH_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "BHFLEX";
-            UpdateFiltered_WorkorderList();
+            
         }
 
         private void BtnWipIFC_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "인터플렉스";
-            UpdateFiltered_WorkorderList();
+            
         }
 
         private void BtnWipSEMCO_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "삼성전기";
-            UpdateFiltered_WorkorderList();
+            
         }
 
         private void BtnWipNFT_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "뉴프렉스";
-            UpdateFiltered_WorkorderList();
+           
         }
 
         private void BtnWipSI_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "SIFLEX";
-            UpdateFiltered_WorkorderList();
+            
         }
 
         #endregion
@@ -796,7 +810,7 @@ namespace DAWON_UV_INVENTORY_PROTO
             {
                 var keyword = string.Empty;
                 var tempKeyword = TboxSearchKeyWord.Text;
-                if (_mainwindowViewModel.SelectedCustomerWoSearch.Contains("대덕전자") && _reDelot.IsMatch(tempKeyword))
+                if (_mainwindowViewModel.SelectedCustomerWoSearch.Contains("대덕") && _reDelot.IsMatch(tempKeyword))
                     keyword = TboxSearchKeyWord.Text.Replace("-", "");
                 else
                     keyword = TboxSearchKeyWord.Text;
@@ -809,80 +823,22 @@ namespace DAWON_UV_INVENTORY_PROTO
                         (x.TrackoutTime >= datefrom && x.TrackoutTime <= dateto && x.IsDone == true) &&
                         (x.Lotid.Contains(keyword) || x.CustModelname.Contains(keyword) ||
                          x.CustToolno.Contains(keyword))));
-
             }
         }
-
 
         private void grid_wip_CurrentCellBeginEdit(object sender, CurrentCellBeginEditEventArgs e)
         {
             IsCellEditing = true;
         }
-
-        private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = true;
-        }
-
-        private void ComboBox_LostFocus_SS(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = false;
-
-        }
-
-        private void ComboBox_LostFocus_CS(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = false;
-
-        }
-
-        private void Cmb_lottype_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = false;
-        }
-
-        private void Cmb_lottype_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = true;
-        }
-
-        private void GridwipSsCombo_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            IsCellEditing = true;
-        }
-
-        private void ButtonWipSrchLot_OnClick(object sender, RoutedEventArgs e)
-        {
-            GridWip.SelectedItems.Clear();
-            var tempkeyword = tblksearchlot.Text;
-
-            if (_mainwindowViewModel.SelectedCustomerWoSearch.Contains("대덕"))
-                tblksearchlot.Text = tblksearchlot.Text.Replace("-", "");
-            else
-                tblksearchlot.Text = tblksearchlot.Text;
-
-            //GridWip.SearchHelper.Search(tblksearchlot.Text);
-            GridWip.SearchHelper.FindNext(tblksearchlot.Text);
-            this.GridWip.SelectionController.MoveCurrentCell(this.GridWip.SearchHelper.CurrentRowColumnIndex);
-            //var list = GridWip.SearchHelper.GetSearchRecords();
-            //if (list != null)
-            //{
-            //    int recordIndex = GridWip.ResolveToRecordIndex(GridWip.ResolveToRowIndex(list[0].Record));
-            //    GridWip.SelectedIndex = recordIndex;
-            //    //this.GridWip.SelectionController.MoveCurrentCell(this.GridWip.SearchHelper.CurrentRowColumnIndex);
-
-            //}
-
-
-        }
-
+        
+        //로트검색 초기화
         private void ButtonWipSrchClear_OnClick(object sender, RoutedEventArgs e)
         {
             tblksearchlot.Text = string.Empty;
-            ButtonWipSrchLot_OnClick(sender, e);
+            PerformSearchGridWip();
         }
 
-
+        #region 재공현황 로트 검색
         private void Tblksearchlot_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Return)
@@ -893,7 +849,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                     {
                         tblksearchlot.Text = tblksearchlot.Text.Replace("-", "");
                     }
-                    PerformSearch();
+                    PerformSearchGridWip();
                 }
                 else if (tblksearchlot.Text.Length < 2)
                 {
@@ -902,22 +858,53 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-        private void PerformSearch()
+        private void PerformSearchGridWip()
         {
             if (this.GridWip.SearchHelper.SearchText.Equals(tblksearchlot.Text))
                 return;
 
             var text = tblksearchlot.Text;
-            this.GridWip.SearchHelper.AllowCaseSensitiveSearch = true;
-            //this.GridWip.SearchHelper.SearchType = SearchType.StartsWith;
+            this.GridWip.SearchHelper.AllowCaseSensitiveSearch = false;
             this.GridWip.SearchHelper.AllowFiltering = true;
             this.GridWip.SearchHelper.Search(text);
         }
+        #endregion
 
         private void BtnToolInfoInput_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (!Application.Current.Windows.OfType<ToolinfoManageManualWindow>().Any())
+            {
+                var toolmanualwindow = new ToolinfoManageManualWindow();
+                toolmanualwindow.Topmost = true;
+                toolmanualwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                toolmanualwindow.Show();
+            }
         }
+
+
+        //행색상변경
+        private void ColorPickerPalette1_OnSelectedBrushChanged(object? sender, SelectedBrushChangedEventArgs e)
+        {
+            if (_mainwindowViewModel.SelectedGridWip != null)
+            {
+                var rowdata = _mainwindowViewModel.SelectedGridWip;
+                var qryid = Convert.ToInt64(rowdata.Id);
+
+                using (var db = new Db_Uv_InventoryContext())
+                {
+                    var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                    if (result != null)
+                    {
+                        result.FormatBg = e.NewColor.ToString();
+                        db.SaveChanges();
+                        UpdateFiltered_WorkorderList();
+                    }
+                }
+            }
+        }
+
+
     }
 
 }

@@ -46,7 +46,7 @@
          "ObjectType": 3
       }
    ],
-   "UiHint": "u20mariadb-vm.db_uv_inventory.dbo",
+   "UiHint": "u20mariadb-vm.db_uv_inventory",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

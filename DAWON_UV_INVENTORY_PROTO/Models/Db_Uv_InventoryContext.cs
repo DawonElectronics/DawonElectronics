@@ -334,6 +334,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             {
                 entity.ToTable("tb_uv_workorder");
 
+                entity.HasIndex(e => new { e.TrackoutTime, e.CustId, e.IsDone }, "IX_tb_uv_workorder");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CreateTime)
@@ -363,6 +365,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.IsPrinted)
                     .HasColumnName("isPrinted")
                     .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.LotHistory).HasColumnType("ntext");
 
                 entity.Property(e => e.LotNotes)
                     .HasColumnType("ntext")
@@ -648,12 +652,24 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("cust_toolno");
 
                 entity.Property(e => e.Depth)
-                    .HasColumnType("decimal(7, 5)")
+                    .HasColumnType("decimal(7, 3)")
                     .HasColumnName("depth");
 
                 entity.Property(e => e.EndCustomer)
                     .HasMaxLength(100)
                     .HasColumnName("end_customer");
+
+                entity.Property(e => e.FormatBg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_bg");
+
+                entity.Property(e => e.FormatBold).HasColumnName("Format_bold");
+
+                entity.Property(e => e.FormatFg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_fg");
 
                 entity.Property(e => e.HoleCount)
                     .HasMaxLength(50)

@@ -6,11 +6,8 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
     xmlns:sfSkinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-    xmlns:listCollection="clr-namespace:System.Collections;assembly=mscorlib" 
+    xmlns:listCollection="clr-namespace:System.Collections;assembly=mscorlib"
     x:Class="DAWON_UV_INVENTORY_PROTO.MainWindow"
-    xmlns:local ="clr-namespace:DAWON_UV_INVENTORY_PROTO"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     sfSkinManager:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=Office2016White}"
     d:DataContext="{d:DesignInstance viewmodel:MainWindowViewModel}"
     mc:Ignorable="d"
@@ -42,11 +39,20 @@
             <Setter Property="Foreground" Value="Black"/>
         </Style>
 
-       
         <viewmodel:GridWipColorConverter x:Key="ColorConverter"/>
+        <viewmodel:GridWipDoneColorConverter x:Key="DoneColorConverter"/>
         <viewmodel:IsSampleConverter x:Key="SampleConverter"/>
+        <viewmodel:GridWipBoldConverter x:Key="BoldConverter"/>
+        <viewmodel:GridWipDoneBoldConverter x:Key="DoneBoldConverter"/>
+        <viewmodel:GridWipFGConverter x:Key="FgConverter"/>
 
 
+        <DataTemplate x:Key="trackoutTemplate">
+            <Button syncfusion:FocusManagerHelper.FocusedElement="True"  
+                                            Command="{Binding Path=DataContext.TrackoutRecord, ElementName=GridWip}"
+                            CommandParameter="{Binding}"
+                            Content="출고" FontWeight="Bold" Margin="0,0" BorderThickness="1" BorderBrush="CornflowerBlue"  />
+        </DataTemplate>
     </syncfusion:RibbonWindow.Resources>
     <syncfusion:RibbonWindow.HeaderItemsSource>
             <listCollection:ArrayList>
@@ -92,23 +98,23 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <syncfusion:SfTextInputLayout Hint="샘플" ContainerType="Outlined"  VerticalAlignment="Center" HintFloatMode="AlwaysFloat" HelperText="샘플" Margin="5,5" Width="60" >
+                        <syncfusion:SfTextInputLayout Hint="샘플" ContainerType="Outlined"  VerticalAlignment="Center" HintFloatMode="AlwaysFloat" HelperText="샘플" HelperTextVisibility="Collapsed" Margin="5,5" Width="60" >
                             <CheckBox x:Name="chkbox_issample" IsChecked="{Binding SelectedIsSampleWo, Converter={StaticResource SampleConverter}}"  HorizontalAlignment="Center" Margin="5,5"/>
                         </syncfusion:SfTextInputLayout>
 
-                        <syncfusion:SfTextInputLayout Hint="고객사" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="고객사 선택" Width="120"  >
+                        <syncfusion:SfTextInputLayout Hint="고객사" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="고객사 선택" HelperTextVisibility="Collapsed" Width="120"  >
                             <ComboBox x:Name="cmb_input_cust" Margin="5,5" SelectedValue="{Binding SelectedCustomerWo}" DisplayMemberPath="CustName" SelectedValuePath="CustName" ItemsSource="{Binding Customer}"/>
                         </syncfusion:SfTextInputLayout>
 
-                        <syncfusion:SfTextInputLayout Hint="LOT" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="LOT입력" Width="250"  >
+                        <syncfusion:SfTextInputLayout Hint="LOT" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="LOT입력" HelperTextVisibility="Collapsed" Width="250"  >
                             <TextBox x:Name="tbox_lotid" Width="240" FontSize="12" FontWeight="Bold" Foreground="Black" Margin="5,5" />
                         </syncfusion:SfTextInputLayout>
 
-                        <syncfusion:SfTextInputLayout Hint="수량" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="PNL" Width="50"  >
+                        <syncfusion:SfTextInputLayout Hint="수량" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="PNL" HelperTextVisibility="Collapsed" Width="60"  >
                             <TextBox x:Name="tbox_pnlqty" Width="60" FontSize="12" FontWeight="Bold" Foreground="Black" Margin="5,5" />
                         </syncfusion:SfTextInputLayout>
 
-                        <syncfusion:SfTextInputLayout Hint="고객사 TOOL" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="TOOL NO 입력" Width="180"  >
+                        <syncfusion:SfTextInputLayout Hint="고객사 TOOL" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="TOOL NO 입력" HelperTextVisibility="Collapsed" Width="180"  >
                         <syncfusion:SfTextBoxExt HorizontalAlignment="Center" Name="sftbox_product_id" 
                                      Width="150" Margin="5,5" VerticalAlignment="Center"
                                      SearchItemPath="CustToolno"
@@ -146,16 +152,16 @@
                         </syncfusion:SfTextBoxExt>
                         </syncfusion:SfTextInputLayout>
 
-                        <syncfusion:SfTextInputLayout VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="제품 관리 번호" Width="130" FontSize="12" FontWeight="Bold" Foreground="Black" >
+                        <syncfusion:SfTextInputLayout VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="제품 관리 번호" HelperTextVisibility="Collapsed"  Width="130" FontSize="12" FontWeight="Bold" Foreground="Black" >
                             <TextBlock x:Name="tblk_productid" Width="150" Margin="5,5" Text="{Binding Toolno2Pid,Mode=OneWay,UpdateSourceTrigger=PropertyChanged }"  VerticalAlignment="Center"/>
                         </syncfusion:SfTextInputLayout>
-                        <syncfusion:SfTextInputLayout Hint="특이사항" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="특이사항 입력" Width="500"  >
+                        <syncfusion:SfTextInputLayout Hint="특이사항" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="특이사항 입력" HelperTextVisibility="Collapsed" Width="500"  >
                             <TextBox x:Name="tbox_lot_notes" Width="630" Margin="5,5"  TextWrapping="Wrap" FontSize="12" FontWeight="Bold" Foreground="Black" AcceptsReturn="True" />
                         </syncfusion:SfTextInputLayout>
                         <TextBlock x:Name="tblk_grid_id" FontSize="1" Foreground="White"/>
 
-                        <Button x:Name="btn_input_proceed" Content="입고" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18" Width="80" Height="50" Margin="15,3" VerticalAlignment="Top" Click="btn_input_proceed_Click" />
-                        <Button x:Name="BtnToolInfoInput" Content="모델등록" FontWeight="Bold" IsEnabled="False" HorizontalAlignment="Left" FontSize="18" Width="80" Height="50" Margin="5,3" VerticalAlignment="Top" Click="BtnToolInfoInput_OnClick" />
+                        <Button x:Name="btn_input_proceed" Content="입고" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18" Width="80" Height="45" Margin="15,3" VerticalAlignment="Center" Click="btn_input_proceed_Click" />
+                        <Button x:Name="BtnToolInfoInput" Content="모델등록" IsEnabled="True" FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18" Width="80" Height="45" Margin="5,3" VerticalAlignment="Center" Click="BtnToolInfoInput_OnClick" />
                         <!--<Button x:Name="btn_input_proceed_reuse" FontWeight="Bold" HorizontalAlignment="Left" FontSize="14" Width="120" Height="45" Margin="15,3"  >
                             <TextBlock Text="입고입력         (기존정보이용)" TextWrapping="Wrap" TextAlignment="Center"/>
 
@@ -188,21 +194,21 @@
         <syncfusion:TabControlExt x:Name="TabControl" HorizontalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Stretch" Margin="10,10">
             <syncfusion:TabItemExt x:Name="TabWip" Header="보유재공현황">
 
-                <Grid>
+                <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0"  VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0"  VerticalAlignment="Top" >
                         <UniformGrid Margin="5,0" VerticalAlignment="Top" Columns="4">
-                        <Button x:Name="BtnWipDEMS"  Content="대덕MS" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEMS_OnClick"/>
-                        <Button x:Name="BtnWipDEPKG"  Content="대덕PKG" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEPKG_OnClick"/>
-                        <Button x:Name="BtnWipYPE"  Content="영풍전자" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipYPE_OnClick"/>
-                        <Button x:Name="BtnWipBH"  Content="BH" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipBH_OnClick"/>
-                        <Button x:Name="BtnWipIFC"  Content="인터" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipIFC_OnClick"/>
-                        <Button x:Name="BtnWipSEMCO"  Content="삼성전기" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipSEMCO_OnClick"/>
-                        <Button x:Name="BtnWipNFT"  Content="뉴프렉스" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipNFT_OnClick"/>
-                            <Button x:Name="BtnWipSI"  Content="SI" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipSI_OnClick"/>
+                            <Button x:Name="BtnWipDEMS" Content="{Binding WipCount_Dems}"  Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEMS_OnClick"/>
+                            <Button x:Name="BtnWipDEPKG"  Content="{Binding WipCount_Depkg}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEPKG_OnClick"/>
+                            <Button x:Name="BtnWipYPE"  Content="{Binding WipCount_Yp}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipYPE_OnClick"/>
+                            <Button x:Name="BtnWipBH"  Content="{Binding WipCount_Bh}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipBH_OnClick"/>
+                            <Button x:Name="BtnWipIFC"  Content="{Binding WipCount_Ifx}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipIFC_OnClick"/>
+                            <Button x:Name="BtnWipSEMCO"  Content="{Binding WipCount_Semco}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipSEMCO_OnClick"/>
+                            <Button x:Name="BtnWipNFT"  Content="{Binding WipCount_Nft}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipNFT_OnClick"/>
+                            <Button x:Name="BtnWipSI"  Content="{Binding WipCount_Si}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipSI_OnClick"/>
 
                         </UniformGrid>
                         <syncfusion:SfTextInputLayout Hint="고객사" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="10,10" Width="120"  >
@@ -229,11 +235,11 @@
                             <!--<Button x:Name="BtnPrintChecksheet" Content="체크시트 출력" Margin="10,10" Height="45" Padding="5,5"  FontSize="16" FontWeight="Bold" />-->
 
                         <Button x:Name="BtnInputLot" Content="인수등록" Margin="10,10"  Padding="15,10" FontSize="20" FontWeight="Bold"  Click="BtnInputLot_OnClick "/>
-                        <syncfusion:SfTextInputLayout Hint="LOT검색" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="50,10,10,10" Width="150"  >
+                        <syncfusion:SfTextInputLayout Hint="LOT검색" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="30,10,10,10" Width="150"  >
                             <TextBox x:Name="tblksearchlot" HorizontalContentAlignment="Center" FontWeight="Bold" PreviewKeyDown="Tblksearchlot_OnPreviewKeyDown"  />
                         </syncfusion:SfTextInputLayout>
                         <!--<Button x:Name="ButtonWipSrchLot" Content="검색" Margin="5,10"  Padding="15,10" Height="45" FontSize="16" FontWeight="Bold"  Click="ButtonWipSrchLot_OnClick"/>-->
-                            <Button x:Name="ButtonWipSrchClear" Content="검색초기화" Margin="5,10"  Padding="15,10" Height="45" FontSize="16" FontWeight="Bold"  Click="ButtonWipSrchClear_OnClick"/>
+                            <Button x:Name="ButtonWipSrchClear" Content="초기화" Margin="5,10"  Padding="15,10" Height="45" FontSize="16" FontWeight="Bold"  Click="ButtonWipSrchClear_OnClick"/>
                         <!--<syncfusion:SfTextInputLayout Hint="선택된 TOOL" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="10,10" Width="150"  >
                             <TextBox  Text="{Binding SelectedGridWip.CustToolno,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" HorizontalContentAlignment="Center" FontWeight="Bold" MouseDoubleClick="tbox_wip_selected_tool_MouseDoubleClick" />
                         </syncfusion:SfTextInputLayout>-->
@@ -244,14 +250,39 @@
                         <!--<Button x:Name="btn_complete_job" Content="작업완료" Margin="3,3" Width="80" Height="33" FontSize="16" FontWeight="Bold"/>-->
                             <TextBlock x:Name="TblkCurrentCustomer" Text="{Binding SelectedCustomerWo}" Margin="10,10" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" Background="Black"/>
                             <TextBlock x:Name="TblkCurrentOrderType" Text="{Binding SelectedIsSampleWo}" Margin="0,10" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Black"/>
-                        <syncfusion:ColorPickerPalette  GenerateThemeVariants="True"
-                                                        GenerateStandardVariants="True" RecentlyUsedPanelVisibility="Visible" NoColorVisibility="Visible" Width="50" Height="30"/>
+                        
+                            
+                            <!--<syncfusion:ColorPickerPalette x:Name="ColorPickerPaletteGridWipBG"  
+                                                       SelectedBrushChanged="ColorPickerPaletteGridWipBG_OnSelectedBrushChanged"
+                                                       ThemePanelVisibility="Collapsed"
+                                                       GenerateStandardVariants="True" 
+                                                       RecentlyUsedPanelVisibility="Visible" 
+                                                       NoColorVisibility="Visible" 
+                                                       IsStandardTabVisible="Visible" 
+                                                       BlackWhiteVisibility="White"
+                                                       Width="45" Height="25"
+                                                       AutomaticColorVisibility="Hidden"
+                                                       Margin="5,5"/>
+
+                        <syncfusion:ColorPickerPalette x:Name="ColorPickerPaletteGridWipFG"  
+                                                       SelectedBrushChanged="ColorPickerPaletteGridWipFG_OnSelectedBrushChanged"
+                                                       ThemePanelVisibility="Collapsed"
+                                                       GenerateStandardVariants="True" 
+                                                       RecentlyUsedPanelVisibility="Visible"  
+                                                       IsStandardTabVisible="Visible"
+                                                       AutomaticColorVisibility="Hidden"
+                                                       BlackWhiteVisibility="Black"
+                                                       Width="45" Height="25"
+                                                       Margin="5,5"/>-->
+                            <!--<Button x:Name="BtnGridWipBold" Width="25" Height="30" Content="B" FontSize="16" FontWeight="Bold" FontStyle="Italic" Click="BtnGridWipBold_OnClick"/>-->
+                       
                     </StackPanel>
                     
-                     <!--MaxHeight="1080" MaxWidth="2560"--> 
+                     
                     <syncfusion:SfDataGrid x:Name="GridWip" Grid.Row="1" Margin="3,3"
-                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowResizingColumns="True" 
-                                       ColumnSizer="SizeToCells"
+                                         
+                                           ColumnSizer="None"
+                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"                                       
                                        SelectionMode="Extended"
                                        SelectionUnit="Cell"
                                        HorizontalContentAlignment="Center"
@@ -260,20 +291,29 @@
                                        CurrentCellBeginEdit="grid_wip_CurrentCellBeginEdit"
                                        CurrentCellEndEdit="grid_wip_CurrentCellEndEdit"
                                        AutoGenerateColumns="False"
-                                       ItemsSource="{Binding WorkOrderList, UpdateSourceTrigger=PropertyChanged}"
-                                       RowHeight="30"
+                                       ItemsSource="{Binding WorkOrderList}"
+                                       RowHeight="32"
+                                           
+ScrollViewer.HorizontalScrollBarVisibility="Visible"
+ScrollViewer.VerticalScrollBarVisibility="Visible"
                                        ShowGroupDropArea="True" 
                                        AllowGrouping="True"
                                        AutoExpandGroups="True"
                                        FrozenColumnCount="6"
                                        AllowDraggingColumns="True"
-                                       RowSelectionBrush="LightCyan"
+                                       RowSelectionBrush="DarkOliveGreen"
+                                       AllowResizingColumns="True" 
                                        ScrollMode="None"
                                        SelectedItem="{Binding SelectedGridWip,Mode=TwoWay}"
                                        HeaderStyle="{StaticResource HeaderStyle}"
-                                       CanMaintainScrollPosition="True"
+                                       CanMaintainScrollPosition="True"       
+                                           VirtualizingStackPanel.IsVirtualizing = "True"                                           
+                                           VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                           
                                        >
+
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
+                            <syncfusion:SortColumnDescription ColumnName="WaitTrackout" SortDirection="Descending" />
                             <syncfusion:SortColumnDescription ColumnName="TrackinTime" SortDirection="Ascending" />
                             
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
@@ -283,9 +323,12 @@
                                 <Style x:Key="TboxAcceptEnter" TargetType="TextBox">
                                     <Setter Property="AcceptsReturn" Value="True"/>
                                 </Style>
-                                <Style TargetType="syncfusion:GridCell">
+                                <Style TargetType="syncfusion:VirtualizingCellsControl">
                                     <Setter Property="Background" Value="{Binding Converter={StaticResource ColorConverter}}"/>
+                                    <Setter Property="FontWeight" Value="{Binding Converter={StaticResource BoldConverter}}"/>
+                                    <Setter Property="Foreground" Value="{Binding Converter={StaticResource FgConverter}}"></Setter>
                                 </Style>
+                               
                             </ResourceDictionary>
                         </syncfusion:SfDataGrid.Resources>
 
@@ -316,6 +359,30 @@
                                           CommandParameter="{Binding }"
                                           Header="PKG CCL 복사">
                                 </MenuItem>
+                                <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RowFontBoldCommand}}"
+                                          CommandParameter="{Binding }"
+                                          Header="굵은 글씨" FontWeight="Bold">
+                                </MenuItem>
+                                
+                                <syncfusion:ColorPickerPalette
+                                    x:Name="ColorPickerGridWipBG"
+                                    Margin="2"
+                                    SetCustomColors="True"
+                                    Mode="Palette"
+                                    NoColorVisibility="Visible"
+                                    AutomaticColorVisibility="Collapsed"
+                                    MoreColorOptionVisibility="Collapsed"
+                                    RecentlyUsedPanelVisibility="Collapsed"
+                                    StandardPanelVisibility="Collapsed"
+                                    ThemePanelVisibility="Collapsed"
+                                    GenerateThemeVariants="False"
+                                    GenerateStandardVariants="False"
+                                    CustomHeaderVisibility="Visible"
+                                    CustomHeaderText="행 색상 지정"                                    
+                                    SelectedBrushChanged="ColorPickerPalette1_OnSelectedBrushChanged"
+                                     />
+                                        
+                              
                             </ContextMenu>
                         </syncfusion:SfDataGrid.RecordContextMenu>
 
@@ -339,14 +406,14 @@
                                     Pattern="ShortDate"
                                     TextAlignment="Center" MinimumWidth="80"/>
 
-                            <syncfusion:GridTextColumn MappingName="Lotid" HeaderText="LOT" Width="120" TextAlignment="Center" AllowFiltering="True"/>
+                            <syncfusion:GridTextColumn MappingName="Lotid" HeaderText="LOT" Width="120" TextAlignment="Center" />
                             <syncfusion:GridTextColumn MappingName="CustModelname" HeaderText="모델명" Width="170" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustRevision" HeaderText="REV" Width="60" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustToolno" HeaderText="TOOL" Width="110" TextAlignment="Center"/>
 <!--<syncfusion:GridTextColumn MappingName="CustName" HeaderText="고객사" Width="90" TextAlignment="Center"/>-->
                             <syncfusion:GridTextColumn MappingName="MesPrcName" HeaderText="공정명" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="PrcName" HeaderText="공법" Width="80" TextAlignment="Center"/>
-                            <syncfusion:GridTextColumn MappingName="Pnlqty" HeaderText="수량" Width="50" TextAlignment="Center"/>
+                            <syncfusion:GridTextColumn MappingName="Pnlqty" HeaderText="수량" Width="50" TextAlignment="Center" AllowEditing="True"  />
                             <syncfusion:GridDateTimeColumn MappingName="TrackinTime" HeaderText="입고시간" Width="80" TextAlignment="Center" CustomPattern="MM/dd HH:mm" Pattern="CustomPattern"/>
                             <syncfusion:GridTextColumn MappingName="TrackinUsername" HeaderText="입고자" Width="70" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn  
@@ -357,66 +424,8 @@
                                     MinimumWidth="200"
                                 MaximumWidth="400"                                
                                 TextWrapping="Wrap"
-                                Padding="5,5"
-                                    >
-                              
+                                >
                             </syncfusion:GridTextColumn>
-
-                            <!--<syncfusion:GridComboBoxColumn MappingName="LotType" HeaderText="로트구분" Width="70" AllowEditing="False"  >
-                                <syncfusion:GridComboBoxColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox x:Name="cmb_lottype" Padding="5,5" Margin="1,1" Height="25" MinWidth="50"
-                                                  SelectedValuePath="Content"
-                                                  SelectionChanged="Combo_Lottype_SelectionChanged"
-                                                  GotFocus="Cmb_lottype_OnGotFocus"
-                                                  LostFocus="Cmb_lottype_OnLostFocus"
-                                                  SelectedValue="{Binding LotType}">
-                                            <ComboBoxItem Content="초도"/>
-                                            <ComboBoxItem Content="반납"/>
-                                            <ComboBoxItem Content=""/>
-                                        </ComboBox>
-                                    </DataTemplate>
-                                </syncfusion:GridComboBoxColumn.CellTemplate>
-                            </syncfusion:GridComboBoxColumn>-->
-
-                            <!--<syncfusion:GridComboBoxColumn MappingName="MachineCs" HeaderText="CS호기" Width="100"  >
-                                <syncfusion:GridComboBoxColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <xctk:CheckComboBox x:Name="_combo_cs" FocusManager.GotFocus="ComboBox_GotFocus" LostFocus="ComboBox_LostFocus_CS"
-                                                            syncfusion:FocusManagerHelper.FocusedElement="True" 
-                                                             HorizontalAlignment="Center" 
-                                                             VerticalAlignment="Center" 
-                                                             DisplayMemberPath="MachineShortname"
-                                                             ValueMemberPath="MachineShortname"
-                                                             SelectedValue="{Binding MachineCs}"
-                                                             ItemsSource="{Binding ElementName=GridWip, Path=DataContext.Machines}"
-                                                            Padding="5,5" Margin="1,1" Height="25" MinWidth="80"
-                                                            Text="{Binding MachineCs,TargetNullValue=설비선택}"
-                                                            ItemSelectionChanged="_combo_cs_ItemSelectionChanged"/>
-                                    </DataTemplate>
-                                </syncfusion:GridComboBoxColumn.CellTemplate>
-                            </syncfusion:GridComboBoxColumn>
-
-                            <syncfusion:GridComboBoxColumn MappingName="MachineSs" HeaderText="SS호기" Width="100" ColumnSizer="Auto" >
-                                <syncfusion:GridComboBoxColumn.CellTemplate>
-                                    <DataTemplate>
-                                       
-                                        <xctk:CheckComboBox x:Name="_combo_ss" FocusManager.GotFocus="ComboBox_GotFocus" LostFocus="ComboBox_LostFocus_SS"
-                                                            syncfusion:FocusManagerHelper.FocusedElement="True" 
-                                                             HorizontalAlignment="Center" 
-                                                             VerticalAlignment="Center" 
-                                                             DisplayMemberPath="MachineShortname"
-                                                             ValueMemberPath="MachineShortname"
-                                                             SelectedValue="{Binding DataContext.WorkOrderList,ElementName=GridWip}"
-                                                             ItemsSource="{Binding ElementName=GridWip, Path=DataContext.Machines}"
-                                                            Padding="5,5" Margin="1,1" Height="25" MinWidth="80"
-                                                            ItemSelectionChanged="_combo_ss_ItemSelectionChanged"
-                                                            Text="{Binding WorkOrderList,TargetNullValue=설비선택}"
-                                                             />
-                                    </DataTemplate>
-                                </syncfusion:GridComboBoxColumn.CellTemplate>
-                            </syncfusion:GridComboBoxColumn>-->
-
                             <syncfusion:GridTextColumn MappingName="MachineCs" HeaderText="CS호기" Width="80" TextAlignment="Center" AllowEditing="True"   />
                             <syncfusion:GridTextColumn MappingName="MachineSs" HeaderText="SS호기" Width="80" TextAlignment="Center" AllowEditing="True"   />
                             <syncfusion:GridTextColumn MappingName="Layer" HeaderText="층수" Width="40" TextAlignment="Center"/>
@@ -426,10 +435,8 @@
                             <syncfusion:GridTextColumn MappingName="Depth" HeaderText="뎁스" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="HoleCount" HeaderText="홀수" Width="120" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="EndCustomer" HeaderText="납품고객" Width="160" TextAlignment="Center"/>
-
-
-
-                            <syncfusion:GridTextColumn MappingName="Id" HeaderText="Id" TextAlignment="Center"/>
+                            <syncfusion:GridTextColumn MappingName="Id" HeaderText="Id" IsHidden="True" TextAlignment="Center"/>
+                            <syncfusion:GridCheckBoxColumn MappingName="WaitTrackout" IsHidden="True"/>
 
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
@@ -609,12 +616,15 @@
                                            RowSelectionBrush="LightCyan"
                                            SelectionForegroundBrush="Black"
                                            HeaderStyle="{StaticResource HeaderStyle}"
-                                           FrozenColumnCount="3"
-                    >
+                                           FrozenColumnCount="3" >
                         <syncfusion:SfDataGrid.Resources>
                             <ResourceDictionary>
                                 <Style TargetType="TextBox">
                                     <Setter Property="AcceptsReturn" Value="True"/>
+                                </Style>
+                                <Style TargetType="syncfusion:VirtualizingCellsControl">                                 
+                                    <Setter Property="Background" Value="{Binding Converter={StaticResource DoneColorConverter}}"/>
+                                    <Setter Property="FontWeight" Value="{Binding Converter={StaticResource DoneBoldConverter}}"/>                                            
                                 </Style>
                             </ResourceDictionary>
                         </syncfusion:SfDataGrid.Resources>
@@ -625,11 +635,12 @@
                                            CommandParameter="{Binding }"
                                            Header="출고취소">
                             </MenuItem>
-                           </ContextMenu>
-
-                            
+                           </ContextMenu>                            
                         </syncfusion:SfDataGrid.RecordContextMenu>
-                       
+                        
+                        <syncfusion:SfDataGrid.SortColumnDescriptions>
+                            <syncfusion:SortColumnDescription ColumnName="TrackoutTime" SortDirection="Descending" />
+                        </syncfusion:SfDataGrid.SortColumnDescriptions>
                         <syncfusion:SfDataGrid.Columns>                            
                             <syncfusion:GridDateTimeColumn  CustomPattern="yyyy/MM/dd hh:mm"
                                     HeaderText="생성일"
@@ -668,11 +679,8 @@
                             <syncfusion:GridTextColumn MappingName="Depth" HeaderText="뎁스" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="MesSeqCode" HeaderText="MES공순" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="MesPrcCode" HeaderText="MES공정코드" Width="80" TextAlignment="Center"/>
-                            <syncfusion:GridTextColumn MappingName="Id" HeaderText="Id" TextAlignment="Center"/>
+                            <syncfusion:GridTextColumn MappingName="Id" HeaderText="Id" TextAlignment="Center" IsHidden="True"/>
                         </syncfusion:SfDataGrid.Columns>
-
-
-
                     </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:TabItemExt>
@@ -680,86 +688,30 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="85"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" >
-                        
-                        <syncfusion:SfTextInputLayout Hint="고객사" VerticalAlignment="Top" HorizontalAlignment="Center" HelperTextVisibility="Hidden" Margin="10,10" Width="120"  >
-                            <ComboBox x:Name="CmbToolinfoCust" Margin="5,5"   HorizontalContentAlignment="Center" 
-                                      ItemsSource="{Binding Customer}"
-                                      DisplayMemberPath="CustName" 
-                                      SelectedValuePath="CustId" 
-                                      SelectedValue="{Binding SelectedCustIdToolinfo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                        </syncfusion:SfTextInputLayout>
-
-
-                        <syncfusion:SfTextInputLayout Hint="가공타입" VerticalAlignment="Top" HorizontalAlignment="Center" HelperTextVisibility="Hidden"  Margin="10,10" Width="120"  >
-                            <ComboBox x:Name="CmbToolinfoPrctype" Margin="5,5"  HorizontalContentAlignment="Center" 
-                                      ItemsSource="{Binding PrcTypes}" 
-                                      DisplayMemberPath="PrcName" 
-                                      SelectedValuePath="PrcCode" 
-                                      SelectedValue="{Binding SelectedPrcCodeToolinfo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                        </syncfusion:SfTextInputLayout>
-
-                        <syncfusion:SfTextInputLayout Hint="고객사 TOOL" VerticalAlignment="Top" HorizontalAlignment="Center" HelperTextVisibility="Hidden"  Margin="10,10" Width="200"  >
-                            <syncfusion:SfTextBoxExt HorizontalAlignment="Center" Name="SftboxToolinfoProductId" 
-                                     Width="180" Margin="5,5" VerticalAlignment="Center"
-                                     SearchItemPath="CustToolno"
-                                     AutoCompleteMode="Suggest"
-                                     AutoCompleteSource="{Binding ToolInfos}"
-                                     SuggestionMode="Contains"
-                                     >
-                                <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-                                    <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                    Grid.Column="0"
-                                                    Padding="2,8,0,8"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="SegoeUI"
-                                                    FontSize="12"
-                                                    FontWeight="Normal"
-                                                    Text="{Binding ProductId}" />
-                                                                <TextBlock
-                                                    Grid.Column="1"
-                                                    Padding="10,8,0,8"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="SegoeUI"
-                                                    FontSize="12"
-                                                    FontWeight="Normal"
-                                                    Text="{Binding CustToolno}" />  
-                                        </Grid>
-                                    </DataTemplate>
-                                </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-
-                            </syncfusion:SfTextBoxExt>
-                        </syncfusion:SfTextInputLayout>
-                        
-                    </StackPanel>
-                    
                     <syncfusion:SfDataGrid x:Name="GridToolinfo" Grid.Column="0" Margin="3,3" Grid.Row="1" MaxHeight="1080" MaxWidth="2560" 
-                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowResizingColumns="True" 
-                                       EnableDataVirtualization="True" ColumnSizer="Auto" 
-                                       SelectionMode="Extended"
-                                       SelectionUnit="Cell"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       ShowRowHeader="True"
-                                       RowSelectionBrush="LightCyan"
-                                       SelectionForegroundBrush="Black"
-                                       ScrollMode="None"
-                                       ItemsSource="{Binding ToolInfos, UpdateSourceTrigger=PropertyChanged}"
+                                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowResizingColumns="True" 
+                                           EnableDataVirtualization="True" ColumnSizer="Auto" 
+                                           SelectionMode="Extended"
+                                           SelectionUnit="Cell"
+                                           HorizontalContentAlignment="Center"
+                                           VerticalContentAlignment="Center"
+                                           ShowRowHeader="True"
+                                           AllowFiltering="True"
+                                           ShowGroupDropArea="True" 
+                                           AllowGrouping="True"
+                                           AutoExpandGroups="True"
+                                           RowSelectionBrush="DarkOliveGreen"
+                                           SelectionForegroundBrush="White"
+                                           ScrollMode="None"
+                                           ItemsSource="{Binding ToolInfos, UpdateSourceTrigger=PropertyChanged}"
                                            HeaderStyle="{StaticResource HeaderStyle}">
                         <syncfusion:SfDataGrid.RecordContextMenu>
                             <ContextMenu >
-                                <MenuItem Command="{Binding Source={x:Static Member=viewmodel:ToolInfoContextMenuCommands.EditToolinfoCommand}}"
+                                <MenuItem Command="{Binding Source={x:Static Member=viewmodel:ToolInfoContextMenuCommands.RefreshToolinfoCommand}}"
                                           CommandParameter="{Binding }"
-                                          Header="모델 정보 수정">
+                                          Header="새로고침">
                                 </MenuItem>
                             </ContextMenu>
 
@@ -767,7 +719,7 @@
                         </syncfusion:SfDataGrid.RecordContextMenu>
                         <syncfusion:SfDataGrid.Columns>                           
                             
-                            <syncfusion:GridTextColumn MappingName="ProductId" HeaderText="다원관리번호" Width="110"  TextAlignment="Center" />
+                            <syncfusion:GridTextColumn MappingName="ProductId" HeaderText="다원관리번호" Width="120"  TextAlignment="Center" />
                             <syncfusion:GridTextColumn MappingName="CustToolno" HeaderText="TOOL" Width="110"  TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustModelname" HeaderText="모델명" Width="180" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustRevision" HeaderText="REV" Width="100" TextAlignment="Center" />
@@ -792,8 +744,9 @@
                             <syncfusion:GridTextColumn MappingName="MesSeqCode" HeaderText="MES공순" Width="100" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="EndCustomer" HeaderText="최종고객" Width="180" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="ProductType" HeaderText="제품타입" Width="80" TextAlignment="Center"/>
-                            <syncfusion:GridTextColumn MappingName="Depth" HeaderText="뎁스" Width="80" TextAlignment="Center"/> 
-                            
+                            <syncfusion:GridTextColumn MappingName="Depth" HeaderText="뎁스" Width="80" TextAlignment="Center"/>
+                            <syncfusion:GridCheckBoxColumn MappingName="CamFinished" HeaderText="초도 캠" Width="80" TextAlignment="Center"/>
+
                         </syncfusion:SfDataGrid.Columns>
 
                     </syncfusion:SfDataGrid>

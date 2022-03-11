@@ -12,7 +12,7 @@ using DAWON_UV_INVENTORY_PROTO.Models;
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
     
-    public class GridWipColorConverter : IValueConverter
+    public class GridWipBoldConverter : IValueConverter
     {
         public SolidColorBrush ToBrush(string HexColorString)
         {
@@ -29,21 +29,13 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             object result = new object();
             if (data != null)
             {
-                if (data.CamFinished == false)
-                    result = BrushFromHex("#FFD966");
-                else if (data.WaitTrackout == true)
-                    result = new SolidColorBrush(Colors.YellowGreen);
-                else if (data.CamFinished == false && data.FormatBg != null)
-                    result = BrushFromHex("#FFD966");
-                else if (data.WaitTrackout == false && data.FormatBg != null)
-                {
-                    if (data.FormatBg.Length > 6)  result = BrushFromHex(data.FormatBg);
-                }
+                if (data.FormatBold == true)
+                    result = FontWeights.Bold;
+
                 else
                     result = DependencyProperty.UnsetValue;
+
             }
-            else
-                result = DependencyProperty.UnsetValue;
 
             return result;
         }
