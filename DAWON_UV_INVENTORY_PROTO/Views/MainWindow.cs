@@ -21,14 +21,17 @@ namespace DAWON_UV_INVENTORY_PROTO
             var pnlqtycol = new GridTextColumn() { MappingName = "Pnlqty", HeaderText = "수량", Width = 50, TextAlignment = TextAlignment.Center, AllowEditing = true };
             var trackintimecol = new GridDateTimeColumn() { MappingName = "TrackinTime", HeaderText = "입고시간", Width = 80, CustomPattern = "MM/dd HH:mm", Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern, TextAlignment = TextAlignment.Center };
             var trackinusercol = new GridTextColumn() { MappingName = "TrackinUsername", HeaderText = "입고자", Width = 70, TextAlignment = TextAlignment.Center };
-            var lotnotescol = new GridTextColumn() 
-            { MappingName = "LotNotes", 
-                HeaderText = "특이사항", Width = 70, 
-                AllowEditing = true, 
-                TextAlignment = TextAlignment.Center, 
-                MaximumWidth = 200, 
-                MinimumWidth = 400, 
-                TextWrapping = TextWrapping.Wrap };
+            var lotnotescol = new GridTextColumn()
+            {
+                MappingName = "LotNotes",
+                HeaderText = "특이사항",
+                Width = 70,
+                AllowEditing = true,
+                TextAlignment = TextAlignment.Center,
+                MaximumWidth = 200,
+                MinimumWidth = 400,
+                TextWrapping = TextWrapping.Wrap
+            };
             var machinecscol = new GridTextColumn() { MappingName = "MachineCs", HeaderText = "CS호기", AllowEditing = true, Width = 80, TextAlignment = TextAlignment.Center };
             var machinesscol = new GridTextColumn() { MappingName = "MachineSs", HeaderText = "SS호기", AllowEditing = true, Width = 80, TextAlignment = TextAlignment.Center };
             var totallayercol = new GridTextColumn() { MappingName = "Layer", HeaderText = "층수", Width = 40, TextAlignment = TextAlignment.Center };

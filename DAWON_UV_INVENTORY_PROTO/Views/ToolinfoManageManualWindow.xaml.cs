@@ -1,22 +1,6 @@
-﻿using DAWON_UV_INVENTORY_PROTO.Models;
-using DAWON_UV_INVENTORY_PROTO.ViewModels;
-using Syncfusion.UI.Xaml.Grid;
+﻿using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using Syncfusion.Windows.Shared;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -29,8 +13,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         public ToolinfoManageManualWindow()
         {
             InitializeComponent();
-            this.Loaded += OnLoaded;    
-            
+            this.Loaded += OnLoaded;
+
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

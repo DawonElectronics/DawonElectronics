@@ -2,21 +2,11 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -27,7 +17,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
     {
         public MachineManageWindow()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             this.Loaded += OnLoaded;
             this.GridMachine.AutoGeneratingColumn += Grid_AutoGeneratingColumn;
         }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using DAWON_UV_INVENTORY_PROTO.Models;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
-    
+
     public class GridWipFGConverter : IValueConverter
     {
         public SolidColorBrush ToBrush(string HexColorString)
@@ -27,13 +23,13 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             var data = value as ViewUvWorkorder;
             object result = new object();
-            if (data.FormatFg != null)
+            result = DependencyProperty.UnsetValue;
+            if (data != null && data.FormatFg != null)
             {
-                if (data.FormatFg.Length>6) result = (SolidColorBrush)(new BrushConverter().ConvertFromString(data.FormatFg));
-
+                if (data.FormatFg.Length > 6)
+                { result = (SolidColorBrush)(new BrushConverter().ConvertFromString(data.FormatFg)); }
                 else
-                    result = DependencyProperty.UnsetValue;
-
+                { result = DependencyProperty.UnsetValue; }
             }
             else
                 result = DependencyProperty.UnsetValue;

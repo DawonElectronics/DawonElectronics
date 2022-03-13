@@ -2,7 +2,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -395,7 +394,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 if (string.IsNullOrEmpty(InputModelName))
                 {
                     result = "모델명을 입력해주세요";
-                }              
+                }
             }
             if (columnName == "InputToolNumber")
             {
@@ -433,7 +432,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 }
             }
 
-           
+
             if (result == null)
             {
                 Error = null;

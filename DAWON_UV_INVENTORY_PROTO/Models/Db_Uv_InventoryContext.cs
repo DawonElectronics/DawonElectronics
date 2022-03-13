@@ -19,10 +19,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured && MainWindow._mainwindowViewModel.SelectedUser == "테스트"&& MainWindow._mainwindowViewModel.ChkTest ==true)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                //optionsBuilder.UseNpgsql("Host=192.168.0.21;Database=uv_inventory;Username=uv_inventory;Password=Ekdnjs3637!");
+                optionsBuilder.UseSqlServer("server=192.168.0.12;database=db_uv_inventory;user=uv_inventory;password=Ekdnjs3637!");
+                optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
+            }
+            else if (!optionsBuilder.IsConfigured)
+            {
                 optionsBuilder.UseSqlServer("server=192.168.0.3;database=db_uv_inventory;user=uv_inventory;password=Ekdnjs3637!");
+                optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
             }
         }
         public virtual DbSet<TbCustomer> TbCustomer { get; set; }

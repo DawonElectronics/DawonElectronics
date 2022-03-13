@@ -2,21 +2,11 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -42,7 +32,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 using (var context = new Db_Uv_InventoryContext())
                 {
 
-                    
+
                     DataTable dt = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTable>(Newtonsoft.Json.JsonConvert.SerializeObject(context.TbCustomer));
                     dt.Columns["CustId"].ColumnName = "고객사 아이디";
                     dt.Columns["CustName"].ColumnName = "고객사명";
@@ -50,14 +40,14 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     dt.Columns["CustCode"].ColumnName = "고객사코드";
 
                     GridCustomer.ItemsSource = dt.DefaultView;
-                    
+
 
                 }
             }
             catch (Exception ex)
             { MessageBox.Show(ex.Message); }
 
-            }
+        }
 
         private void qry_customer()
         {
@@ -92,7 +82,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 this.TboxInputCustcode = null;
             if (this.TboxInputCustname != null)
                 this.TboxInputCustname = null;
-            
+
             base.OnClosing(e);
         }
 
@@ -109,19 +99,19 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 using (var context = new Db_Uv_InventoryContext())
                 {
                     var custlist = context.TbCustomer.ToList<TbCustomer>();
-                    if(CmbDept.SelectedItem != null)
+                    if (CmbDept.SelectedItem != null)
                         dept = CmbDept.Text;
-                    var custidCount = custlist.Where(w=>w.CustId.Contains(dept)).Count();
-                    
-                    if(custlist.Where(w=>w.CustCode.Contains(TboxInputCustcode.Text)).Count()>0)
-                    { 
-                      goto EXIT;
+                    var custidCount = custlist.Where(w => w.CustId.Contains(dept)).Count();
+
+                    if (custlist.Where(w => w.CustCode.Contains(TboxInputCustcode.Text)).Count() > 0)
+                    {
+                        goto EXIT;
                     }
 
                     var inputTemp = new TbCustomer();
-                    inputTemp.CustId = dept+"_"+(custidCount).ToString();
-                    if(TboxInputCustname != null)
-                    inputTemp.CustName = TboxInputCustname.Text;
+                    inputTemp.CustId = dept + "_" + (custidCount).ToString();
+                    if (TboxInputCustname != null)
+                        inputTemp.CustName = TboxInputCustname.Text;
                     if (TboxInputCustcode != null)
                         inputTemp.CustCode = TboxInputCustcode.Text;
 
@@ -141,6 +131,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             { MessageBox.Show(ex.Message); }
         }
 
-        
+
     }
 }

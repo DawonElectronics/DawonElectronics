@@ -4,6 +4,8 @@ using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -88,10 +90,11 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 return _executeWaitTrackoutCommand;
             }
         }
-        private static void ExecuteWaitTrackout(object obj)
+        private static async void ExecuteWaitTrackout(object obj)
         {
             if (obj is GridRecordContextMenuInfo)
             {
+
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
                 var mw = new MainWindow();
@@ -105,9 +108,30 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                         if (result != null)
                         {
+                            //var old = MainWindow._mainwindowViewModel.WorkOrderList;
+                            //old.Where(x=>x.Id == record.Id).FirstOrDefault().WaitTrackout = true;
+                            //MainWindow._mainwindowViewModel.WorkOrderList = old;
+                            MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = true;
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
                             result.WaitTrackout = true;
-                            db.SaveChanges();
-                            mw.UpdateFiltered_WorkorderList();
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
                         }
                     }
                 }
@@ -126,7 +150,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 return _cancelWaitTrackoutCommand;
             }
         }
-        private static void CancelWaitTrackout(object obj)
+        private static async void CancelWaitTrackout(object obj)
         {
             if (obj is GridRecordContextMenuInfo)
             {
@@ -140,9 +164,27 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
                         if (result != null)
                         {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = false;
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
                             result.WaitTrackout = false;
-                            db.SaveChanges();
-                            mw.UpdateFiltered_WorkorderList();
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
                         }
                     }
                 }
@@ -259,7 +301,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 return _rowFontBoldCommand;
             }
         }
-        private static void RowFontBold(object obj)
+        private static async void RowFontBold(object obj)
         {
             if (obj is GridRecordContextMenuInfo)
             {
@@ -277,17 +319,329 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                         if (result != null)
                         {
                             if (result.FormatBold == true)
+                            {
                                 result.FormatBold = false;
+                                MainWindow._mainwindowViewModel.SelectedGridWip.FormatBold = false;
+                            }
                             else if (result.FormatBold == false || result.FormatBold == null)
+                            {
                                 result.FormatBold = true;
+                                MainWindow._mainwindowViewModel.SelectedGridWip.FormatBold = true;
+                            }
 
-                            db.SaveChanges();
-                            mw.UpdateFiltered_WorkorderList();
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
                         }
                     }
                 }
             }
         }
+
+        #endregion
+
+        #region 행 색상 변경
+
+        static BaseCommand _rowColor1Command;
+        public static BaseCommand RowColor1Command
+        {
+            get
+            {
+                _rowColor1Command = new BaseCommand(RowColor1);
+                return _rowColor1Command;
+            }
+        }
+        private static async void RowColor1(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.Red.ToString();
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.White.ToString();
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+                            result.FormatBg = Colors.Red.ToString();
+                            result.FormatFg = Colors.White.ToString();
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
+                }
+            }
+        }
+
+        static BaseCommand _rowColor2Command;
+        public static BaseCommand RowColor2Command
+        {
+            get
+            {
+                _rowColor2Command = new BaseCommand(RowColor2);
+                return _rowColor2Command;
+            }
+        }
+        private static async void RowColor2(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.White.ToString();
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.Black.ToString();
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+                            result.FormatBg = Colors.White.ToString();
+                            result.FormatFg = Colors.Black.ToString();
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+        static BaseCommand _rowColor3Command;
+        public static BaseCommand RowColor3Command
+        {
+            get
+            {
+                _rowColor3Command = new BaseCommand(RowColor3);
+                return _rowColor3Command;
+            }
+        }
+        private static async void RowColor3(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.Yellow.ToString();
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.Black.ToString();
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+                            result.FormatBg = Colors.Yellow.ToString();
+                            result.FormatFg = Colors.Black.ToString();
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
+                }
+            }
+        }
+
+
+        static BaseCommand _rowColor4Command;
+        public static BaseCommand RowColor4Command
+        {
+            get
+            {
+                _rowColor4Command = new BaseCommand(RowColor4);
+                return _rowColor4Command;
+            }
+        }
+        private static async void RowColor4(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.Green.ToString();
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.White.ToString();
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+                            result.FormatBg = Colors.Green.ToString();
+                            result.FormatFg = Colors.White.ToString();
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
+                }
+            }
+        }
+
+
+        static BaseCommand _rowColor5Command;
+        public static BaseCommand RowColor5Command
+        {
+            get
+            {
+                _rowColor5Command = new BaseCommand(RowColor5);
+                return _rowColor5Command;
+            }
+        }
+        private static async void RowColor5(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+                var qryid = Convert.ToInt64(record.Id);
+                var mw = new MainWindow();
+
+                if (record != null)
+                {
+                    //장부이력 반납처리
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null)
+                        {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.White.ToString();
+                            MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.Black.ToString();
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+                            result.FormatBg = Colors.White.ToString();
+                            result.FormatFg = Colors.Black.ToString();
+
+                            await db.SaveChangesAsync();
+                            //mw.UpdateFiltered_WorkorderList();
+                        }
+                    }
+                }
+            }
+        }
+
+
+
 
         #endregion
 

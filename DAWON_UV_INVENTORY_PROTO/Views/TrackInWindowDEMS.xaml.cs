@@ -1,33 +1,18 @@
-﻿using Syncfusion.Windows.Shared;
+﻿using ConnectorDEMS;
+using ConnectorDEMS.Models;
+using DAWON_UV_INVENTORY_PROTO.Models;
+using DAWON_UV_INVENTORY_PROTO.ViewModels;
+using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
-using DAWON_UV_INVENTORY_PROTO.Models;
-using System.Xml.Serialization;
-using DAWON_UV_INVENTORY_PROTO.ViewModels;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using System.ServiceModel;
-using System.Collections.ObjectModel;
-using System.Xml.Linq;
-using ConnectorDEMS;
-using ConnectorDEMS.Models;
-using DAWON_UV_INVENTORY_PROTO.Helper;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Windows;
+using System.Windows.Input;
+using System.Xml;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -36,18 +21,18 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
     /// </summary>
     public partial class TrackInWindowDems : ChromelessWindow
     {
-        
+
         public TrackInWindowDemsViewModel TrackinDemsViewmodel = new TrackInWindowDemsViewModel();
         DemsHelper _demsClient = new DemsHelper();
         public TrackInWindowDems()
         {
-                    
+
             InitializeComponent();
             TrackinDemsViewmodel.SegementDataTable = de_ms_qry_workcenter();
             this.DataContext = TrackinDemsViewmodel;
-           
+
         }
-       
+
         private DataTable de_ms_qry_workcenter()
         {
             //var client = new DemsOiClient();
@@ -65,7 +50,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
                 //var result_workcenter = client.ExecCommandAsync(new MesClient_DE_MS.ExecCommandRequest(qry_workcenter_msg));
                 var aa = client.ChannelFactory.CreateChannel();
-                
+
                 var resultWorkcenter = client.ExecCommand(qryWorkcenterMsg);
                 resultWorkcenterXml.LoadXml(resultWorkcenter.OBJECT.ToString());
                 //result_lotlist_xml.LoadXml(result_lotlist);
@@ -75,7 +60,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 dsWorkcenter.ReadXml(sr);
                 DataTable dt = dsWorkcenter.Tables[0];
 
-                
+
                 return dt;
 
                 client.Close();
@@ -138,20 +123,20 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
 
                 var qryLotlistMsg = new IMesRuleService.MessageData();
-                
+
                 qryLotlistMsg.COMMAND = "GetStoredProcedureResult";
-                
+
                 qryLotlistMsg.OBJECT = qryRcvlotlist.OuterXml;
 
                 //var result_lotlist = client.ExecCommandAsync(new MesClient_DE_MS.ExecCommandRequest(qry_lotlist_msg));
                 var resultLotlist = client.ExecCommand(qryLotlistMsg);
                 resultRcvlotlistXml.LoadXml(resultLotlist.OBJECT.ToString());
-                
+
                 var sr = new StringReader(resultRcvlotlistXml["message"]["body"]["DATASET"]["DATALIST"].OuterXml);
 
                 var dsRcvlist = new DataSet();
                 dsRcvlist.ReadXml(sr);
-                
+
                 string jsonString = string.Empty;
                 //jsonString = JsonConvert.SerializeObject(dsRcvlist.Tables[0]);
 
@@ -215,7 +200,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     if (fromlayer == null)
                         pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool).Select(x => x.ProductId).FirstOrDefault();
                     else if (fromlayer != null)
-                        pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool&&w.PrcLayerFrom1 == fromlayer).Select(x => x.ProductId).FirstOrDefault();
+                        pid = MainWindow._mainwindowViewModel.ToolInfos.Where(w => w.CustToolno == tool && w.PrcLayerFrom1 == fromlayer).Select(x => x.ProductId).FirstOrDefault();
 
                     inputTemp.ProductId = pid;
                     inputTemp.SampleOrder = issample;
@@ -244,7 +229,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                
+
             }
             GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
             UpdateFiltered_WorkorderList();
@@ -299,10 +284,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var selcust = "대덕전자(MS)";
                         inputTemp.CustId = MainWindow._mainwindowViewModel.ToolInfos.Where(x => x.CustName == selcust)
                             .FirstOrDefault().CustId;
-                        
+
                         //작성자 선택, 필수항목으로 입력 여부 체크
                         inputTemp.TrackinUserId = user.UserId;
-                        
+
                         //LOT입력, 필수항목으로 입력 여부 체크
                         inputTemp.Lotid = lot;
 
@@ -505,18 +490,18 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 lotchange.InnerText = lot;
 
                 var qryLotlistMsg = new IMesRuleService.MessageData();
-                
+
                 qryLotlistMsg.COMMAND = "MoveLineReceive";
-                
+
                 qryLotlistMsg.OBJECT = exeRcv.OuterXml;
 
-                var resultLotlist =client.ExecCommandAsync(qryLotlistMsg);
+                var resultLotlist = client.ExecCommandAsync(qryLotlistMsg);
                 //var result_lotlist = client.ExecCommandAsync(new MesClient_DE_MS.ExecCommandRequest(qry_lotlist_msg));
                 resultRcvXml.LoadXml(resultLotlist.Result.OBJECT.ToString());
 
                 var sr = new StringReader(resultRcvXml["message"]["return"]["returncode"].OuterXml);
                 if (sr.ToString() == "0")
-                { result = true;}
+                { result = true; }
 
                 client.Close();
                 return result;
@@ -539,7 +524,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 var rcvitemxml = new XmlDocument();
                 var exeMultircv = new XmlDocument();
                 exeMultircv.LoadXml(Resource1.Exe_RcvLot);
-                
+
                 var lotchange = exeMultircv.SelectSingleNode("//message//body//MOVELINERECEIVELIST");
                 lotchange.FirstChild.SelectSingleNode("LOTID").InnerText = lot[0];
 
@@ -549,12 +534,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     tempnode.SelectSingleNode("LOTID").InnerText = lot[i];
                     lotchange.AppendChild(tempnode);
                 }
-                
-                
+
+
                 var qryLotlistMsg = new IMesRuleService.MessageData();
-                
+
                 qryLotlistMsg.COMMAND = "MoveLineReceive";
-                
+
                 qryLotlistMsg.OBJECT = exeMultircv.OuterXml;
 
                 var resultLotlist = client.ExecCommand(qryLotlistMsg);
@@ -576,7 +561,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             }
         }
 
-        private bool IsToolExist(string tool,string prcname)
+        private bool IsToolExist(string tool, string prcname)
         {
             var result = false;
             using (var context = new Db_Uv_InventoryContext())
@@ -592,21 +577,21 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             return result;
         }
 
-        private void RegistTool(string tool, string workcenter, string lot, bool issample,string seqnr)
+        private void RegistTool(string tool, string workcenter, string lot, bool issample, string seqnr)
         {
             try
             {
                 using (var context = new Db_Uv_InventoryContext())
                 {
                     var tools = context.TbUvToolinfo.Where(w => w.CustToolno == tool);
-                    var ldrillinfoSeq = _demsClient.MesHoleInfoQry(tool).Where(x=>x.ProcName.ToLower().Contains("uv")).GroupBy(x => x.ProcSeq).Select(x => x.Key).ToList<string>();
-                    var lbcutinfoSeq   = _demsClient.MesLBodyCutInfoQry(tool,seqnr).GroupBy(x => x.ProcSeq).Select(x => x.Key).ToList<string>();
+                    var ldrillinfoSeq = _demsClient.MesHoleInfoQry(tool).Where(x => x.ProcName.ToLower().Contains("uv")).GroupBy(x => x.ProcSeq).Select(x => x.Key).ToList<string>();
+                    var lbcutinfoSeq = _demsClient.MesLBodyCutInfoQry(tool, seqnr).GroupBy(x => x.ProcSeq).Select(x => x.Key).ToList<string>();
 
                     foreach (var seq in ldrillinfoSeq)
                     {
                         if (tools.Where(x => x.MesSeqCode == seq).Count() == 0)
                         {
-                            var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq,issample);
+                            var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq, issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
                             MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
@@ -659,7 +644,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     var specinfo = _demsClient.MesSpecInfoQry(tool, lotdetailinfo.Seqnr);
                     var countItem = ldrillinfo.FindAll(f => f.LaserType.Contains("UV"));
                     var countDbItem = context.TbUvToolinfo.Where(w => w.CustToolno == tool && w.MesPrcName.Contains("Uv"));
-                    
+
                     tempTool.CustModelname = lotdetailinfo.ModelName;
                     tempTool.CustRevision = lotdetailinfo.ModelRev.Trim();
                     tempTool.CustToolno = lotdetailinfo.ToolNo;
@@ -670,7 +655,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     tempTool.MesSeqCode = seq;
                     tempTool.MesPrcName = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcName;
                     tempTool.MesPrcCode = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcCode;
-                    
+
                     tempTool.StackType = lotdetailinfo.SpecType1;
                     tempTool.PrdCategory = lotdetailinfo.ProductType;
                     tempTool.LayerStructure = lotdetailinfo.LayerStructure;
@@ -784,20 +769,20 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         }
 
         //바디컷 정보 조회
-        private TbUvToolinfo GetTbUvToolinfo_DE_MS_lbcut(string tool, string workcenter, string lot, string seq, bool issample,string seqnr)
+        private TbUvToolinfo GetTbUvToolinfo_DE_MS_lbcut(string tool, string workcenter, string lot, string seq, bool issample, string seqnr)
         {
             var tempTool = new TbUvToolinfo();
 
             try
             {
-               
+
                 using (var context = new Db_Uv_InventoryContext())
 
                 {
                     var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
                     var lotinfo = _demsClient.MesLotInfoQry(lot);
                     var specinfo = _demsClient.MesSpecInfoQry(tool, lotdetailinfo.Seqnr);
-                    var lbcutinfo = _demsClient.MesLBodyCutInfoQry(tool,seqnr);
+                    var lbcutinfo = _demsClient.MesLBodyCutInfoQry(tool, seqnr);
 
                     tempTool.CustId = "UV_01";
                     tempTool.CustName = "대덕전자(MS)";
@@ -830,7 +815,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     tempTool.PrcLayerTo1 = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
                     tempTool.HoleCount = "길이:" + lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcDistance;
                     tempTool.Depth = Convert.ToDecimal(lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Depth.Trim());
-                    tempTool.ToolNotes = "가공면:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Side+" Tool순번:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ToolSeq; ;
+                    tempTool.ToolNotes = "가공면:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Side + " Tool순번:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ToolSeq; ;
 
                     if (issample == true)
                     { tempTool.Sample = true; }
@@ -852,6 +837,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             return tempTool;
         }
 
-        
+
     }
 }

@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAWON_UV_INVENTORY_PROTO.Models;
-using Syncfusion.Data.Extensions;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -20,8 +13,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
-        
-        
+
+
 
     }
 }

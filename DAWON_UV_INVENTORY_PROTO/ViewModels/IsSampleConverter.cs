@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
-    public class IsSampleConverter:IValueConverter
+    public class IsSampleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string str = (string) value;
+            string str = (string)value;
             if (str == "샘플")
             {
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -30,7 +26,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 return "샘플";
             }
-            else 
+            else
             {
                 return "양산";
             }

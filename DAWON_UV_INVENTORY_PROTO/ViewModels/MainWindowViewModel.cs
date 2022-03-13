@@ -2,7 +2,6 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Controls.Input;
 using Syncfusion.Windows.Shared;
-using Syncfusion.Windows.Tools.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +11,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -439,6 +437,17 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 OnPropertyChanged(nameof(SelectedUser));
             }
         }
+
+        private bool? chktest;
+        public bool? ChkTest
+        {
+            get { return chktest; }
+            set
+            {
+                chktest = value;
+                OnPropertyChanged(nameof(ChkTest));
+            }
+        }
         private string? _searchkeyword;
         public string? SearchKeyword
         {
@@ -473,7 +482,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-       
+
 
         #region 업체별 재공 수량 표시
 

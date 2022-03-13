@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
-using DAWON_UV_INVENTORY_PROTO.Models;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using Syncfusion.Windows.Shared;
+using System.Linq;
+using System.Windows;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -16,23 +15,23 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         public MachineChooserWindow(object obj)
         {
             InitializeComponent();
-            _mcviewmodel =new MachineChooserViewModel();
+            _mcviewmodel = new MachineChooserViewModel();
             _mcviewmodel.WorkorderRecord = (ViewUvWorkorder)obj;
             chkListBox.DataContext = _mcviewmodel;
 
-            
+
             _mcviewmodel.DbMachineString = _mcviewmodel.WorkorderRecord.MachineCs;
-            lbl_lotid.Content = ((ViewUvWorkorder) obj).Lotid;
+            lbl_lotid.Content = ((ViewUvWorkorder)obj).Lotid;
 
 
 
         }
 
-        
+
 
         private void RdoCs_OnChecked(object sender, RoutedEventArgs e)
         {
-            if(_mcviewmodel != null)
+            if (_mcviewmodel != null)
                 _mcviewmodel.DbMachineString = _mcviewmodel.WorkorderRecord.MachineCs;
         }
 

@@ -2,20 +2,10 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -40,7 +30,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             {
                 using (var context = new Db_Uv_InventoryContext())
                 {
-                    
+
                     DataTable dt = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTable>(Newtonsoft.Json.JsonConvert.SerializeObject(context.TbUsers));
                     dt.Columns["UserId"].ColumnName = "사용자 ID";
                     dt.Columns["UserName"].ColumnName = "사용자명";
@@ -107,10 +97,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 using (var context = new Db_Uv_InventoryContext())
                 {
                     var userlist = context.TbUsers.ToList<TbUsers>();
-                    
+
                     if (CmbDept.SelectedItem != null)
                         dept = CmbDept.Text;
-                    
+
 
                     if (userlist.Where(w => w.UserId == TboxInputUserid.Text).Count() > 0)
                     {

@@ -8,7 +8,7 @@ using System.Windows.Media;
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
 
-    public class GridWipBoldConverter : IValueConverter
+    public class GridWipDoneFGConverter : IValueConverter
     {
         public SolidColorBrush ToBrush(string HexColorString)
         {
@@ -21,18 +21,18 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var data = value as ViewUvWorkorder;
+            var data = value as ViewUvWorkorderDone;
             object result = new object();
             result = DependencyProperty.UnsetValue;
-            if (data != null)
+            if (data != null && data.FormatFg != null)
             {
-                if (data.FormatBold == true)
-                { result = FontWeights.Bold; }
-
+                if (data.FormatFg.Length > 6)
+                { result = (SolidColorBrush)(new BrushConverter().ConvertFromString(data.FormatFg)); }
                 else
                 { result = DependencyProperty.UnsetValue; }
-
             }
+            else
+                result = DependencyProperty.UnsetValue;
 
             return result;
         }

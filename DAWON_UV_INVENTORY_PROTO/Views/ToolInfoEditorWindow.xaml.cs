@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
-using DAWON_UV_INVENTORY_PROTO.Models;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using Syncfusion.Windows.Shared;
+using System.Collections.Generic;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -22,8 +19,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             GridToolinfoEdit.ItemsSource = toolinfosrc;
 
 
-            lbl_pid.Content = ((TbUvToolinfo) obj).ProductId;
+            lbl_pid.Content = ((TbUvToolinfo)obj).ProductId;
         }
-       
+
     }
 }

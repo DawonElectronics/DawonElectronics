@@ -1,12 +1,10 @@
-﻿using System;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using Syncfusion.Data.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAWON_UV_INVENTORY_PROTO.Models;
-using Syncfusion.Data.Extensions;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -48,7 +46,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         public ObservableCollection<object> SelectedMachine
         {
-            get { return _selectedMachine;}
+            get { return _selectedMachine; }
             set
             {
                 _selectedMachine = value;
@@ -61,30 +59,30 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             get
             {
-                var templist= new List<string>(); 
+                var templist = new List<string>();
                 foreach (var item in SelectedMachine)
                 {
-                    templist.Add(((TbMachine) item).MachineShortname);
+                    templist.Add(((TbMachine)item).MachineShortname);
                 }
 
                 return string.Join(",", templist);
             }
             set
             {
-                if (value != null&& value.Length>2)
+                if (value != null && value.Length > 2)
                 {
                     var templist = new ObservableCollection<object>();
 
                     foreach (var item in value.Split(',').ToList())
-                {
-                    templist.Add(Machines.Where(x => x.MachineShortname == item).First());
-                }
+                    {
+                        templist.Add(Machines.Where(x => x.MachineShortname == item).First());
+                    }
 
-                SelectedMachine.Clear();
-                SelectedMachine = templist;
-                OnPropertyChanged(nameof(SelectedMachine));
+                    SelectedMachine.Clear();
+                    SelectedMachine = templist;
+                    OnPropertyChanged(nameof(SelectedMachine));
+                }
             }
-        }
         }
 
     }

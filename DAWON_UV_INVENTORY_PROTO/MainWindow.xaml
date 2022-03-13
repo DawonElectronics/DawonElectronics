@@ -38,6 +38,10 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
+        <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="GridRowStyle">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Red"/>
+        </Style>
 
         <viewmodel:GridWipColorConverter x:Key="ColorConverter"/>
         <viewmodel:GridWipDoneColorConverter x:Key="DoneColorConverter"/>
@@ -45,8 +49,8 @@
         <viewmodel:GridWipBoldConverter x:Key="BoldConverter"/>
         <viewmodel:GridWipDoneBoldConverter x:Key="DoneBoldConverter"/>
         <viewmodel:GridWipFGConverter x:Key="FgConverter"/>
-
-
+        <viewmodel:GridWipDoneFGConverter x:Key="DoneFgConverter"/>
+        
         <DataTemplate x:Key="trackoutTemplate">
             <Button syncfusion:FocusManagerHelper.FocusedElement="True"  
                                             Command="{Binding Path=DataContext.TrackoutRecord, ElementName=GridWip}"
@@ -56,27 +60,22 @@
     </syncfusion:RibbonWindow.Resources>
     <syncfusion:RibbonWindow.HeaderItemsSource>
             <listCollection:ArrayList>
+                
+            
             <ComboBox x:Name="CmbUserlist" ItemsSource="{Binding Users}" SelectedIndex="0" FontWeight="Bold"  SelectedValue="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox x:Name="chktest" IsChecked="{Binding ChkTest,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="4,4"/>
 
-
-            <!--<syncfusion:ButtonAdv x:Name="headerItem" Height="25" Margin="25,0,0,0" Label="Sign-In" SizeMode="Normal"  />-->
+            
             </listCollection:ArrayList>
         </syncfusion:RibbonWindow.HeaderItemsSource>
 
-    <!--<syncfusion:RibbonWindow.DataContext>
-        <viewmodel:MainWindowViewModel/>
-    </syncfusion:RibbonWindow.DataContext>-->
+  
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="400"/>
-        </Grid.ColumnDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="*"/>            
+        </Grid.RowDefinitions>       
         <syncfusion:Ribbon HorizontalAlignment="Center"  VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2"  EnableSimplifiedLayoutMode="True" RibbonState="Normal" >
             <syncfusion:Ribbon.ApplicationMenu>
                 <syncfusion:ApplicationMenu IsPopupOpen="False"/>
@@ -84,7 +83,7 @@
             <syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar/>
             </syncfusion:Ribbon.QuickAccessToolBar>
-           
+         
 
             <syncfusion:RibbonTab Caption="수기입력">
                 <Grid Margin="10,10">
@@ -155,18 +154,14 @@
                         <syncfusion:SfTextInputLayout VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="제품 관리 번호" HelperTextVisibility="Collapsed"  Width="130" FontSize="12" FontWeight="Bold" Foreground="Black" >
                             <TextBlock x:Name="tblk_productid" Width="150" Margin="5,5" Text="{Binding Toolno2Pid,Mode=OneWay,UpdateSourceTrigger=PropertyChanged }"  VerticalAlignment="Center"/>
                         </syncfusion:SfTextInputLayout>
-                        <syncfusion:SfTextInputLayout Hint="특이사항" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="특이사항 입력" HelperTextVisibility="Collapsed" Width="500"  >
-                            <TextBox x:Name="tbox_lot_notes" Width="630" Margin="5,5"  TextWrapping="Wrap" FontSize="12" FontWeight="Bold" Foreground="Black" AcceptsReturn="True" />
+                        <syncfusion:SfTextInputLayout Hint="특이사항" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5" HelperText="특이사항 입력" HelperTextVisibility="Collapsed" Width="430"  >
+                            <TextBox x:Name="tbox_lot_notes" Width="400" Margin="5,5"  TextWrapping="Wrap" FontSize="12" FontWeight="Bold" Foreground="Black" AcceptsReturn="True" />
                         </syncfusion:SfTextInputLayout>
                         <TextBlock x:Name="tblk_grid_id" FontSize="1" Foreground="White"/>
 
                         <Button x:Name="btn_input_proceed" Content="입고" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18" Width="80" Height="45" Margin="15,3" VerticalAlignment="Center" Click="btn_input_proceed_Click" />
                         <Button x:Name="BtnToolInfoInput" Content="모델등록" IsEnabled="True" FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18" Width="80" Height="45" Margin="5,3" VerticalAlignment="Center" Click="BtnToolInfoInput_OnClick" />
-                        <!--<Button x:Name="btn_input_proceed_reuse" FontWeight="Bold" HorizontalAlignment="Left" FontSize="14" Width="120" Height="45" Margin="15,3"  >
-                            <TextBlock Text="입고입력         (기존정보이용)" TextWrapping="Wrap" TextAlignment="Center"/>
-
-                        </Button>-->
-                        <!--<Button x:Name="btn_modify_proceed" Content="수정" FontWeight="Bold" HorizontalAlignment="Left" FontSize="14" Width="120" Height="45" Margin="15,3" />-->
+                        
                     </StackPanel>
                 </Grid>
             </syncfusion:RibbonTab>
@@ -197,10 +192,12 @@
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0"  VerticalAlignment="Top" >
-                        <UniformGrid Margin="5,0" VerticalAlignment="Top" Columns="4">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0"  VerticalAlignment="Top" VirtualizingStackPanel.IsVirtualizing = "True"                                           
+                                           VirtualizingStackPanel.VirtualizationMode="Recycling" >
+                        <UniformGrid Margin="5,0" VerticalAlignment="Top" Columns="4"  >
+                            
                             <Button x:Name="BtnWipDEMS" Content="{Binding WipCount_Dems}"  Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEMS_OnClick"/>
                             <Button x:Name="BtnWipDEPKG"  Content="{Binding WipCount_Depkg}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipDEPKG_OnClick"/>
                             <Button x:Name="BtnWipYPE"  Content="{Binding WipCount_Yp}" Margin="2,2" Height="35" Padding="5,5" FontWeight="Bold" Click="BtnWipYPE_OnClick"/>
@@ -232,50 +229,22 @@
                         </syncfusion:SfTextInputLayout>
                        
                         
-                            <!--<Button x:Name="BtnPrintChecksheet" Content="체크시트 출력" Margin="10,10" Height="45" Padding="5,5"  FontSize="16" FontWeight="Bold" />-->
+                          
 
                         <Button x:Name="BtnInputLot" Content="인수등록" Margin="10,10"  Padding="15,10" FontSize="20" FontWeight="Bold"  Click="BtnInputLot_OnClick "/>
                         <syncfusion:SfTextInputLayout Hint="LOT검색" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="30,10,10,10" Width="150"  >
                             <TextBox x:Name="tblksearchlot" HorizontalContentAlignment="Center" FontWeight="Bold" PreviewKeyDown="Tblksearchlot_OnPreviewKeyDown"  />
                         </syncfusion:SfTextInputLayout>
-                        <!--<Button x:Name="ButtonWipSrchLot" Content="검색" Margin="5,10"  Padding="15,10" Height="45" FontSize="16" FontWeight="Bold"  Click="ButtonWipSrchLot_OnClick"/>-->
+                        
                             <Button x:Name="ButtonWipSrchClear" Content="초기화" Margin="5,10"  Padding="15,10" Height="45" FontSize="16" FontWeight="Bold"  Click="ButtonWipSrchClear_OnClick"/>
-                        <!--<syncfusion:SfTextInputLayout Hint="선택된 TOOL" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="10,10" Width="150"  >
-                            <TextBox  Text="{Binding SelectedGridWip.CustToolno,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" HorizontalContentAlignment="Center" FontWeight="Bold" MouseDoubleClick="tbox_wip_selected_tool_MouseDoubleClick" />
-                        </syncfusion:SfTextInputLayout>-->
+                       
                         <Button x:Name="BtnGridWipXls"  Click="btn_grid_wip_xls_Click" Margin="20,10" Width="42" Height="42">                            
                             <Image Source="/Icon/Excel-icon.png" />                           
-                        </Button>
-                            
-                        <!--<Button x:Name="btn_complete_job" Content="작업완료" Margin="3,3" Width="80" Height="33" FontSize="16" FontWeight="Bold"/>-->
+                        </Button>                            
+                        
                             <TextBlock x:Name="TblkCurrentCustomer" Text="{Binding SelectedCustomerWo}" Margin="10,10" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" Background="Black"/>
                             <TextBlock x:Name="TblkCurrentOrderType" Text="{Binding SelectedIsSampleWo}" Margin="0,10" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Black"/>
-                        
-                            
-                            <!--<syncfusion:ColorPickerPalette x:Name="ColorPickerPaletteGridWipBG"  
-                                                       SelectedBrushChanged="ColorPickerPaletteGridWipBG_OnSelectedBrushChanged"
-                                                       ThemePanelVisibility="Collapsed"
-                                                       GenerateStandardVariants="True" 
-                                                       RecentlyUsedPanelVisibility="Visible" 
-                                                       NoColorVisibility="Visible" 
-                                                       IsStandardTabVisible="Visible" 
-                                                       BlackWhiteVisibility="White"
-                                                       Width="45" Height="25"
-                                                       AutomaticColorVisibility="Hidden"
-                                                       Margin="5,5"/>
-
-                        <syncfusion:ColorPickerPalette x:Name="ColorPickerPaletteGridWipFG"  
-                                                       SelectedBrushChanged="ColorPickerPaletteGridWipFG_OnSelectedBrushChanged"
-                                                       ThemePanelVisibility="Collapsed"
-                                                       GenerateStandardVariants="True" 
-                                                       RecentlyUsedPanelVisibility="Visible"  
-                                                       IsStandardTabVisible="Visible"
-                                                       AutomaticColorVisibility="Hidden"
-                                                       BlackWhiteVisibility="Black"
-                                                       Width="45" Height="25"
-                                                       Margin="5,5"/>-->
-                            <!--<Button x:Name="BtnGridWipBold" Width="25" Height="30" Content="B" FontSize="16" FontWeight="Bold" FontStyle="Italic" Click="BtnGridWipBold_OnClick"/>-->
-                       
+                                                
                     </StackPanel>
                     
                      
@@ -284,14 +253,12 @@
                                            ColumnSizer="None"
                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"                                       
                                        SelectionMode="Extended"
-                                       SelectionUnit="Cell"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
+                                       SelectionUnit="Cell"                                       
                                        ShowRowHeader="True"
                                        CurrentCellBeginEdit="grid_wip_CurrentCellBeginEdit"
                                        CurrentCellEndEdit="grid_wip_CurrentCellEndEdit"
                                        AutoGenerateColumns="False"
-                                       ItemsSource="{Binding WorkOrderList}"
+                                       ItemsSource="{Binding WorkOrderList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                        RowHeight="32"
                                            
 ScrollViewer.HorizontalScrollBarVisibility="Visible"
@@ -304,20 +271,21 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                                        RowSelectionBrush="DarkOliveGreen"
                                        AllowResizingColumns="True" 
                                        ScrollMode="None"
-                                       SelectedItem="{Binding SelectedGridWip,Mode=TwoWay}"
+                                       SelectedItem="{Binding SelectedGridWip,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                        HeaderStyle="{StaticResource HeaderStyle}"
                                        CanMaintainScrollPosition="True"       
                                            VirtualizingStackPanel.IsVirtualizing = "True"                                           
                                            VirtualizingStackPanel.VirtualizationMode="Recycling"
-                                           
+                                          
                                        >
+                       
 
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="WaitTrackout" SortDirection="Descending" />
                             <syncfusion:SortColumnDescription ColumnName="TrackinTime" SortDirection="Ascending" />
                             
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
-                        <!--QueryRowHeight="dataGrid_QueryRowHeight"-->
+                        
                         <syncfusion:SfDataGrid.Resources>
                             <ResourceDictionary>
                                 <Style x:Key="TboxAcceptEnter" TargetType="TextBox">
@@ -326,14 +294,16 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                                 <Style TargetType="syncfusion:VirtualizingCellsControl">
                                     <Setter Property="Background" Value="{Binding Converter={StaticResource ColorConverter}}"/>
                                     <Setter Property="FontWeight" Value="{Binding Converter={StaticResource BoldConverter}}"/>
-                                    <Setter Property="Foreground" Value="{Binding Converter={StaticResource FgConverter}}"></Setter>
+                                    <Setter Property="Foreground" Value="{Binding Converter={StaticResource FgConverter}}"/>
                                 </Style>
                                
                             </ResourceDictionary>
                         </syncfusion:SfDataGrid.Resources>
 
                         <syncfusion:SfDataGrid.RecordContextMenu>
+                            
                             <ContextMenu >
+                                
                                 <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.CancelTrackinRecordCommand}}"
                                           CommandParameter="{Binding }"
                                           Header="인수취소">
@@ -363,26 +333,23 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                                           CommandParameter="{Binding }"
                                           Header="굵은 글씨" FontWeight="Bold">
                                 </MenuItem>
-                                
-                                <syncfusion:ColorPickerPalette
-                                    x:Name="ColorPickerGridWipBG"
-                                    Margin="2"
-                                    SetCustomColors="True"
-                                    Mode="Palette"
-                                    NoColorVisibility="Visible"
-                                    AutomaticColorVisibility="Collapsed"
-                                    MoreColorOptionVisibility="Collapsed"
-                                    RecentlyUsedPanelVisibility="Collapsed"
-                                    StandardPanelVisibility="Collapsed"
-                                    ThemePanelVisibility="Collapsed"
-                                    GenerateThemeVariants="False"
-                                    GenerateStandardVariants="False"
-                                    CustomHeaderVisibility="Visible"
-                                    CustomHeaderText="행 색상 지정"                                    
-                                    SelectedBrushChanged="ColorPickerPalette1_OnSelectedBrushChanged"
-                                     />
-                                        
-                              
+                                <MenuItem Header="행 색상 변경" >
+
+                                    <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RowColor1Command}}"
+CommandParameter="{Binding }"
+Background="Red" Foreground="White" Header="텍스트" 
+                                              />
+                                    <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RowColor2Command}}"
+CommandParameter="{Binding }"
+Background="White" Foreground="Black" Header="텍스트"/>
+                                    <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RowColor3Command}}"
+CommandParameter="{Binding }"
+Background="Yellow" Foreground="Black" Header="텍스트"/>
+                                    <MenuItem Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RowColor4Command}}"
+CommandParameter="{Binding }"
+Background="Green" Foreground="White" Header="텍스트"/>
+                                </MenuItem>
+
                             </ContextMenu>
                         </syncfusion:SfDataGrid.RecordContextMenu>
 
@@ -410,7 +377,7 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                             <syncfusion:GridTextColumn MappingName="CustModelname" HeaderText="모델명" Width="170" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustRevision" HeaderText="REV" Width="60" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="CustToolno" HeaderText="TOOL" Width="110" TextAlignment="Center"/>
-<!--<syncfusion:GridTextColumn MappingName="CustName" HeaderText="고객사" Width="90" TextAlignment="Center"/>-->
+
                             <syncfusion:GridTextColumn MappingName="MesPrcName" HeaderText="공정명" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="PrcName" HeaderText="공법" Width="80" TextAlignment="Center"/>
                             <syncfusion:GridTextColumn MappingName="Pnlqty" HeaderText="수량" Width="50" TextAlignment="Center" AllowEditing="True"  />
@@ -447,7 +414,7 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -492,104 +459,6 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                             <Button x:Name="BtnGridWipsearchXls"  Click="btn_grid_wipsearch_xls_Click" Margin="30,10" Width="36" Height="36">
                                 <Image Source="/Icon/Excel-icon.png" />
                             </Button>
-                        <!--<syncfusion:SfTextInputLayout Hint="고객사" VerticalAlignment="Center" HorizontalAlignment="Center" HelperTextVisibility="Collapsed" Margin="10,0" Width="120"  >
-                            <ComboBox x:Name="CmbFinishCust" Margin="5,5"   
-                                      ItemsSource="{Binding Customer}" 
-                                      DisplayMemberPath="CustName" 
-                                      SelectedValuePath="CustName" 
-                                      SelectedValue="{Binding SelectedCustomer_WO_Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                      SelectedIndex="1"  HorizontalContentAlignment="Center"  />
-                        </syncfusion:SfTextInputLayout>-->
-                        
-                       
-                            <!--<syncfusion:SfDatePicker x:Name="DtpickWipsearch" FormatString="M" SelectorFormatString="M"/>-->
-                       
-                        <!--<Button x:Name="BtnQrySearch" Content="조회" Margin="15,5"  Height="45" Padding="5,5" FontSize="16" FontWeight="Bold"  Click="btn_qry_search_Click"/>-->
-                       
-
-                         <!--<StackPanel Orientation="Horizontal">
-                            <syncfusion:SfTextInputLayout Hint="LOT" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0" HelperTextVisibility="Collapsed" Width="200"  >
-                                <TextBox x:Name="TboxSearchWipLot" Text="{Binding Srch_Input_Lot, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}" />
-                                </syncfusion:SfTextInputLayout>
-                                
-                            <syncfusion:SfTextInputLayout Hint="모델명" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0" HelperTextVisibility="Collapsed" Width="200"  >
-                                    <syncfusion:SfTextBoxExt HorizontalAlignment="Center" Name="SftboxSearchWipModelname" 
-                                     Width="180" Margin="5,5" VerticalAlignment="Center"
-                                     SearchItemPath="CustModelname"
-                                     AutoCompleteMode="Suggest"
-                                     AutoCompleteSource="{Binding ToolInfos}"
-                                     SuggestionMode="Contains"
-                                                             Text="{Binding Srch_Input_ModelName, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}">
-                                    <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-                                        <DataTemplate>
-                                            <Grid HorizontalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock
-                            Grid.Column="0"
-                            Padding="2,8,0,8"
-                            VerticalAlignment="Center"
-                            FontFamily="SegoeUI"
-                            FontSize="12"
-                            FontWeight="Normal"
-                            Text="{Binding CustModelname}" />-->
-                                                <!--<TextBlock
-                            Grid.Column="1"
-                            Padding="10,8,0,8"
-                            VerticalAlignment="Center"
-                            FontFamily="SegoeUI"
-                            FontSize="12"
-                            FontWeight="Normal"
-                            Text="{Binding CustToolno}" />-->
-                                            <!--</Grid>
-                                        </DataTemplate>
-                                    </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-
-                                </syncfusion:SfTextBoxExt>
-                            </syncfusion:SfTextInputLayout>
-                                
-                            <syncfusion:SfTextInputLayout Hint="TOOL" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0" HelperTextVisibility="Collapsed" Width="200"  >
-                                <syncfusion:SfTextBoxExt HorizontalAlignment="Center" Name="SftboxSearchWipTool" 
-                                     Width="180" Margin="5,5" VerticalAlignment="Center"
-                                     SearchItemPath="CustToolno"
-                                     AutoCompleteMode="Suggest"
-                                     AutoCompleteSource="{Binding ToolInfos}"
-                                     SuggestionMode="Contains"
-                                                         Text="{Binding Srch_Input_ToolNo, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}">
-                                    <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-                                        <DataTemplate>
-                                            <Grid HorizontalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock
-                            Grid.Column="0"
-                            Padding="2,8,0,8"
-                            VerticalAlignment="Center"
-                            FontFamily="SegoeUI"
-                            FontSize="12"
-                            FontWeight="Normal"
-                            Text="{Binding CustToolno}" />
-                            
-                            <TextBlock
-                            Grid.Column="1"
-                            Padding="10,8,0,8"
-                            VerticalAlignment="Center"
-                            FontFamily="SegoeUI"
-                            FontSize="12"
-                            FontWeight="Normal"
-                            Text="{Binding CustToolno}" />-->
-                                            <!--</Grid>
-                                        </DataTemplate>
-                                    </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-
-                                </syncfusion:SfTextBoxExt>
-                            </syncfusion:SfTextInputLayout>-->
-
-
-
                     </StackPanel>
                     <TextBlock x:Name="TblkCurrentCustomerWipSearch" Text="{Binding SelectedCustomerWoSearch}" Margin="10,10" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" Background="Black"/>
 
@@ -604,8 +473,7 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                                            ShowRowHeader="True"                                       
                                            AutoGenerateColumns="False"
                                            AllowFiltering="True"
-                                           ItemsSource="{Binding WorkOrderListSearch, UpdateSourceTrigger=PropertyChanged}"
-                                           QueryRowHeight="dataGrid_QueryRowHeight"
+                                           ItemsSource="{Binding WorkOrderListSearch, UpdateSourceTrigger=PropertyChanged}"                                           
                                            AllowDraggingColumns="True"
                                            ShowGroupDropArea="True"
                                            AutoExpandGroups="True"
@@ -624,6 +492,7 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
                                 </Style>
                                 <Style TargetType="syncfusion:VirtualizingCellsControl">                                 
                                     <Setter Property="Background" Value="{Binding Converter={StaticResource DoneColorConverter}}"/>
+                                    <Setter Property="Foreground" Value="{Binding Converter={StaticResource DoneFgConverter}}"/>
                                     <Setter Property="FontWeight" Value="{Binding Converter={StaticResource DoneBoldConverter}}"/>                                            
                                 </Style>
                             </ResourceDictionary>
@@ -686,11 +555,8 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt x:Name="TabToolinfo" Header="모델정보조회">
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <syncfusion:SfDataGrid x:Name="GridToolinfo" Grid.Column="0" Margin="3,3" Grid.Row="1" MaxHeight="1080" MaxWidth="2560" 
+                <Grid>                    
+                    <syncfusion:SfDataGrid x:Name="GridToolinfo" Grid.Column="0" Margin="3,3" MaxHeight="1080" MaxWidth="2560" 
                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowResizingColumns="True" 
                                            EnableDataVirtualization="True" ColumnSizer="Auto" 
                                            SelectionMode="Extended"
@@ -754,16 +620,14 @@ ScrollViewer.VerticalScrollBarVisibility="Visible"
             </syncfusion:TabItemExt>
 
         </syncfusion:TabControlExt>
-        <syncfusion:SfGridSplitter x:Name="SfGridSplitter"
-                                   HorizontalAlignment="Stretch" Grid.Row="3" Grid.ColumnSpan="2"/>
-
+    
     </Grid>
     <syncfusion:RibbonWindow.StatusBar>
         <syncfusion:RibbonStatusBar Background="DarkBlue" Height="25"  >
             <WrapPanel  >
                 <TextBlock Text="입출고 기본 페이지" Margin="20,3" Foreground="AntiqueWhite"/>
                 <TextBlock Text="사용자:"  Margin="20,3" Foreground="AntiqueWhite" />
-                <TextBlock Text="{Binding ElementName=CmbUserlist, Path=SelectedItem }"  Margin="5,3" Foreground="AntiqueWhite" />
+                <TextBlock Text="{Binding SelectedUser}"  Margin="5,3" Foreground="AntiqueWhite" />
                 <TextBlock Text="대덕 전산 상태: OK" Margin="20,3" Foreground="AntiqueWhite" />
                 <TextBlock Text="영풍 전산 상태: OK" Margin="20,3" Foreground="AntiqueWhite" />
             </WrapPanel>

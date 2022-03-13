@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using System;
+using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using DAWON_UV_INVENTORY_PROTO.Models;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
-    
+
     public class GridWipColorConverter : IValueConverter
     {
         public SolidColorBrush ToBrush(string HexColorString)
@@ -27,23 +24,27 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             var data = value as ViewUvWorkorder;
             object result = new object();
+            result = DependencyProperty.UnsetValue;
             if (data != null)
             {
                 if (data.CamFinished == false)
-                    result = BrushFromHex("#FFD966");
+                { result = BrushFromHex("#FFD966"); }
                 else if (data.WaitTrackout == true)
-                    result = new SolidColorBrush(Colors.YellowGreen);
+                { result = new SolidColorBrush(Colors.YellowGreen); }
                 else if (data.CamFinished == false && data.FormatBg != null)
-                    result = BrushFromHex("#FFD966");
+                { result = BrushFromHex("#FFD966"); }
                 else if (data.WaitTrackout == false && data.FormatBg != null)
                 {
-                    if (data.FormatBg.Length > 6)  result = BrushFromHex(data.FormatBg);
+                    if (data.FormatBg.Length > 6)
+                    {
+                        result = data.FormatBg;
+                        Debug.WriteLine("배경컨버팅");
+                    }
                 }
                 else
-                    result = DependencyProperty.UnsetValue;
+                { result = DependencyProperty.UnsetValue; }
             }
-            else
-                result = DependencyProperty.UnsetValue;
+
 
             return result;
         }

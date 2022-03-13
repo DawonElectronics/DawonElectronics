@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DAWON_UV_INVENTORY_PROTO.Models;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using DAWON_UV_INVENTORY_PROTO.Models;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
-    
+
     public class GridWipDoneColorConverter : IValueConverter
     {
         public SolidColorBrush ToBrush(string HexColorString)

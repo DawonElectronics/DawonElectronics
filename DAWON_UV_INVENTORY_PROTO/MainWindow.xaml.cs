@@ -18,7 +18,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using MessageBox = System.Windows.MessageBox;
 
@@ -45,8 +44,7 @@ namespace DAWON_UV_INVENTORY_PROTO
         public static List<TbCustomer> Tbcustomer = new List<TbCustomer>();
 
         public static bool IsCellEditing = false;
-        double _autoHeight = double.NaN;
-        GridRowSizingOptions _gridRowResizingOptions = new GridRowSizingOptions();
+
 
 
         private DispatcherTimer? Timer { get; set; }
@@ -57,15 +55,15 @@ namespace DAWON_UV_INVENTORY_PROTO
             this.Loaded += OnLoaded;
             _mainwindowViewModel.OnViewInitialized(this);
 
-            System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor> colors = new System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor>();
-            colors.Add(new CustomColor() { Color = Colors.White, ColorName = "White" });
-            colors.Add(new CustomColor() { Color = Colors.Yellow, ColorName = "Yellow" });
-            colors.Add(new CustomColor() { Color = Colors.LightCoral, ColorName = "Light Coral" });
-            colors.Add(new CustomColor() { Color = Color.FromRgb(255, 192, 0) });
-            colors.Add(new CustomColor() { Color = Color.FromRgb(83, 141, 213) });
-            colors.Add(new CustomColor() { Color = Color.FromRgb(220, 120, 120) });
+            //System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor> colors = new System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor>();
+            //colors.Add(new CustomColor() { Color = Colors.White, ColorName = "White" });
+            //colors.Add(new CustomColor() { Color = Colors.Yellow, ColorName = "Yellow" });
+            //colors.Add(new CustomColor() { Color = Colors.LightCoral, ColorName = "Light Coral" });
+            //colors.Add(new CustomColor() { Color = Color.FromRgb(255, 192, 0) });
+            //colors.Add(new CustomColor() { Color = Color.FromRgb(83, 141, 213) });
+            //colors.Add(new CustomColor() { Color = Color.FromRgb(220, 120, 120) });
 
-            ((ColorPickerPalette)GridWip.RecordContextMenu.Items[7]).CustomColorsCollection = colors;
+            //((ColorPickerPalette)GridWip.RecordContextMenu.Items[7]).CustomColorsCollection = colors;
 
         }
 
@@ -162,18 +160,18 @@ namespace DAWON_UV_INVENTORY_PROTO
             UpdateFiltered_WorkorderList();
         }
 
-        void dataGrid_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
-        {
-            if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, _gridRowResizingOptions,
-                    out _autoHeight))
-            {
-                if (_autoHeight > 20 && e.RowIndex > 0)
-                {
-                    e.Height = _autoHeight;
-                    e.Handled = true;
-                }
-            }
-        }
+        //void dataGrid_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
+        //{
+        //    if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, _gridRowResizingOptions,
+        //            out _autoHeight))
+        //    {
+        //        if (_autoHeight > 20 && e.RowIndex > 0)
+        //        {
+        //            e.Height = _autoHeight;
+        //            e.Handled = true;
+        //        }
+        //    }
+        //}
 
         //수기 입력 버튼
         private void btn_input_proceed_Click(object sender, RoutedEventArgs e)
@@ -211,12 +209,12 @@ namespace DAWON_UV_INVENTORY_PROTO
                 {
                     input_temp.ProductId = tblk_productid.Text;
                 }
-                else if (tblk_productid.Text.Length < 7) 
+                else if (tblk_productid.Text.Length < 7)
                 {
-                    MessageBox.Show("툴번호를 입력해주세요. 없는 경우 신규 등록 필요"); 
+                    MessageBox.Show("툴번호를 입력해주세요. 없는 경우 신규 등록 필요");
                     isvalid = false;
                     btn_input_proceed.IsEnabled = true;
-                    return; 
+                    return;
                 }
 
                 if (!tblk_productid.Text.Contains(cust.CustCode))
@@ -231,7 +229,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 else if (chkbox_issample.IsChecked != true)
                 { input_temp.SampleOrder = false; }
 
-                if(tbox_pnlqty.Text.Length>0) input_temp.Pnlqty = Convert.ToInt16(tbox_pnlqty.Text);
+                if (tbox_pnlqty.Text.Length > 0) input_temp.Pnlqty = Convert.ToInt16(tbox_pnlqty.Text);
                 input_temp.LotNotes = tbox_lot_notes.Text;
                 input_temp.CreateTime = DateTime.Now;
                 input_temp.TrackinTime = DateTime.Now;
@@ -399,6 +397,69 @@ namespace DAWON_UV_INVENTORY_PROTO
             }), System.Windows.Threading.DispatcherPriority.Normal);
         }
 
+        public void UpdateFiltered_WorkorderListSelectChanged()
+        {
+            starttime1 = DateTime.Now;
+            using (var db = new Db_Uv_InventoryContext())
+            {
+                var customer = _mainwindowViewModel.SelectedCustomerWo;
+                var issample = false;
+                if (_mainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
+                else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
+                Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                var tmpwolist = db.ViewUvWorkorder.ToList<ViewUvWorkorder>();
+                Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
+                _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
+                _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
+                _mainwindowViewModel.WipCount_Bh = tmpwolist.Where(w => w.CustName == "BHFLEX").Count().ToString();
+                _mainwindowViewModel.WipCount_Ifx = tmpwolist.Where(w => w.CustName == "인터플렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Semco = tmpwolist.Where(w => w.CustName == "삼성전기").Count().ToString();
+                _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
+                Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                if (GridWip != null)
+                {
+                    var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+                    var comparer = new ObjectsComparer.Comparer<ObservableCollection<ViewUvWorkorder>>();
+
+                    //Compare objects
+                    IEnumerable<Difference> differences;
+                    var isEqual = comparer.Compare(dbWorkOrderList, _mainwindowViewModel.WorkOrderList, out differences);
+
+                    //Print results
+                    Debug.WriteLine(isEqual ? "Objects are equal" : string.Join(Environment.NewLine, differences));
+
+                    if (!isEqual)
+                    {
+                        _mainwindowViewModel.WorkOrderList = dbWorkOrderList;
+                    }
+                }
+
+
+                Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
+                if (GridWip != null)
+                {
+
+                    GridWip.Columns.Clear();
+
+                    if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
+                    {
+                        GridWipColumnDems();
+                    }
+                    else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
+                    {
+                        GridWipColumnDepkg();
+                    }
+
+                }
+
+                var time2 = DateTime.Now;
+
+                Debug.WriteLine(_mainwindowViewModel.WipCount_Dems + "  " + (time2 - starttime1).TotalMilliseconds);
+            }
+        }
+
         public void UpdateFiltered_WorkorderList()
         {
             starttime1 = DateTime.Now;
@@ -420,35 +481,13 @@ namespace DAWON_UV_INVENTORY_PROTO
                 _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
                 _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
                 Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                if (GridWip != null && GridWip.View != null)
-                {
 
-
-                    var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime));
-
-                    var comparer = new ObjectsComparer.Comparer<ObservableCollection<ViewUvWorkorder>>();
-
-                    //Compare objects
-                    IEnumerable<Difference> differences;
-                    var isEqual = comparer.Compare(dbWorkOrderList, _mainwindowViewModel.WorkOrderList, out differences);
-
-                    //Print results
-                    Debug.WriteLine(isEqual ? "Objects are equal" : string.Join(Environment.NewLine, differences));
-
-                    if (!isEqual)
-                    {
-                        GridWip.View.BeginInit();
-                        _mainwindowViewModel.WorkOrderList = dbWorkOrderList;
-                        GridWip.View.EndInit();
-                    }
-
-                }
-
+                _mainwindowViewModel.WorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
 
                 Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                if (GridWip != null && GridWip.View != null)
+                if (GridWip != null)
                 {
-                    GridWip.View.BeginInit();
+
                     GridWip.Columns.Clear();
 
                     if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
@@ -459,7 +498,6 @@ namespace DAWON_UV_INVENTORY_PROTO
                     {
                         GridWipColumnDepkg();
                     }
-                    GridWip.View.EndInit();
 
                 }
 
@@ -567,12 +605,12 @@ namespace DAWON_UV_INVENTORY_PROTO
         }
         private void cmb_wip_cust_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateFiltered_WorkorderList();
+            UpdateFiltered_WorkorderListSelectChanged();
         }
         private void cmb_wip_ordertype_SelectionChanged(object sender,
             System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateFiltered_WorkorderList();
+            UpdateFiltered_WorkorderListSelectChanged();
         }
         private void btn_qry_search_Click(object sender, RoutedEventArgs e)
         {
@@ -655,7 +693,7 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-        
+
         #region 업체별 인수등록
         private void BtnInputLot_OnClick(object sender, RoutedEventArgs e)
         {
@@ -687,50 +725,50 @@ namespace DAWON_UV_INVENTORY_PROTO
 
         private async void BtnWipDEMS_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainwindowViewModel.SelectedCustomerWo = "대덕전자(MS)";           
-            
+            _mainwindowViewModel.SelectedCustomerWo = "대덕전자(MS)";
+
         }
 
         private async void BtnWipDEPKG_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "대덕전자(PKG)";
-           
+
         }
 
         private void BtnWipYPE_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "영풍전자";
-            
+
         }
 
         private void BtnWipBH_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "BHFLEX";
-            
+
         }
 
         private void BtnWipIFC_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "인터플렉스";
-            
+
         }
 
         private void BtnWipSEMCO_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "삼성전기";
-            
+
         }
 
         private void BtnWipNFT_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "뉴프렉스";
-           
+
         }
 
         private void BtnWipSI_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWo = "SIFLEX";
-            
+
         }
 
         #endregion
@@ -830,7 +868,7 @@ namespace DAWON_UV_INVENTORY_PROTO
         {
             IsCellEditing = true;
         }
-        
+
         //로트검색 초기화
         private void ButtonWipSrchClear_OnClick(object sender, RoutedEventArgs e)
         {
@@ -883,12 +921,12 @@ namespace DAWON_UV_INVENTORY_PROTO
 
 
         //행색상변경
-        private void ColorPickerPalette1_OnSelectedBrushChanged(object? sender, SelectedBrushChangedEventArgs e)
+        private async void ColorPickerPalette1_OnSelectedBrushChanged(object? sender, SelectedBrushChangedEventArgs e)
         {
             if (_mainwindowViewModel.SelectedGridWip != null)
             {
                 var rowdata = _mainwindowViewModel.SelectedGridWip;
-                var qryid = Convert.ToInt64(rowdata.Id);
+                var qryid = Convert.ToInt32(rowdata.Id);
 
                 using (var db = new Db_Uv_InventoryContext())
                 {
@@ -897,7 +935,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                     if (result != null)
                     {
                         result.FormatBg = e.NewColor.ToString();
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
+                        Debug.WriteLine($"색상변경{e.NewColor.ToString()}");
                         UpdateFiltered_WorkorderList();
                     }
                 }
