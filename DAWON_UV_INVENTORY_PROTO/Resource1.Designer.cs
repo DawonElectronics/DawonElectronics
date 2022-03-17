@@ -63,6 +63,16 @@ namespace DAWON_UV_INVENTORY_PROTO {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        public static System.Drawing.Bitmap _64 {
+            get {
+                object obj = ResourceManager.GetObject("_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         public static System.Drawing.Bitmap Excel_icon {
             get {
                 object obj = ResourceManager.GetObject("Excel_icon", resourceCulture);

@@ -3,23 +3,30 @@ using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Controls.Input;
 using Syncfusion.Windows.Shared;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
     public partial class MainWindowViewModel : INotifyPropertyChanged
     {
+        private ConcurrentQueue<string> trackoutque;
+
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        
         private void OnPropertyChanged(String info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
@@ -34,10 +41,14 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             AutoCompleteLoaded = new DelegateCommand(AutoCompleteLoadedMethod);
             WipLotSearchCommand = new DelegateCommand(OnWipLotSearchRecordClicked);
-            ToolInfos = new ObservableCollection<TbUvToolinfo>();
-            WorkOrderList = new ObservableCollection<ViewUvWorkorder>();
+            ToolInfos = new List<TbUvToolinfo>();
+            Machines = new List<TbMachine>();
+            
+            WorkOrderList = new ObservableCollection<ViewUvWorkorder>();   
+
             _selectedDateFromWoSearch = DateTime.Now.AddMonths(-1);
             _selectedDateToWoSearch = DateTime.Now;
+            trackoutque = new ConcurrentQueue<string>();
         }
 
         #region 로트검색 엔터키 명령
@@ -105,6 +116,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
             if (selData != null)
             {
+                var gridrecord = (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Where(x=>x.Id == selData.Id).First();
                 if (((selData.PrcLayer2.Length > 1) && (selData.PrcName.Contains("BVH"))))
                 {
                     if (selData.MachineSs == null || selData.MachineCs == null)
@@ -128,9 +140,12 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                 result.LotType = "완료";
                                 result.WaitTrackout = false;
                                 db.SaveChanges();
-                                mainWindow.UpdateFiltered_WorkorderList();
+                                (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
+                                mainWindow.GridWip.View.Refresh();
 
-                                MessageBox.Show("처리되었습니다");
+                                mainWindow.TblkExecuteStatus.Visibility = Visibility.Visible;
+                                trackoutque.Enqueue($"{selData.Lotid} 출고\t");
+                                ExecuteResult += $"{selData.Lotid} 출고\t";
                             }
                         }
                     }
@@ -151,9 +166,11 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.LotType = "완료";
                             result.WaitTrackout = false;
                             db.SaveChanges();
-                            mainWindow.UpdateFiltered_WorkorderList();
-                            MessageBox.Show("처리되었습니다");
-
+                            
+                            (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
+                            mainWindow.GridWip.View.Refresh();
+                            trackoutque.Enqueue($"{selData.Lotid} 출고\t");
+                            ExecuteResult += $"{selData.Lotid} 출고\t";
                         }
                     }
                 }
@@ -172,8 +189,12 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.LotType = "완료";
                             result.WaitTrackout = false;
                             db.SaveChanges();
-                            mainWindow.UpdateFiltered_WorkorderList();
-                            MessageBox.Show("처리되었습니다");
+
+                            (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
+                            mainWindow.GridWip.View.Refresh();
+                            trackoutque.Enqueue($"{selData.Lotid} 출고\t");
+                            ExecuteResult += $"{selData.Lotid} 출고\t";
+
                         }
                     }
                 }
@@ -184,8 +205,24 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                     MessageBox.Show("호기 선택 바랍니다");
                 }
             }
+
+            DelayedExecuteMsgOff();
         }
         #endregion
+
+        public void DelayedExecuteMsgOff()
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                var deque = string.Empty;
+                trackoutque.TryDequeue(out deque);
+                ExecuteResult = ExecuteResult.Replace(deque,"");
+            };
+            
+        }
 
         #region Tool 자동완성
         public ICommand AutoCompleteLoaded { get; set; }
@@ -210,8 +247,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             return false;
         }
         #endregion
-        private ObservableCollection<TbPrctype>? _prctypes;
-        public ObservableCollection<TbPrctype>? PrcTypes
+
+        private List<TbPrctype>? _prctypes;
+        public List<TbPrctype>? PrcTypes
         {
             get { return _prctypes; }
             set
@@ -221,8 +259,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbUvToolinfo>? _toolinfos;
-        public ObservableCollection<TbUvToolinfo>? ToolInfos
+        private List<TbUvToolinfo>? _toolinfos;
+        public List<TbUvToolinfo>? ToolInfos
         {
             get { return _toolinfos; }
             set
@@ -243,6 +281,17 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 OnPropertyChanged(nameof(WorkOrderList));
             }
         }
+        private ObservableCollection<ViewUvWorkorder2>? _workOrderlist2;
+        public ObservableCollection<ViewUvWorkorder2>? WorkOrderList2
+        {
+            get { return _workOrderlist2; }
+            set
+            {
+
+                _workOrderlist2 = value;
+                OnPropertyChanged(nameof(WorkOrderList2));
+            }
+        }
 
         private ViewUvWorkorder? _selectedGridWip;
         public ViewUvWorkorder? SelectedGridWip
@@ -255,9 +304,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<ViewUvWorkorderDone>? _workOrderlistSearch;
+        private List<ViewUvWorkorderDone>? _workOrderlistSearch;
 
-        public ObservableCollection<ViewUvWorkorderDone>? WorkOrderListSearch
+        public List<ViewUvWorkorderDone>? WorkOrderListSearch
         {
             get { return _workOrderlistSearch; }
             set
@@ -267,8 +316,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbCustomer>? _customer;
-        public ObservableCollection<TbCustomer>? Customer
+        private List<TbCustomer>? _customer;
+        public List<TbCustomer>? Customer
         {
             get { return _customer; }
             set
@@ -278,8 +327,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbUsers>? _userList;
-        public ObservableCollection<TbUsers>? UserList
+        private List<TbUsers>? _userList;
+        public List<TbUsers>? UserList
         {
             get { return _userList; }
             set
@@ -391,20 +440,32 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbMachine>? _machines;
-        public ObservableCollection<TbMachine>? Machines
+        private List<TbMachine>? _machines;
+        public List<TbMachine>? Machines
         {
             get { return _machines; }
             set
             {
                 _machines = value;
+                MachineList = value.Select(x => x.MachineShortname).ToList<string>();
                 OnPropertyChanged(nameof(Machines));
             }
         }
 
+        private List<string>? _machineList;
+        public List<string>? MachineList
+        {
+            get { return _machineList; }
+            set
+            {
+                _machineList = value;
+                OnPropertyChanged(nameof(MachineList));
+            }
+        }
 
-        private ObservableCollection<object>? _selectedMachineCs;
-        public ObservableCollection<object>? SelectedMachineCs
+
+        private List<object>? _selectedMachineCs;
+        public List<object>? SelectedMachineCs
         {
             get { return _selectedMachineCs; }
             set
@@ -414,8 +475,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<object>? _selectedMachineSs;
-        public ObservableCollection<object>? SelectedMachineSs
+        private List<object>? _selectedMachineSs;
+        public List<object>? SelectedMachineSs
         {
             get { return _selectedMachineSs; }
             set
@@ -481,7 +542,16 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 OnPropertyChanged(nameof(Toolno2Pid));
             }
         }
-
+        private string? _executeResult;
+        public string? ExecuteResult
+        {
+            get { return _executeResult; }
+            set
+            {
+                _executeResult = value;
+                OnPropertyChanged(nameof(ExecuteResult));
+            }
+        }
 
 
         #region 업체별 재공 수량 표시

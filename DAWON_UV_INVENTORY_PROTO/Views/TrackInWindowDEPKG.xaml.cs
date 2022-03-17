@@ -532,7 +532,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
                 tempTool.StackType = lotdetailinfo.SpecType1;
                 tempTool.PrdCategory = lotdetailinfo.ProductType;
-                tempTool.CreateDate = DateTime.ParseExact(specinfo.CreateDate, "yyyyMMdd", null);
+                tempTool.CreateDate = specinfo.CreateDate;
 
                 tempTool.ArrayBlk = specinfo.Arrayx * specinfo.Arrayy;
                 tempTool.WorksizeX = specinfo.Worksizex;

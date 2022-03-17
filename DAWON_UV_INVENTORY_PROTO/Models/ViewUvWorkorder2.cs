@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAWON_UV_INVENTORY_PROTO.Models
 {
-    public partial class ViewUvWorkorder
+    public partial class ViewUvWorkorder2
     {
         public string EndCustomer { get; set; }
         public string Lotid { get; set; }
@@ -14,8 +14,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string CustToolno { get; set; }
         public string MesPrcName { get; set; }
         public string PrcName { get; set; }
-        public decimal? WorksizeX { get; set; }
-        public decimal? WorksizeY { get; set; }
         public DateTime? CreateTime { get; set; }
         public decimal? Depth { get; set; }
         public short? Pnlqty { get; set; }
@@ -33,12 +31,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string HoleCount { get; set; }
         public string MachineCs { get; set; }
         public string MachineSs { get; set; }
-        public bool? Sample { get; set; }
         public string ProductId { get; set; }
-        public int? ArrayBlk { get; set; }
         public int? Pcs { get; set; }
         public int? Layer { get; set; }
-        public string CreateDate { get; set; }
         public string PrcLayer1 { get; set; }
         public string PrcLayer2 { get; set; }
         public string MesPrcCode { get; set; }
@@ -47,13 +42,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string CustComment { get; set; }
         public string InsulType { get; set; }
         public string MainHoleSize { get; set; }
-        public string MesSeqCode { get; set; }
         public string PrcCode { get; set; }
         public bool? IsDone { get; set; }
-        public bool? IsPrinted { get; set; }
         public long Id { get; set; }
         public string CustName { get; set; }
-        public bool? SampleOrder { get; set; }
         public bool? CamFinished { get; set; }
+        public bool? SampleOrder { get; set; }
     }
 }

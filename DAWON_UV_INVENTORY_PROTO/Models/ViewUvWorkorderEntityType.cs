@@ -36,12 +36,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
             var createDate = runtimeEntityType.AddProperty(
                 "CreateDate",
-                typeof(DateTime?),
+                typeof(string),
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("CreateDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<CreateDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
+                nullable: true,
+                maxLength: 20);
             createDate.AddAnnotation("Relational:ColumnName", "create_date");
-            createDate.AddAnnotation("Relational:ColumnType", "datetime");
             createDate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createTime = runtimeEntityType.AddProperty(

@@ -1,7 +1,10 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.Views;
+using Syncfusion.Data.Extensions;
 using Syncfusion.UI.Xaml.Grid;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
@@ -27,50 +30,59 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (obj is GridRecordContextMenuInfo)
             {
 
-                var mw = new MainWindow();
+                
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
                 var cancelTrackinMsg = MessageBox.Show(" 장부에서 반납처리할까요?\n 예(반납으로 이력 남김)/ 아니오(장부 이력 삭제)", "입고취소", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
 
                 if (record != null)
                 {
-                    if (cancelTrackinMsg == MessageBoxResult.Yes)
+                    using (var mw = new MainWindow())
                     {
-                        //장부이력 반납처리
-                        using (var db = new Db_Uv_InventoryContext())
+                        if (cancelTrackinMsg == MessageBoxResult.Yes)
                         {
-                            var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
-
-                            if (result != null)
+                            //장부이력 반납처리
+                            using (var db = new Db_Uv_InventoryContext())
                             {
-                                var trackoutuser = db.TbUsers.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).FirstOrDefault();
+                                var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
 
-                                result.TrackoutTime = DateTime.Now;
-                                result.TrackoutUser = trackoutuser;
-                                result.IsDone = true;
-                                result.LotType = "반납";
-                                db.SaveChanges();
+                                if (result != null)
+                                {
+                                    var trackoutuser = db.TbUsers.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).FirstOrDefault();
 
-                                mw.UpdateFiltered_WorkorderList();
-                                mw.UpdateFiltered_WorkorderSearchList();
-                                MessageBox.Show("처리되었습니다");
+                                    result.TrackoutTime = DateTime.Now;
+                                    result.TrackoutUser = trackoutuser;
+                                    result.IsDone = true;
+                                    result.LotType = "반납";
+                                    db.SaveChanges();
+
+
+                                    mw.UpdateFiltered_WorkorderList();
+                                    mw.UpdateFiltered_WorkorderSearchList();
+
+
+                                    MessageBox.Show("처리되었습니다");
+                                }
                             }
                         }
-                    }
 
-                    else if (cancelTrackinMsg == MessageBoxResult.No)
-                    {
-                        //장부이력 삭제
-                        using (var db = new Db_Uv_InventoryContext())
+                        else if (cancelTrackinMsg == MessageBoxResult.No)
                         {
-                            var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
-                            if (result != null)
+                            //장부이력 삭제
+                            using (var db = new Db_Uv_InventoryContext())
                             {
-                                db.Remove(result);
-                                db.SaveChanges();
-                                mw.UpdateFiltered_WorkorderList();
+                                var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
+                                if (result != null)
+                                {
+                                    db.Remove(result);
+                                    db.SaveChanges();
 
-                                MessageBox.Show("처리되었습니다");
+
+                                    mw.UpdateFiltered_WorkorderList();
+
+
+                                    MessageBox.Show("처리되었습니다");
+                                }
                             }
                         }
                     }
@@ -94,23 +106,18 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             if (obj is GridRecordContextMenuInfo)
             {
-
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
-                var mw = new MainWindow();
-
+                var grid = (obj as GridRecordContextMenuInfo).DataGrid as SfDataGrid;
                 if (record != null)
                 {
                     //장부이력 반납처리
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
-
+                        
                         if (result != null)
                         {
-                            //var old = MainWindow._mainwindowViewModel.WorkOrderList;
-                            //old.Where(x=>x.Id == record.Id).FirstOrDefault().WaitTrackout = true;
-                            //MainWindow._mainwindowViewModel.WorkOrderList = old;
                             MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = true;
 
                             Binding bindbg = new Binding();
@@ -127,14 +134,19 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
 
                             (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Clear();
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName= "WaitTrackout" ,SortDirection= ListSortDirection.Descending });
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "TrackinTime", SortDirection = ListSortDirection.Ascending });
+                            (obj as GridRecordContextMenuInfo).DataGrid.View.RefreshFilter();                          
 
 
                             result.WaitTrackout = true;
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+
                         }
                     }
                 }
+
             }
         }
         #endregion
@@ -156,12 +168,13 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
-                var mw = new MainWindow();
+                
                 if (record != null)
                 {
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
+                        
                         if (result != null)
                         {
                             MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = false;
@@ -181,10 +194,14 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                             (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
 
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Clear();
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "WaitTrackout", SortDirection = ListSortDirection.Descending });
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "TrackinTime", SortDirection = ListSortDirection.Ascending });
+                            (obj as GridRecordContextMenuInfo).DataGrid.View.RefreshFilter();
 
                             result.WaitTrackout = false;
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                           
                         }
                     }
                 }
@@ -268,8 +285,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (obj is GridRecordContextMenuInfo)
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
-                var lot = record.Lotid;
-                var mw = new MainWindow();
+                
 
                 if (record != null)
                 {
@@ -280,9 +296,29 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                         if (result != null)
                         {
+                            MainWindow._mainwindowViewModel.SelectedGridWip.CamFinished = true;
+
+                            Binding bindbg = new Binding();
+                            bindbg.Converter = new GridWipColorConverter();
+                            Binding bindfg = new Binding();
+                            bindfg.Converter = new GridWipFGConverter();
+                            Binding bindbold = new Binding();
+                            bindbold.Converter = new GridWipBoldConverter();
+
+                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+
+
                             result.CamFinished = true;
+
                             db.SaveChanges();
-                            mw.UpdateFiltered_WorkorderList();
+                            
                         }
                     }
                 }
@@ -307,7 +343,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+               
 
                 if (record != null)
                 {
@@ -345,7 +381,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
 
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                           
                         }
                     }
                 }
@@ -371,7 +407,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+               
 
                 if (record != null)
                 {
@@ -405,7 +441,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.White.ToString();
 
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                            
                         }
                     }
                 }
@@ -427,7 +463,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+                
 
                 if (record != null)
                 {
@@ -460,8 +496,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatBg = Colors.White.ToString();
                             result.FormatFg = Colors.Black.ToString();
 
-                            await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                            await db.SaveChangesAsync();                           
 
                         }
                     }
@@ -485,7 +520,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+               
 
                 if (record != null)
                 {
@@ -519,7 +554,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.Black.ToString();
 
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                            
                         }
                     }
                 }
@@ -542,7 +577,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+                
 
                 if (record != null)
                 {
@@ -576,7 +611,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.White.ToString();
 
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                            
                         }
                     }
                 }
@@ -599,7 +634,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                var mw = new MainWindow();
+                
 
                 if (record != null)
                 {
@@ -612,6 +647,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                         {
                             MainWindow._mainwindowViewModel.SelectedGridWip.FormatBg = Colors.White.ToString();
                             MainWindow._mainwindowViewModel.SelectedGridWip.FormatFg = Colors.Black.ToString();
+
+
 
                             Binding bindbg = new Binding();
                             bindbg.Converter = new GridWipColorConverter();
@@ -633,7 +670,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.Black.ToString();
 
                             await db.SaveChangesAsync();
-                            //mw.UpdateFiltered_WorkorderList();
+                            
                         }
                     }
                 }
@@ -645,6 +682,33 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         #endregion
 
+        #region 입고 작업자 수정
+
+        static BaseCommand _editUserCommand;
+        public static BaseCommand EditUserCommand
+        {
+            get
+            {
+                _editUserCommand = new BaseCommand(EditUser);
+                return _editUserCommand;
+            }
+        }
+        private static void EditUser(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+
+                if (!Application.Current.Windows.OfType<EditUserWindow>().Any() && record != null)
+                {
+                    var mcWindow = new EditUserWindow(obj);
+                    mcWindow.Topmost = true;
+                    mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    mcWindow.Show();
+                }
+            }
+        }
+        #endregion
     }
 
 }

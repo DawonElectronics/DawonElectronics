@@ -26,8 +26,9 @@ namespace DAWON_UV_INVENTORY_PROTO
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : RibbonWindow
+    public partial class MainWindow : RibbonWindow, IDisposable
     {
+        readonly IDisposable disposable;
         private double _scrollbarValue;
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
 
@@ -44,7 +45,7 @@ namespace DAWON_UV_INVENTORY_PROTO
         public static List<TbCustomer> Tbcustomer = new List<TbCustomer>();
 
         public static bool IsCellEditing = false;
-
+        ObservableCollection<ViewUvWorkorder> tmpdb=new ObservableCollection<ViewUvWorkorder>();
 
 
         private DispatcherTimer? Timer { get; set; }
@@ -65,29 +66,38 @@ namespace DAWON_UV_INVENTORY_PROTO
 
             //((ColorPickerPalette)GridWip.RecordContextMenu.Items[7]).CustomColorsCollection = colors;
 
+
+
+            //(ComboBoxAdv)GridWip.Columns["MachineCs"].CellTemplate.FindName("cmbMachineCS", GridWip.Columns["MachineCs"].CellTemplate)
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             using (var context = new Db_Uv_InventoryContext())
             {
-                _mainwindowViewModel.PrcTypes = new ObservableCollection<TbPrctype>(context.TbPrctype);
-                _mainwindowViewModel.Customer = new ObservableCollection<TbCustomer>(context.TbCustomer);
-                _mainwindowViewModel.UserList = new ObservableCollection<TbUsers>(context.TbUsers);
+                _mainwindowViewModel.PrcTypes = new List<TbPrctype>(context.TbPrctype);
+                _mainwindowViewModel.Customer = new List<TbCustomer>(context.TbCustomer);
+                _mainwindowViewModel.UserList = new List<TbUsers>(context.TbUsers);
                 _mainwindowViewModel.Users = _mainwindowViewModel.UserList.Where(w => w.IsRetired == false).Select(x => x.UserName)
                     .ToList<string>();
-                _mainwindowViewModel.Machines = new ObservableCollection<TbMachine>(context.TbMachine);
-                _mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                _mainwindowViewModel.Machines = new List<TbMachine>(context.TbMachine);
+                _mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
                 _mainwindowViewModel.RefreshDate();
+                _mainwindowViewModel.SelectedCustomerWo = "대덕전자(MS)";
                 _mainwindowViewModel.SelectedCustomerWoSearch = "대덕전자(MS)";
+
             }
 
-            //sftbox_product_id.LostFocus += Sftbox_product_id_LostFocus;
-            this.GridToolinfo.AutoGeneratingColumn += Grid_AutoGeneratingColumn;
+            CmbWipCust.SelectionChanged += cmb_wip_cust_SelectionChanged;
 
-            this.GridWip.SelectionController = new GridCellSelectionControllerExt(GridWip);
+            CmbWipOrdertype.Items.Add("양산");
+            CmbWipOrdertype.Items.Add("샘플");
+            _mainwindowViewModel.SelectedIsSampleWo = "양산";
+            CmbWipOrdertype.SelectionChanged += cmb_wip_ordertype_SelectionChanged;
+
+            this.GridToolinfo.AutoGeneratingColumn += Grid_AutoGeneratingColumn;
             this.DataContext = _mainwindowViewModel;
-            //this.GridWip.SelectionController = new GridSelectionControllerExt(GridWip);
+
 
             update_db();
             btn_rib_wiplist_Click(this, e);
@@ -97,6 +107,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var userSelectPopup = new UserSelectPopup();
                 userSelectPopup.Topmost = true;
                 userSelectPopup.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+
                 userSelectPopup.Show();
                 CmbWipCust.SelectedIndex = 1;
                 CmbWipOrdertype.SelectedIndex = 0;
@@ -109,7 +120,6 @@ namespace DAWON_UV_INVENTORY_PROTO
         private void GridWip_ItemsSourceChanged(object? sender, GridItemsSourceChangedEventArgs e)
         {
             var time2 = DateTime.Now;
-
             Debug.WriteLine("grid rendered  " + (time2 - starttime1).TotalMilliseconds);
 
         }
@@ -300,7 +310,7 @@ namespace DAWON_UV_INVENTORY_PROTO
             TabControl.SelectedItem = TabToolinfo;
             using (var context = new Db_Uv_InventoryContext())
             {
-                _mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                _mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
             }
         }
 
@@ -320,83 +330,128 @@ namespace DAWON_UV_INVENTORY_PROTO
         }
 
 
-        private void grid_wip_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs e)
+        private async void grid_wip_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs e)
         {
 
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+
+            var grid = sender as SfDataGrid;
+            //getting GridCell 
+            var cell = (grid.SelectionController.CurrentCellManager.CurrentCell.Renderer as GridCellRendererBase)
+                .CurrentCellElement;
+
+            if (cell != null)
             {
-                var grid = sender as SfDataGrid;
-                //getting GridCell 
-                var cell = (grid.SelectionController.CurrentCellManager.CurrentCell.Renderer as GridCellRendererBase)
-                    .CurrentCellElement;
-
-                if (cell != null)
+                object? rowdata = ((SfDataGrid)sender).View.Records.GetItemAt(e.RowColumnIndex.RowIndex - 1);
+                string? mappingName = ((SfDataGrid)sender).Columns[e.RowColumnIndex.ColumnIndex - 1].MappingName;
+                var qryid = Convert.ToInt64(((SfDataGrid)e.OriginalSender).View.GetPropertyAccessProvider()
+                    .GetValue(rowdata, "Id"));
+                ;
+                var newCellValue = ((SfDataGrid)e.OriginalSender).View.GetPropertyAccessProvider()
+                    .GetValue(rowdata, mappingName);
+                if (newCellValue != null)
                 {
-                    object? rowdata = ((SfDataGrid)sender).View.Records.GetItemAt(e.RowColumnIndex.RowIndex - 1);
-                    string? mappingName = ((SfDataGrid)sender).Columns[e.RowColumnIndex.ColumnIndex - 1].MappingName;
-                    var qryid = Convert.ToInt64(((SfDataGrid)e.OriginalSender).View.GetPropertyAccessProvider()
-                        .GetValue(rowdata, "Id"));
-                    ;
-                    var newCellValue = ((SfDataGrid)e.OriginalSender).View.GetPropertyAccessProvider()
-                        .GetValue(rowdata, mappingName);
-                    if (newCellValue != null)
+                    using (var db = new Db_Uv_InventoryContext())
                     {
-                        using (var db = new Db_Uv_InventoryContext())
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+
+                        if (result != null && mappingName == "LotNotes")
                         {
-                            var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
+                            (rowdata as ViewUvWorkorder).LotNotes = newCellValue.ToString();
+                            result.LotNotes = newCellValue.ToString();
+                            await db.SaveChangesAsync();
+                            GridWip.View.Refresh();
+                        }
 
-                            if (result != null && mappingName == "LotNotes")
+                        //호기 규칙(D/I/R 00) 또는 빈칸(배정삭제)시 적용
+                        else if (result != null && mappingName == "MachineCs")
+                        {
+
+                            Regex regex = new Regex("([DIR]{1}[0-9]{2})");
+
+                            var numofsplited = 0;
+
+                            if (newCellValue.ToString().ToUpper().Contains(",")) { numofsplited = newCellValue.ToString().ToUpper().Split(',').Count(); }
+                            else if (newCellValue.ToString().ToUpper().Contains(" ")) { numofsplited = newCellValue.ToString().ToUpper().Split(' ').Count(); }
+                            else { numofsplited = 1; }
+                            var numofmatched = regex.Matches(newCellValue.ToString().ToUpper()).Count();
+
+                            var lengthmatch = newCellValue.ToString().Length == (3 * numofmatched) + (numofsplited - 1);
+                            if (((numofsplited == numofmatched) && lengthmatch) || newCellValue.ToString().ToUpper().Length < 1)
                             {
-                                result.LotNotes = newCellValue.ToString();
-                                db.SaveChanges();
-                                UpdateFiltered_WorkorderList();
+                                _mainwindowViewModel.SelectedGridWip.MachineCs = newCellValue.ToString().ToUpper();
+                                result.MachineCs = newCellValue.ToString().ToUpper();
+                                await db.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                MessageBox.Show("호기 형식 확인 바랍니다 D00 I00 R00 \n 여러대 입력시 , 또는 빈칸 1개로 구분", "호기 입력 형식 오류",
+                   MessageBoxButton.OK, MessageBoxImage.Error);
+                                _mainwindowViewModel.SelectedGridWip.MachineCs = result.MachineCs;
+                                GridWip.View.Refresh();
                             }
 
-                            //호기 규칙(D/I/R 00) 또는 빈칸(배정삭제)시 적용
-                            else if (result != null && mappingName == "MachineCs")
+
+                        }
+
+                        else if (result != null && mappingName == "MachineSs")
+                        {
+                            Regex regex = new Regex("([DIR]{1}[0-9]{2})");
+                            var numofsplited = 0;
+
+                            if (newCellValue.ToString().ToUpper().Contains(",")) { numofsplited = newCellValue.ToString().ToUpper().Split(',').Count(); }
+                            else if (newCellValue.ToString().ToUpper().Contains(" ")) { numofsplited = newCellValue.ToString().ToUpper().Split(' ').Count(); }
+                            else { numofsplited = 1; }
+                            var numofmatched = regex.Matches(newCellValue.ToString().ToUpper()).Count();
+
+                            var lengthmatch = newCellValue.ToString().Length == (3 * numofmatched) + (numofsplited - 1);
+                            if (((numofsplited == numofmatched) && lengthmatch) || newCellValue.ToString().ToUpper().Length < 1)
                             {
+                                _mainwindowViewModel.SelectedGridWip.MachineSs = newCellValue.ToString().ToUpper();
+                                result.MachineSs = newCellValue.ToString().ToUpper();
+                                await db.SaveChangesAsync();
 
-                                Regex regex = new Regex("^[DIR][0-9]{2}");
-
-                                if (regex.IsMatch(newCellValue.ToString()) || newCellValue.ToString().Length < 1)
-                                {
-                                    result.MachineCs = newCellValue.ToString();
-                                    db.SaveChanges();
-                                }
-
-                                UpdateFiltered_WorkorderList();
+                            }
+                            else
+                            {
+                                MessageBox.Show("호기 형식 확인 바랍니다 D00 I00 R00 \n여러대 입력시 , 또는 빈칸 1개로 구분", "호기 입력 형식 오류",
+                   MessageBoxButton.OK, MessageBoxImage.Error);
+                                _mainwindowViewModel.SelectedGridWip.MachineSs = result.MachineSs;
+                                GridWip.View.Refresh();
                             }
 
-                            else if (result != null && mappingName == "MachineSs")
-                            {
-                                Regex regex = new Regex("^[DIR][0-9]{2}");
+                        }
 
-                                if (regex.IsMatch(newCellValue.ToString()) || newCellValue.ToString().Length < 1)
-                                {
-                                    result.MachineSs = newCellValue.ToString();
-                                    db.SaveChanges();
-                                }
+                        else if (result != null && mappingName == "Pnlqty")
+                        {
+                            result.LotHistory += "\n" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:sss") + "\t" + _mainwindowViewModel.SelectedUser + "\t[수량변경]\t변경 전:" + result.Pnlqty + "\t변경 후:" + Convert.ToInt16(newCellValue.ToString());
+                            (rowdata as ViewUvWorkorder).Pnlqty = Convert.ToInt16(newCellValue.ToString());
+                            result.Pnlqty = Convert.ToInt16(newCellValue.ToString());
 
-                                UpdateFiltered_WorkorderList();
-                            }
-
-                            else if (result != null && mappingName == "Pnlqty")
-                            {
-                                result.LotHistory += "\n" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:sss") + "\t" + _mainwindowViewModel.SelectedUser + "\t[수량변경]\t변경 전:" + result.Pnlqty + "\t변경 후:" + Convert.ToInt16(newCellValue.ToString());
-                                result.Pnlqty = Convert.ToInt16(newCellValue.ToString());
-
-                                db.SaveChanges();
-                                UpdateFiltered_WorkorderList();
-                            }
+                            await db.SaveChangesAsync();
+                            GridWip.View.Refresh();
                         }
                     }
-
-                    IsCellEditing = false;
-                    GridWip.GetVisualContainer().InvalidateMeasureInfo();
                 }
-            }), System.Windows.Threading.DispatcherPriority.Normal);
+
+                IsCellEditing = false;
+                GridWip.GetVisualContainer().InvalidateMeasureInfo();
+            }
+
         }
 
+        public bool FilterCustomerWo(object o)
+        {
+            string filterText = _mainwindowViewModel.SelectedCustomerWo;
+            var item = o as ViewUvWorkorder;
+
+            if (item != null)
+            {
+
+                if (item.CustName.Equals(filterText))
+                    return true;
+            }
+            return false;
+        }
         public void UpdateFiltered_WorkorderListSelectChanged()
         {
             starttime1 = DateTime.Now;
@@ -407,7 +462,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                 if (_mainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
                 else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
                 Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                var tmpwolist = db.ViewUvWorkorder.ToList<ViewUvWorkorder>();
+                var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
+                
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
                 _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
@@ -420,36 +476,47 @@ namespace DAWON_UV_INVENTORY_PROTO
                 Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 if (GridWip != null)
                 {
-                    var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+                    //var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+                    //var tmpdb_query = new ObservableCollection<ViewUvWorkorder>(tmpdb.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+
+                    var dbWorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime));
+                    var tmpdb_query = new ObservableCollection<ViewUvWorkorder>(tmpdb.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime));
                     var comparer = new ObjectsComparer.Comparer<ObservableCollection<ViewUvWorkorder>>();
 
                     //Compare objects
                     IEnumerable<Difference> differences;
-                    var isEqual = comparer.Compare(dbWorkOrderList, _mainwindowViewModel.WorkOrderList, out differences);
+                    //var isEqual = comparer.Compare(dbWorkOrderList, (ObservableCollection<ViewUvWorkorder>)_mainwindowViewModel.WorkOrderList, out differences);
+                    var isEqual = comparer.Compare(tmpwolist, tmpdb, out differences);
 
                     //Print results
                     Debug.WriteLine(isEqual ? "Objects are equal" : string.Join(Environment.NewLine, differences));
 
-                    if (!isEqual)
+                     if (!isEqual)
                     {
-                        _mainwindowViewModel.WorkOrderList = dbWorkOrderList;
+                        //_mainwindowViewModel.WorkOrderList = dbWorkOrderList;
+                        _mainwindowViewModel.WorkOrderList = tmpwolist;                      
                     }
-                }
 
+                }
 
                 Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 if (GridWip != null)
                 {
-
-                    GridWip.Columns.Clear();
+                    //GridWip.Columns.Clear();
 
                     if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
                     {
-                        GridWipColumnDems();
+                        //GridWipColumnDems();
                     }
                     else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
                     {
-                        GridWipColumnDepkg();
+                        //GridWipColumnDepkg();
+                    }
+                   
+                    if (GridWip.View != null)
+                    {
+                        GridWip.View.Filter = FilterCustomerWo;
+                        GridWip.View.RefreshFilter();
                     }
 
                 }
@@ -457,6 +524,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var time2 = DateTime.Now;
 
                 Debug.WriteLine(_mainwindowViewModel.WipCount_Dems + "  " + (time2 - starttime1).TotalMilliseconds);
+                tmpdb = tmpwolist;
             }
         }
 
@@ -470,7 +538,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                 if (_mainwindowViewModel.SelectedIsSampleWo == "양산") issample = false;
                 else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
                 Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                var tmpwolist = db.ViewUvWorkorder.ToList<ViewUvWorkorder>();
+                var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
+                
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
                 _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
@@ -482,28 +551,36 @@ namespace DAWON_UV_INVENTORY_PROTO
                 _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
                 Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
 
-                _mainwindowViewModel.WorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+
+                _mainwindowViewModel.WorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist);
+                //_mainwindowViewModel.WorkOrderList = new ObservableCollection<ViewUvWorkorder>(tmpwolist.Where(x => x.CustName == customer && x.SampleOrder == issample).OrderBy(x => x.TrackinTime).OrderByDescending(x => x.WaitTrackout));
+
 
                 Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 if (GridWip != null)
                 {
 
-                    GridWip.Columns.Clear();
+                    //GridWip.Columns.Clear();
 
                     if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
                     {
-                        GridWipColumnDems();
+                        //GridWipColumnDems();
                     }
                     else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
                     {
-                        GridWipColumnDepkg();
+                        //GridWipColumnDepkg();
                     }
-
+                    if (GridWip.View != null)
+                    {
+                        GridWip.View.Filter = FilterCustomerWo;
+                        GridWip.View.RefreshFilter();
+                    }
                 }
-
+                //GC.Collect();
                 var time2 = DateTime.Now;
 
                 Debug.WriteLine(_mainwindowViewModel.WipCount_Dems + "  " + (time2 - starttime1).TotalMilliseconds);
+                tmpdb = tmpwolist;
             }
         }
 
@@ -518,7 +595,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 if (_mainwindowViewModel.SelectedIsSampleWoSearch == "양산") issample = false;
                 else if (_mainwindowViewModel.SelectedIsSampleWoSearch == "샘플") issample = true;
 
-                var rcvdata = new ObservableCollection<ViewUvWorkorderDone>(db.ViewUvWorkorderDone.Where(x =>
+                var rcvdata = new List<ViewUvWorkorderDone>(db.ViewUvWorkorderDone.Where(x =>
                     x.CustName == customer && x.SampleOrder == issample && x.CreateTime >= datefrom &&
                     x.CreateTime <= dateto));
 
@@ -542,7 +619,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 if (isLot && isTool && isModelName)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.Lotid == lot && x.CustToolno == tool && x.CustModelname == modelname &&
                                  x.CreateTime >= datefrom && x.CreateTime <= dateto));
@@ -550,7 +627,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 else if (isLot && isTool)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.Lotid == lot && x.CustToolno == tool && x.CreateTime >= datefrom &&
                                  x.CreateTime <= dateto));
@@ -558,7 +635,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 else if (isLot && isModelName)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.Lotid == lot && x.CustModelname == modelname && x.CreateTime >= datefrom &&
                                  x.CreateTime <= dateto));
@@ -566,7 +643,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 else if (isTool && isModelName)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.CustToolno == tool && x.CustModelname == modelname && x.CreateTime >= datefrom &&
                                  x.CreateTime <= dateto));
@@ -574,20 +651,20 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                 else if (isTool)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.CustToolno == tool && x.CreateTime >= datefrom && x.CreateTime <= dateto));
                 }
 
                 else if (isModelName)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.CustModelname == modelname && x.CreateTime >= datefrom && x.CreateTime <= dateto));
                 }
                 else if (isLot)
                 {
-                    _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                    _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                         db.ViewUvWorkorderDone.Where(
                             x => x.Lotid == lot && x.CreateTime >= datefrom && x.CreateTime <= dateto));
                 }
@@ -600,7 +677,7 @@ namespace DAWON_UV_INVENTORY_PROTO
             using (var db = new Db_Uv_InventoryContext())
             {
                 _mainwindowViewModel.ToolInfos =
-                    new ObservableCollection<TbUvToolinfo>(db.TbUvToolinfo);
+                    new List<TbUvToolinfo>(db.TbUvToolinfo);
             }
         }
         private void cmb_wip_cust_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -712,6 +789,17 @@ namespace DAWON_UV_INVENTORY_PROTO
                 if (!Application.Current.Windows.OfType<TrackInWindowDepkg>().Any())
                 {
                     var trackinwindow = new TrackInWindowDepkg();
+                    trackinwindow.Topmost = true;
+                    trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    trackinwindow.Show();
+                }
+            }
+
+            else
+            {
+                if (!Application.Current.Windows.OfType<TrackinWindowGeneral>().Any())
+                {
+                    var trackinwindow = new TrackinWindowGeneral();
                     trackinwindow.Topmost = true;
                     trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                     trackinwindow.Show();
@@ -833,7 +921,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var dateto = DateTime.Parse(DtpickWipsearchTo.SelectedDate.ToString());
                 if (_mainwindowViewModel.SelectedIsSampleWoSearch == "양산") issample = false;
                 else if (_mainwindowViewModel.SelectedIsSampleWoSearch == "샘플") issample = true;
-                _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                     db.ViewUvWorkorderDone.Where(x =>
                         x.SampleOrder == issample && x.CreateTime >= datefrom && x.CreateTime <= dateto));
             }
@@ -856,7 +944,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var datefrom = DateTime.Parse(DtpickWipsearchFrom.SelectedDate.ToString()).AddDays(-1);
                 var dateto = DateTime.Parse(DtpickWipsearchTo.SelectedDate.ToString()).AddDays(1);
 
-                _mainwindowViewModel.WorkOrderListSearch = new ObservableCollection<ViewUvWorkorderDone>(
+                _mainwindowViewModel.WorkOrderListSearch = new List<ViewUvWorkorderDone>(
                     db.ViewUvWorkorderDone.Where(x =>
                         (x.TrackoutTime >= datefrom && x.TrackoutTime <= dateto && x.IsDone == true) &&
                         (x.Lotid.Contains(keyword) || x.CustModelname.Contains(keyword) ||
@@ -874,6 +962,7 @@ namespace DAWON_UV_INVENTORY_PROTO
         {
             tblksearchlot.Text = string.Empty;
             PerformSearchGridWip();
+            
         }
 
         #region 재공현황 로트 검색
@@ -919,31 +1008,80 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-
-        //행색상변경
-        private async void ColorPickerPalette1_OnSelectedBrushChanged(object? sender, SelectedBrushChangedEventArgs e)
+        public void Dispose()
         {
-            if (_mainwindowViewModel.SelectedGridWip != null)
+            this.Close();
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            Dispose();
+            base.OnClosed(e);
+        }
+
+        private async void cmbMachineCS_DropDownClosed(object sender, EventArgs e)
+        {
+            var record = _mainwindowViewModel.SelectedGridWip;
+            string[] selItems = new string[] { };
+            if (record != null)
             {
-                var rowdata = _mainwindowViewModel.SelectedGridWip;
-                var qryid = Convert.ToInt32(rowdata.Id);
+                if (((sender as ComboBoxAdv).SelectedItems) != null)
+                { selItems = (sender as ComboBoxAdv).SelectedItems.Cast<string>().ToArray(); }
 
-                using (var db = new Db_Uv_InventoryContext())
+                if (record.MachineCs != string.Join(",", selItems))
                 {
-                    var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
-
-                    if (result != null)
+                    using (var db = new Db_Uv_InventoryContext())
                     {
-                        result.FormatBg = e.NewColor.ToString();
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
+
+                        var txt = string.Join(",", selItems).ToString();
+
+                        result.MachineCs = txt;
                         await db.SaveChangesAsync();
-                        Debug.WriteLine($"색상변경{e.NewColor.ToString()}");
-                        UpdateFiltered_WorkorderList();
                     }
+                }
+
+                else if (record.MachineCs == string.Join(",", selItems))
+                {
+                    return;
                 }
             }
         }
 
+        private async void cmbMachineSS_DropDownClosed(object sender, EventArgs e)
+        {
+            var record = _mainwindowViewModel.SelectedGridWip;
 
+            if (record != null)
+            {
+
+                var selItems = (sender as ComboBoxAdv).SelectedItems.Cast<string>().ToArray();
+                if (record.MachineSs != string.Join(",", selItems))
+                {
+                    using (var db = new Db_Uv_InventoryContext())
+                    {
+                        var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
+
+                        var txt = string.Join(",", selItems).ToString();
+
+                        result.MachineSs = txt;
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else if (record.MachineSs == string.Join(",", selItems))
+                {
+                    return;
+                }
+            }
+        }
+
+        private void GridWip_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (GridWip.View != null)
+            {
+                GridWip.View.Filter = FilterCustomerWo;
+                GridWip.View.RefreshFilter();
+            }
+        }
     }
 
 }

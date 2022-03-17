@@ -49,12 +49,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
             var createDate = runtimeEntityType.AddProperty(
                 "CreateDate",
-                typeof(DateTime?),
+                typeof(string),
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("CreateDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<CreateDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
+                nullable: true,
+                maxLength: 20);
             createDate.AddAnnotation("Relational:ColumnName", "create_date");
-            createDate.AddAnnotation("Relational:ColumnType", "datetime");
             createDate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var cuThickness = runtimeEntityType.AddProperty(
@@ -413,6 +413,28 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 nullable: true);
             sample.AddAnnotation("Relational:ColumnName", "sample");
             sample.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var semCsdata = runtimeEntityType.AddProperty(
+                "SemCsdata",
+                typeof(string),
+                propertyInfo: typeof(TbUvToolinfo).GetProperty("SemCsdata", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvToolinfo).GetField("<SemCsdata>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            semCsdata.AddAnnotation("Relational:ColumnName", "sem_csdata");
+            semCsdata.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var semSsdata = runtimeEntityType.AddProperty(
+                "SemSsdata",
+                typeof(string),
+                propertyInfo: typeof(TbUvToolinfo).GetProperty("SemSsdata", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvToolinfo).GetField("<SemSsdata>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            semSsdata.AddAnnotation("Relational:ColumnName", "sem_ssdata");
+            semSsdata.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var stackType = runtimeEntityType.AddProperty(
                 "StackType",

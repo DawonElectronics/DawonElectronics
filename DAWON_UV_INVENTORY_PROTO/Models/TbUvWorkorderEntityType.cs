@@ -160,6 +160,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             machineSs.AddAnnotation("Relational:ColumnName", "machine_ss");
             machineSs.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var nftOrderserial = runtimeEntityType.AddProperty(
+                "NftOrderserial",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("NftOrderserial", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<NftOrderserial>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 10,
+                unicode: false);
+            nftOrderserial.AddAnnotation("Relational:ColumnName", "nft_orderserial");
+            nftOrderserial.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var pnlqty = runtimeEntityType.AddProperty(
                 "Pnlqty",
                 typeof(short?),
@@ -178,6 +189,38 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 maxLength: 100);
             productId.AddAnnotation("Relational:ColumnName", "product_id");
             productId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var rtrLoss = runtimeEntityType.AddProperty(
+                "RtrLoss",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("RtrLoss", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<RtrLoss>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            rtrLoss.AddAnnotation("Relational:ColumnName", "rtr_loss");
+            rtrLoss.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var rtrLot = runtimeEntityType.AddProperty(
+                "RtrLot",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("RtrLot", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<RtrLot>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            rtrLot.AddAnnotation("Relational:ColumnName", "rtr_lot");
+            rtrLot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var sampleDep = runtimeEntityType.AddProperty(
+                "SampleDep",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("SampleDep", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<SampleDep>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100);
+            sampleDep.AddAnnotation("Relational:ColumnName", "sample_dep");
+            sampleDep.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var sampleOrder = runtimeEntityType.AddProperty(
                 "SampleOrder",
@@ -246,6 +289,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             waitTrackout.AddAnnotation("Relational:DefaultValueSql", "((0))");
             waitTrackout.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var ypShortlot = runtimeEntityType.AddProperty(
+                "YpShortlot",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("YpShortlot", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<YpShortlot>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 10,
+                unicode: false);
+            ypShortlot.AddAnnotation("Relational:ColumnName", "yp_shortlot");
+            ypShortlot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var key = runtimeEntityType.AddKey(
                 new[] { id });
             runtimeEntityType.SetPrimaryKey(key);
@@ -265,6 +319,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             var iX_tb_uv_workorder = runtimeEntityType.AddIndex(
                 new[] { trackoutTime, custId, isDone },
                 name: "IX_tb_uv_workorder");
+
+            var _dta_index_tb_uv_workorder_5_805577908__K15_K18_K7_K6_K11_2_3_4_5_8_9_10_13_14_16_19_20_21_22_23 = runtimeEntityType.AddIndex(
+                new[] { isDone, id, trackoutUserId, trackinUserId, productId },
+                name: "_dta_index_tb_uv_workorder_5_805577908__K15_K18_K7_K6_K11_2_3_4_5_8_9_10_13_14_16_19_20_21_22_23");
 
             return runtimeEntityType;
         }

@@ -44,7 +44,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             if (_mcviewmodel.SelectedMachine != null)
             {
-                var mw = new MainWindow();
+               
                 var rowdata = _mcviewmodel.WorkorderRecord;
                 var qryid = rowdata.Id;
                 var changevalue = _mcviewmodel.DbMachineString.ToString();
@@ -56,7 +56,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         result.MachineCs = changevalue;
                         _mcviewmodel.WorkorderRecord.MachineCs = changevalue;
                         db.SaveChanges();
-                        mw.UpdateFiltered_WorkorderList();
+                        using (var mw = new MainWindow())
+                        {                            
+                            mw.UpdateFiltered_WorkorderList();
+                        }
                         lbl_csResult.Content = "CS: 처리완료";
                     }
                 }
@@ -66,7 +69,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             if (_mcviewmodel.SelectedMachine != null)
             {
-                var mw = new MainWindow();
+                
                 var rowdata = _mcviewmodel.WorkorderRecord;
                 var qryid = rowdata.Id;
                 var changevalue = _mcviewmodel.DbMachineString.ToString();
@@ -78,7 +81,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         result.MachineSs = changevalue;
                         _mcviewmodel.WorkorderRecord.MachineSs = changevalue;
                         db.SaveChanges();
-                        mw.UpdateFiltered_WorkorderList();
+                        using (var mw = new MainWindow())
+                        {
+                            mw.UpdateFiltered_WorkorderList();
+                        }
                         lbl_ssResult.Content = "SS: 처리완료";
                     }
                 }

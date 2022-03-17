@@ -19,11 +19,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured && MainWindow._mainwindowViewModel.SelectedUser == "테스트"&& MainWindow._mainwindowViewModel.ChkTest ==true)
+            if (!optionsBuilder.IsConfigured && MainWindow._mainwindowViewModel.SelectedUser == "테스트" && MainWindow._mainwindowViewModel.ChkTest == true)
             {
                 //optionsBuilder.UseNpgsql("Host=192.168.0.21;Database=uv_inventory;Username=uv_inventory;Password=Ekdnjs3637!");
                 optionsBuilder.UseSqlServer("server=192.168.0.12;database=db_uv_inventory;user=uv_inventory;password=Ekdnjs3637!");
                 optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
+
             }
             else if (!optionsBuilder.IsConfigured)
             {
@@ -38,6 +39,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public virtual DbSet<TbUvToolinfo> TbUvToolinfo { get; set; }
         public virtual DbSet<TbUvWorkorder> TbUvWorkorder { get; set; }
         public virtual DbSet<ViewUvWorkorder> ViewUvWorkorder { get; set; }
+        public virtual DbSet<ViewUvWorkorder2> ViewUvWorkorder2 { get; set; }
         public virtual DbSet<ViewUvWorkorderDone> ViewUvWorkorderDone { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -165,7 +167,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.CamFinished).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(20)
                     .HasColumnName("create_date");
 
                 entity.Property(e => e.CuThickness)
@@ -305,6 +307,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.Sample).HasColumnName("sample");
 
+                entity.Property(e => e.SemCsdata)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("sem_csdata");
+
+                entity.Property(e => e.SemSsdata)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("sem_ssdata");
+
                 entity.Property(e => e.StackType).HasMaxLength(20);
 
                 entity.Property(e => e.StriparrayBlk).HasColumnName("striparrayBlk");
@@ -341,6 +353,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.ToTable("tb_uv_workorder");
 
                 entity.HasIndex(e => new { e.TrackoutTime, e.CustId, e.IsDone }, "IX_tb_uv_workorder");
+
+                entity.HasIndex(e => new { e.IsDone, e.Id, e.TrackoutUserId, e.TrackinUserId, e.ProductId }, "_dta_index_tb_uv_workorder_5_805577908__K15_K18_K7_K6_K11_2_3_4_5_8_9_10_13_14_16_19_20_21_22_23");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -394,11 +408,30 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(300)
                     .HasColumnName("machine_ss");
 
+                entity.Property(e => e.NftOrderserial)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("nft_orderserial");
+
                 entity.Property(e => e.Pnlqty).HasColumnName("pnlqty");
 
                 entity.Property(e => e.ProductId)
                     .HasMaxLength(100)
                     .HasColumnName("product_id");
+
+                entity.Property(e => e.RtrLoss)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_loss");
+
+                entity.Property(e => e.RtrLot)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_lot");
+
+                entity.Property(e => e.SampleDep)
+                    .HasMaxLength(100)
+                    .HasColumnName("sample_dep");
 
                 entity.Property(e => e.SampleOrder).HasColumnName("sample_order");
 
@@ -421,6 +454,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.Txid).HasColumnName("txid");
 
                 entity.Property(e => e.WaitTrackout).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.YpShortlot)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("yp_shortlot");
 
                 entity.HasOne(d => d.Cust)
                     .WithMany(p => p.TbUvWorkorder)
@@ -452,7 +490,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.ArrayBlk).HasColumnName("array_blk");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(20)
                     .HasColumnName("create_date");
 
                 entity.Property(e => e.CreateTime)
@@ -619,6 +657,160 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("worksize_y");
             });
 
+            modelBuilder.Entity<ViewUvWorkorder2>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("view_uv_workorder2");
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("create_time");
+
+                entity.Property(e => e.CustComment)
+                    .HasColumnType("ntext")
+                    .HasColumnName("cust_comment");
+
+                entity.Property(e => e.CustModelname)
+                    .HasMaxLength(200)
+                    .HasColumnName("cust_modelname");
+
+                entity.Property(e => e.CustName)
+                    .HasMaxLength(30)
+                    .HasColumnName("cust_name");
+
+                entity.Property(e => e.CustRevision)
+                    .HasMaxLength(10)
+                    .HasColumnName("cust_revision")
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustToolno)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("cust_toolno");
+
+                entity.Property(e => e.Depth)
+                    .HasColumnType("decimal(7, 3)")
+                    .HasColumnName("depth");
+
+                entity.Property(e => e.EndCustomer)
+                    .HasMaxLength(100)
+                    .HasColumnName("end_customer");
+
+                entity.Property(e => e.FormatBg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_bg");
+
+                entity.Property(e => e.FormatBold).HasColumnName("Format_bold");
+
+                entity.Property(e => e.FormatFg)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Format_fg");
+
+                entity.Property(e => e.HoleCount)
+                    .HasMaxLength(50)
+                    .HasColumnName("hole_count");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.InsulType)
+                    .HasMaxLength(30)
+                    .HasColumnName("insul_type");
+
+                entity.Property(e => e.IsDone).HasColumnName("isDone");
+
+                entity.Property(e => e.Layer).HasColumnName("layer");
+
+                entity.Property(e => e.LotNotes)
+                    .HasColumnType("ntext")
+                    .HasColumnName("lot_notes");
+
+                entity.Property(e => e.LotType)
+                    .HasMaxLength(20)
+                    .HasColumnName("lot_type");
+
+                entity.Property(e => e.Lotid)
+                    .HasMaxLength(100)
+                    .HasColumnName("lotid");
+
+                entity.Property(e => e.MachineCs)
+                    .HasMaxLength(300)
+                    .HasColumnName("machine_cs");
+
+                entity.Property(e => e.MachineSs)
+                    .HasMaxLength(300)
+                    .HasColumnName("machine_ss");
+
+                entity.Property(e => e.MainHoleSize)
+                    .HasMaxLength(10)
+                    .HasColumnName("main_hole_size");
+
+                entity.Property(e => e.MesPrcCode)
+                    .HasMaxLength(10)
+                    .HasColumnName("mes_prc_code");
+
+                entity.Property(e => e.MesPrcName)
+                    .HasMaxLength(30)
+                    .HasColumnName("mes_prc_name");
+
+                entity.Property(e => e.Pcs).HasColumnName("pcs");
+
+                entity.Property(e => e.Pnlqty).HasColumnName("pnlqty");
+
+                entity.Property(e => e.PrcCode)
+                    .HasMaxLength(20)
+                    .HasColumnName("prc_code");
+
+                entity.Property(e => e.PrcLayer1)
+                    .IsRequired()
+                    .HasMaxLength(9)
+                    .HasColumnName("prc_layer1");
+
+                entity.Property(e => e.PrcLayer2)
+                    .IsRequired()
+                    .HasMaxLength(9)
+                    .HasColumnName("prc_layer2");
+
+                entity.Property(e => e.PrcName)
+                    .HasMaxLength(20)
+                    .HasColumnName("prc_name");
+
+                entity.Property(e => e.ProductId)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("product_id");
+
+                entity.Property(e => e.ProductType)
+                    .HasMaxLength(20)
+                    .HasColumnName("product_type");
+
+                entity.Property(e => e.SampleOrder).HasColumnName("sample_order");
+
+                entity.Property(e => e.ToolNotes)
+                    .HasColumnType("ntext")
+                    .HasColumnName("tool_notes");
+
+                entity.Property(e => e.TrackinTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("trackin_time");
+
+                entity.Property(e => e.TrackinUsername)
+                    .HasMaxLength(20)
+                    .HasColumnName("trackin_username");
+
+                entity.Property(e => e.TrackoutTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("trackout_time");
+
+                entity.Property(e => e.TrackoutUsername)
+                    .HasMaxLength(20)
+                    .HasColumnName("trackout_username");
+
+                entity.Property(e => e.Txid).HasColumnName("txid");
+            });
+
             modelBuilder.Entity<ViewUvWorkorderDone>(entity =>
             {
                 entity.HasNoKey();
@@ -628,7 +820,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.ArrayBlk).HasColumnName("array_blk");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(20)
                     .HasColumnName("create_date");
 
                 entity.Property(e => e.CreateTime)

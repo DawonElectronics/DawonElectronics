@@ -1,5 +1,6 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -14,8 +15,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         }
 
-        private ObservableCollection<TbPrctype>? _prctypes;
-        public ObservableCollection<TbPrctype>? PrcTypes
+        private List<TbPrctype>? _prctypes;
+        public List<TbPrctype>? PrcTypes
         {
             get { return _prctypes; }
             set
@@ -25,8 +26,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbCustomer>? _customer;
-        public ObservableCollection<TbCustomer>? Customer
+        private List<TbCustomer>? _customer;
+        public List<TbCustomer>? Customer
         {
             get { return _customer; }
             set
@@ -36,8 +37,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
-        private ObservableCollection<TbUsers>? _userList;
-        public ObservableCollection<TbUsers>? UserList
+        private List<TbUsers>? _userList;
+        public List<TbUsers>? UserList
         {
             get { return _userList; }
             set

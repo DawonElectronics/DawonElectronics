@@ -15,7 +15,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string ProductId { get; set; }
         public string CustToolno { get; set; }
         public string CustModelname { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public string CreateDate { get; set; }
         public string CustId { get; set; }
         public bool? Sample { get; set; }
         public decimal? WorksizeX { get; set; }
@@ -59,6 +59,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public int? StriparrayRow { get; set; }
         public int? StriparrayBlk { get; set; }
         public bool? CamFinished { get; set; }
+        public string SemCsdata { get; set; }
+        public string SemSsdata { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbPrctype PrcCodeNavigation { get; set; }

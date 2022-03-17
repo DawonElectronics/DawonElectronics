@@ -9,7 +9,10 @@
         syncfusion:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=FluentLight}"
         mc:Ignorable="d"
         Title="설비선택화면" Height="320" Width="500">
-    
+
+    <syncfusion:ChromelessWindow.Resources>
+        <viewmodel:MachineSelectionConverter x:Key="MachineConverter"/>
+    </syncfusion:ChromelessWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -18,17 +21,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
+            
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
         <Label Content="선택된 LOT:" FontSize="16"/>
             <Label x:Name="lbl_lotid"  FontSize="16"/>
         </StackPanel>
+       
         <syncfusion:CheckListBox Grid.Row="1" Grid.Column="0" x:Name="chkListBox" Margin="5,5"
                                  VerticalContentAlignment="Center" IsSelectAllEnabled="False" 
                                  ItemsSource="{Binding Machines}"
-                                 SelectedItems="{Binding SelectedMachine}"
-                                 DisplayMemberPath="MachineShortname"
-                                 SelectedValuePath="MachineShortname"
+                                 SelectedItems="{Binding SelectedMachine,Converter={StaticResource MachineConverter}}"                                 
+                                 DisplayMemberPath="MachineShortname"                                 
                                  FontSize="15" FontWeight="Bold">
             
             <syncfusion:CheckListBox.ItemsPanel>

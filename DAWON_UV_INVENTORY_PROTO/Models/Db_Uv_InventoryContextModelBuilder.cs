@@ -19,6 +19,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             var tbUvToolinfo = TbUvToolinfoEntityType.Create(this);
             var tbUvWorkorder = TbUvWorkorderEntityType.Create(this);
             var viewUvWorkorder = ViewUvWorkorderEntityType.Create(this);
+            var viewUvWorkorder2 = ViewUvWorkorder2EntityType.Create(this);
             var viewUvWorkorderDone = ViewUvWorkorderDoneEntityType.Create(this);
 
             TbUvToolinfoEntityType.CreateForeignKey1(tbUvToolinfo, tbCustomer);
@@ -35,9 +36,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             TbUvToolinfoEntityType.CreateAnnotations(tbUvToolinfo);
             TbUvWorkorderEntityType.CreateAnnotations(tbUvWorkorder);
             ViewUvWorkorderEntityType.CreateAnnotations(viewUvWorkorder);
+            ViewUvWorkorder2EntityType.CreateAnnotations(viewUvWorkorder2);
             ViewUvWorkorderDoneEntityType.CreateAnnotations(viewUvWorkorderDone);
 
-            AddAnnotation("ProductVersion", "6.0.2");
+            AddAnnotation("ProductVersion", "6.0.3");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }

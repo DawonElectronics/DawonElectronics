@@ -10,14 +10,14 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
     public class MachineChooserViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<object> _selectedMachine = new ObservableCollection<object>();
+        private List<object> _selectedMachine = new List<object>();
         public MachineChooserViewModel()
         {
             //Machines = MainWindow.mainwindowViewModel.Machines.Select(x=>x.MachineShortname).ToObservableCollection();
             Machines = MainWindow._mainwindowViewModel.Machines;
         }
-        private ObservableCollection<TbMachine>? _machines;
-        public ObservableCollection<TbMachine>? Machines
+        private List<TbMachine>? _machines;
+        public List<TbMachine>? Machines
         {
             get { return _machines; }
             set
@@ -44,7 +44,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        public ObservableCollection<object> SelectedMachine
+        public List<object> SelectedMachine
         {
             get { return _selectedMachine; }
             set
@@ -71,7 +71,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 if (value != null && value.Length > 2)
                 {
-                    var templist = new ObservableCollection<object>();
+                    var templist = new List<object>();
 
                     foreach (var item in value.Split(',').ToList())
                     {

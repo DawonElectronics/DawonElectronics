@@ -1,6 +1,6 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -13,35 +13,24 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string data = string.Empty;
-            if ((string)parameter == "MachineCs")
-            { data = ((ViewUvWorkorder)value).MachineCs; }
-            else if ((string)parameter == "MachineSs")
-            { data = ((ViewUvWorkorder)value).MachineCs; }
-
-
-            //custom condition is checked based on data.
+            var data = value as string;
+            var result = new ObservableCollection<object>();
+            
             if (data != null)
-                return data.Split(',').ToList();
-            else
-                return DependencyProperty.UnsetValue;
+            {
+                foreach (var item in data.Split(',').ToList())
+                {
+                    result.Add(item);
+                }
+            } 
+
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var data = value as List<string>;
 
-            string tempdata = string.Empty;
-            if ((string)parameter == "MachineCs")
-            { tempdata = ((ViewUvWorkorder)value).MachineCs; }
-            else if ((string)parameter == "MachineSs")
-            { tempdata = ((ViewUvWorkorder)value).MachineCs; }
-
-            if (data != null)
-
-                return String.Join(", ", data.ToArray());
-            else
-                return DependencyProperty.UnsetValue;
+            throw new NotImplementedException();
         }
     }
 }

@@ -30,6 +30,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string FormatFg { get; set; }
         public bool? FormatBold { get; set; }
         public string LotHistory { get; set; }
+        public string YpShortlot { get; set; }
+        public string RtrLot { get; set; }
+        public string SampleDep { get; set; }
+        public string NftOrderserial { get; set; }
+        public string RtrLoss { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbUvToolinfo Product { get; set; }

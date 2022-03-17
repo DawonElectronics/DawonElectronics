@@ -22,11 +22,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         private static void CancelTrackoutRecord(object obj)
         {
 
-
-
             if (obj is GridRecordContextMenuInfo)
             {
-                var mw = new MainWindow();
+                
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorderDone;
                 var lot = record.Lotid;
                 var cancelTrackinMsg = MessageBox.Show(" 출고취소할까요?", "출고취소", MessageBoxButton.YesNo,
@@ -47,9 +45,11 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                 result.IsDone = false;
 
                                 db.SaveChanges();
-
-                                mw.UpdateFiltered_WorkorderSearchList();
-                                mw.UpdateFiltered_WorkorderList();
+                                using (var mw = new MainWindow())
+                                { 
+                                    mw.UpdateFiltered_WorkorderSearchList();
+                                    mw.UpdateFiltered_WorkorderList();
+                                }
 
                                 MessageBox.Show("처리되었습니다");
                             }

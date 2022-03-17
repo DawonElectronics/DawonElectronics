@@ -44,6 +44,10 @@
       {
          "Name": "[dbo].[view_uv_workorder_done]",
          "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[view_uv_workorder2]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "u20mariadb-vm.db_uv_inventory",

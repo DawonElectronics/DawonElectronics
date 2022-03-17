@@ -594,7 +594,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq, issample);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -610,7 +610,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             var tempTool = GetTbUvToolinfo_DE_MS_lbcut(tool, workcenter, lot, seq, issample, seqnr);
                             context.TbUvToolinfo.AddAsync(tempTool);
                             context.SaveChanges();
-                            MainWindow._mainwindowViewModel.ToolInfos = new ObservableCollection<TbUvToolinfo>(context.TbUvToolinfo);
+                            MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
                         }
 
                         else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
@@ -660,7 +660,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     tempTool.PrdCategory = lotdetailinfo.ProductType;
                     tempTool.LayerStructure = lotdetailinfo.LayerStructure;
                     tempTool.CustComment = lotdetailinfo.Reason;
-                    tempTool.CreateDate = DateTime.ParseExact(lotdetailinfo.Okdat, "yyyyMMdd", null);
+                    tempTool.CreateDate = lotdetailinfo.Okdat;
 
                     tempTool.ArrayBlk = specinfo.Arrayx * specinfo.Arrayy;
                     tempTool.WorksizeX = specinfo.Worksizex;
@@ -802,7 +802,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     tempTool.PrdCategory = lotdetailinfo.ProductType;
                     tempTool.LayerStructure = lotdetailinfo.LayerStructure;
                     tempTool.CustComment = lotdetailinfo.Reason;
-                    tempTool.CreateDate = DateTime.ParseExact(lotdetailinfo.Okdat, "yyyyMMdd", null);
+                    tempTool.CreateDate = lotdetailinfo.Okdat;
 
                     tempTool.ArrayBlk = specinfo.Arrayx * specinfo.Arrayy;
                     tempTool.WorksizeX = specinfo.Worksizex;

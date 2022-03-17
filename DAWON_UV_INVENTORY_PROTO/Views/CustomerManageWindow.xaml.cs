@@ -2,6 +2,7 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -121,7 +122,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     TboxInputCustname.Clear();
                     TboxInputCustcode.Clear();
                     qry_customer();
-                    MainWindow._mainwindowViewModel.Customer = new ObservableCollection<TbCustomer>(context.TbCustomer);
+                    MainWindow._mainwindowViewModel.Customer = new List<TbCustomer>(context.TbCustomer);
                 EXIT:
                     MessageBox.Show("이미 있는 고객사 코드입니다 다른 코드를 입력해주세요");
 

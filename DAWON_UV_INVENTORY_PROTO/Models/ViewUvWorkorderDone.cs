@@ -38,7 +38,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public int? ArrayBlk { get; set; }
         public int? Pcs { get; set; }
         public int? Layer { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public string CreateDate { get; set; }
         public string PrcLayer1 { get; set; }
         public string PrcLayer2 { get; set; }
         public string MesPrcCode { get; set; }

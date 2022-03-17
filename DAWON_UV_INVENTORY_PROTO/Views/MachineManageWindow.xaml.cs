@@ -2,6 +2,7 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -118,7 +119,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     TboxInputMachineMaker.Clear();
                     TboxInputMachineModelname.Clear();
                     qry_machine();
-                    MainWindow._mainwindowViewModel.Machines = new ObservableCollection<TbMachine>(context.TbMachine);
+                    MainWindow._mainwindowViewModel.Machines = new List<TbMachine>(context.TbMachine);
                 EXIT:
                     MessageBox.Show("이미 있는 호기 입니다 다른 호기를 입력해주세요");
 
