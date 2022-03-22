@@ -141,8 +141,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                 result.WaitTrackout = false;
                                 db.SaveChanges();
                                 (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
-                                mainWindow.GridWip.View.Refresh();
 
+                                mainWindow.GridWip.View.RefreshFilter();
+                                mainWindow.GetWipCount();
                                 mainWindow.TblkExecuteStatus.Visibility = Visibility.Visible;
                                 trackoutque.Enqueue($"{selData.Lotid} 출고\t");
                                 ExecuteResult += $"{selData.Lotid} 출고\t";
@@ -168,7 +169,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             db.SaveChanges();
                             
                             (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
-                            mainWindow.GridWip.View.Refresh();
+                            mainWindow.GridWip.View.RefreshFilter();
+                            mainWindow.GetWipCount();
                             trackoutque.Enqueue($"{selData.Lotid} 출고\t");
                             ExecuteResult += $"{selData.Lotid} 출고\t";
                         }
@@ -191,7 +193,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             db.SaveChanges();
 
                             (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
-                            mainWindow.GridWip.View.Refresh();
+                            mainWindow.GridWip.View.RefreshFilter();
+                            mainWindow.GetWipCount();
                             trackoutque.Enqueue($"{selData.Lotid} 출고\t");
                             ExecuteResult += $"{selData.Lotid} 출고\t";
 
@@ -563,7 +566,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Dems; }
             set
             {
-                _wipCount_Dems = $"대덕MS({value})";
+                _wipCount_Dems = $"대덕MS - {value}";
                 OnPropertyChanged(nameof(WipCount_Dems));
             }
         }
@@ -575,7 +578,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Depkg; }
             set
             {
-                _wipCount_Depkg = $"대덕PKG({value})";
+                _wipCount_Depkg = $"대덕PKG - {value}";
                 OnPropertyChanged(nameof(WipCount_Depkg));
             }
         }
@@ -587,7 +590,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Yp; }
             set
             {
-                _wipCount_Yp = $"영풍전자({value})";
+                _wipCount_Yp = $"영풍전자 - {value}";
                 OnPropertyChanged(nameof(WipCount_Yp));
             }
         }
@@ -598,7 +601,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Bh; }
             set
             {
-                _wipCount_Bh = $"BH({value})";
+                _wipCount_Bh = $"B H - {value}";
                 OnPropertyChanged(nameof(WipCount_Bh));
             }
         }
@@ -609,7 +612,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Ifx; }
             set
             {
-                _wipCount_Ifx = $"인터({value})";
+                _wipCount_Ifx = $"인 터 - {value}";
                 OnPropertyChanged(nameof(WipCount_Ifx));
             }
         }
@@ -620,7 +623,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Semco; }
             set
             {
-                _wipCount_Semco = $"삼성전기({value})";
+                _wipCount_Semco = $"삼성전기 - {value}";
                 OnPropertyChanged(nameof(WipCount_Semco));
             }
         }
@@ -632,7 +635,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Nft; }
             set
             {
-                _wipCount_Nft = $"뉴프렉스({value})";
+                _wipCount_Nft = $"뉴프렉스 - {value}";
                 OnPropertyChanged(nameof(WipCount_Nft));
             }
         }
@@ -644,7 +647,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _wipCount_Si; }
             set
             {
-                _wipCount_Si = $"SI({value})";
+                _wipCount_Si = $"S I - {value}";
                 OnPropertyChanged(nameof(WipCount_Si));
             }
         }

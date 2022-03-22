@@ -47,6 +47,8 @@ namespace DAWON_UV_INVENTORY_PROTO
         public static bool IsCellEditing = false;
         ObservableCollection<ViewUvWorkorder> tmpdb=new ObservableCollection<ViewUvWorkorder>();
 
+        GridRowSizingOptions gridRowResizingOptions = new GridRowSizingOptions();
+        double autoHeight=0;
 
         private DispatcherTimer? Timer { get; set; }
 
@@ -114,7 +116,14 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
 
             GridWip.ItemsSourceChanged += GridWip_ItemsSourceChanged;
-
+            GridWip.QueryRowHeight += GridWip_QueryRowHeight;
+            GridFinish.QueryRowHeight += GridFinish_QueryRowHeight;
+            
+            if (GridWip!=null && GridWip.View != null)
+            {
+                GridWip.View.Filter = FilterCustomerWo;
+                GridWip.View.RefreshFilter();
+            }
         }
 
         private void GridWip_ItemsSourceChanged(object? sender, GridItemsSourceChangedEventArgs e)
@@ -170,18 +179,31 @@ namespace DAWON_UV_INVENTORY_PROTO
             UpdateFiltered_WorkorderList();
         }
 
-        //void dataGrid_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
-        //{
-        //    if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, _gridRowResizingOptions,
-        //            out _autoHeight))
-        //    {
-        //        if (_autoHeight > 20 && e.RowIndex > 0)
-        //        {
-        //            e.Height = _autoHeight;
-        //            e.Handled = true;
-        //        }
-        //    }
-        //}
+        void GridWip_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
+        {
+            if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
+                    out autoHeight))
+            {
+                if (autoHeight > 30 && e.RowIndex > 0 )
+                {
+                    e.Height = autoHeight;
+                    e.Handled = true;
+                }
+            }
+        }
+
+        void GridFinish_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
+        {
+            if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
+                    out autoHeight))
+            {
+                if (autoHeight > 30 && e.RowIndex > 0)
+                {
+                    e.Height = autoHeight;
+                    e.Handled = true;
+                }
+            }
+        }
 
         //수기 입력 버튼
         private void btn_input_proceed_Click(object sender, RoutedEventArgs e)
@@ -359,27 +381,20 @@ namespace DAWON_UV_INVENTORY_PROTO
                             (rowdata as ViewUvWorkorder).LotNotes = newCellValue.ToString();
                             result.LotNotes = newCellValue.ToString();
                             await db.SaveChangesAsync();
-                            GridWip.View.Refresh();
+                            GridWip.View.RefreshFilter();
                         }
 
                         //호기 규칙(D/I/R 00) 또는 빈칸(배정삭제)시 적용
                         else if (result != null && mappingName == "MachineCs")
                         {
+                            bool valid = false;
 
-                            Regex regex = new Regex("([DIR]{1}[0-9]{2})");
+                            var parsed = MachineStringParse(newCellValue.ToString(), out valid);
 
-                            var numofsplited = 0;
-
-                            if (newCellValue.ToString().ToUpper().Contains(",")) { numofsplited = newCellValue.ToString().ToUpper().Split(',').Count(); }
-                            else if (newCellValue.ToString().ToUpper().Contains(" ")) { numofsplited = newCellValue.ToString().ToUpper().Split(' ').Count(); }
-                            else { numofsplited = 1; }
-                            var numofmatched = regex.Matches(newCellValue.ToString().ToUpper()).Count();
-
-                            var lengthmatch = newCellValue.ToString().Length == (3 * numofmatched) + (numofsplited - 1);
-                            if (((numofsplited == numofmatched) && lengthmatch) || newCellValue.ToString().ToUpper().Length < 1)
+                            if(valid)
                             {
-                                _mainwindowViewModel.SelectedGridWip.MachineCs = newCellValue.ToString().ToUpper();
-                                result.MachineCs = newCellValue.ToString().ToUpper();
+                                _mainwindowViewModel.SelectedGridWip.MachineCs = parsed;
+                                result.MachineCs = parsed;
                                 await db.SaveChangesAsync();
                             }
                             else
@@ -387,7 +402,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                                 MessageBox.Show("호기 형식 확인 바랍니다 D00 I00 R00 \n 여러대 입력시 , 또는 빈칸 1개로 구분", "호기 입력 형식 오류",
                    MessageBoxButton.OK, MessageBoxImage.Error);
                                 _mainwindowViewModel.SelectedGridWip.MachineCs = result.MachineCs;
-                                GridWip.View.Refresh();
+                                GridWip.View.RefreshFilter();
                             }
 
 
@@ -395,28 +410,22 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                         else if (result != null && mappingName == "MachineSs")
                         {
-                            Regex regex = new Regex("([DIR]{1}[0-9]{2})");
-                            var numofsplited = 0;
+                            bool valid = false;
 
-                            if (newCellValue.ToString().ToUpper().Contains(",")) { numofsplited = newCellValue.ToString().ToUpper().Split(',').Count(); }
-                            else if (newCellValue.ToString().ToUpper().Contains(" ")) { numofsplited = newCellValue.ToString().ToUpper().Split(' ').Count(); }
-                            else { numofsplited = 1; }
-                            var numofmatched = regex.Matches(newCellValue.ToString().ToUpper()).Count();
+                            var parsed = MachineStringParse(newCellValue.ToString(), out valid);
 
-                            var lengthmatch = newCellValue.ToString().Length == (3 * numofmatched) + (numofsplited - 1);
-                            if (((numofsplited == numofmatched) && lengthmatch) || newCellValue.ToString().ToUpper().Length < 1)
+                            if (valid)
                             {
-                                _mainwindowViewModel.SelectedGridWip.MachineSs = newCellValue.ToString().ToUpper();
-                                result.MachineSs = newCellValue.ToString().ToUpper();
+                                _mainwindowViewModel.SelectedGridWip.MachineSs = parsed;
+                                result.MachineSs = parsed;
                                 await db.SaveChangesAsync();
-
                             }
                             else
                             {
                                 MessageBox.Show("호기 형식 확인 바랍니다 D00 I00 R00 \n여러대 입력시 , 또는 빈칸 1개로 구분", "호기 입력 형식 오류",
                    MessageBoxButton.OK, MessageBoxImage.Error);
                                 _mainwindowViewModel.SelectedGridWip.MachineSs = result.MachineSs;
-                                GridWip.View.Refresh();
+                                GridWip.View.RefreshFilter();
                             }
 
                         }
@@ -428,7 +437,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                             result.Pnlqty = Convert.ToInt16(newCellValue.ToString());
 
                             await db.SaveChangesAsync();
-                            GridWip.View.Refresh();
+                            GridWip.View.RefreshFilter();
                         }
                     }
                 }
@@ -439,6 +448,51 @@ namespace DAWON_UV_INVENTORY_PROTO
 
         }
 
+        private string MachineStringParse(string newCellValue, out bool isvalid)
+        {
+            string result = string.Empty;
+
+            Regex regex = new Regex("([DIR]{1}[0-9]{2}|^[0-9]{2}|^[0-9]{1})", RegexOptions.Compiled);
+
+            newCellValue = newCellValue.Replace(" ", ",");
+            var numofsplited = 0;
+
+            if(Regex.IsMatch(newCellValue, @"^\d") && !newCellValue.Contains(","))
+            {
+                newCellValue= "D" + Convert.ToInt16(newCellValue).ToString("D2");
+                numofsplited = 1;
+            }
+            else if (newCellValue.Contains(",")) 
+            { 
+                numofsplited = newCellValue.ToString().ToUpper().Split(',').Count();
+                var splitstring = newCellValue.ToString().Split(",");
+
+                for (int i = 0; i < splitstring.Count(); i++)
+                {
+                    if (Regex.IsMatch(splitstring[i], @"^\d"))
+                    {
+                        splitstring[i] = "D" + Convert.ToInt16(splitstring[i]).ToString("D2");
+                    }
+                }
+                newCellValue = String.Join(",", splitstring);
+            }
+
+
+            else { numofsplited = 1; }
+            var numofmatched = regex.Matches(newCellValue.ToString().ToUpper()).Count();
+
+            //var lengthmatch = newCellValue.ToString().Length == (3 * numofmatched) + (numofsplited - 1);
+            if (((numofsplited == numofmatched)) || newCellValue.ToString().ToUpper().Length < 1)
+            {
+                result = newCellValue.ToString().ToUpper();
+                isvalid = true;
+            }
+            else
+            {
+                isvalid = false;
+            }
+            return result;
+        }
         public bool FilterCustomerWo(object o)
         {
             string filterText = _mainwindowViewModel.SelectedCustomerWo;
@@ -452,6 +506,23 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
             return false;
         }
+
+        public void GetWipCount()
+        {
+            if ((GridWip.DataContext as MainWindowViewModel).WorkOrderList != null)
+            {
+                var tmpwolist = (GridWip.DataContext as MainWindowViewModel).WorkOrderList;
+                _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
+                _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
+                _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
+                _mainwindowViewModel.WipCount_Bh = tmpwolist.Where(w => w.CustName == "BHFLEX").Count().ToString();
+                _mainwindowViewModel.WipCount_Ifx = tmpwolist.Where(w => w.CustName == "인터플렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Semco = tmpwolist.Where(w => w.CustName == "삼성전기").Count().ToString();
+                _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
+                _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
+            }
+        }
+
         public void UpdateFiltered_WorkorderListSelectChanged()
         {
             starttime1 = DateTime.Now;
@@ -465,14 +536,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
                 
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
-                _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
-                _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
-                _mainwindowViewModel.WipCount_Bh = tmpwolist.Where(w => w.CustName == "BHFLEX").Count().ToString();
-                _mainwindowViewModel.WipCount_Ifx = tmpwolist.Where(w => w.CustName == "인터플렉스").Count().ToString();
-                _mainwindowViewModel.WipCount_Semco = tmpwolist.Where(w => w.CustName == "삼성전기").Count().ToString();
-                _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
-                _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
+
+                GetWipCount();
+
                 Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 if (GridWip != null)
                 {
@@ -541,14 +607,8 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
                 
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
-                _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
-                _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
-                _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
-                _mainwindowViewModel.WipCount_Bh = tmpwolist.Where(w => w.CustName == "BHFLEX").Count().ToString();
-                _mainwindowViewModel.WipCount_Ifx = tmpwolist.Where(w => w.CustName == "인터플렉스").Count().ToString();
-                _mainwindowViewModel.WipCount_Semco = tmpwolist.Where(w => w.CustName == "삼성전기").Count().ToString();
-                _mainwindowViewModel.WipCount_Nft = tmpwolist.Where(w => w.CustName == "뉴프렉스").Count().ToString();
-                _mainwindowViewModel.WipCount_Si = tmpwolist.Where(w => w.CustName == "SIFLEX").Count().ToString();
+
+                GetWipCount();
                 Debug.WriteLine("wipcount  " + (DateTime.Now - starttime1).TotalMilliseconds);
 
 
@@ -1081,6 +1141,16 @@ namespace DAWON_UV_INVENTORY_PROTO
                 GridWip.View.Filter = FilterCustomerWo;
                 GridWip.View.RefreshFilter();
             }
+        }
+
+        private void SfTextBoxExt_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void SfTextBoxExt_SuggestionPopupOpened(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
         }
     }
 

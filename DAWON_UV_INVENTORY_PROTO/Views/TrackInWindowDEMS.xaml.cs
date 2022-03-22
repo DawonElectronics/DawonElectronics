@@ -101,13 +101,50 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 EndpointAddress("net.tcp://192.168.6.89:9003/DDGUIService1150/MesWcfService.svc");
             return myEndpoint;
         }
+        private bool GetRegist(string tool)
+        {
+            var registed = MainWindow._mainwindowViewModel.ToolInfos.Select(s => s.CustToolno).ToList<string>();
+            //var registed2 = MainWindow._mainwindowViewModel.Customer.Select(s => s.CustName).ToList<string>();
+            var result = registed.Contains(tool);
+            return result;
+        }
         private void cmb_input_segment_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
-            GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+            var rcvdt = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+
+            rcvdt.Columns.Add("IsRegist");
+
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+
+            foreach (var item in toollist)
+            {
+                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                    .ForEach(r => r["IsRegist"] = GetRegist(item));
+            }
+
+            GridRcv.ItemsSource = rcvdt;
 
         }
-        private DataView de_ms_qry_rcv_lotlist(string workcenter)
+        private void UpdateGridRcv()
+        {
+
+            var rcvdt = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+
+            rcvdt.Columns.Add("IsRegist");
+
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+
+            foreach (var item in toollist)
+            {
+                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                    .ForEach(r => r["IsRegist"] = GetRegist(item));
+            }
+
+            GridRcv.ItemsSource = rcvdt;
+
+        }
+        private DataTable de_ms_qry_rcv_lotlist(string workcenter)
         {
             var client = new DemsOiClient();
 
@@ -141,7 +178,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 //jsonString = JsonConvert.SerializeObject(dsRcvlist.Tables[0]);
 
                 //var rcvlist = JsonConvert.DeserializeObject<List<DemsRcvList>>(jsonString);
-                var rcvlist = dsRcvlist.Tables[0].DefaultView;
+                var rcvlist = dsRcvlist.Tables[0];
                 client.Close();
                 return rcvlist;
             }
@@ -231,7 +268,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 MessageBox.Show(ex.Message);
 
             }
-            GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+            UpdateGridRcv();
             UpdateFiltered_WorkorderList();
         }
 
@@ -342,7 +379,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 }
             }
 
-            GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+            UpdateGridRcv();
             UpdateFiltered_WorkorderList();
             BtnExeRcv.IsEnabled = true;
             BtnAddOnly.IsEnabled = true;
@@ -457,7 +494,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             else if (rcvlist.Count > 1)
                 ExecuteMultiRcv(rcvlist);
 
-            GridRcv.ItemsSource = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+            UpdateGridRcv();
             UpdateFiltered_WorkorderList();
             BtnExeRcv.IsEnabled = true;
             BtnAddOnly.IsEnabled = true;

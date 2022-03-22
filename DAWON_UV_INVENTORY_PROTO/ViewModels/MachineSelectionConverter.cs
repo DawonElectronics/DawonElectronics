@@ -18,6 +18,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             
             if (data != null)
             {
+                data = data.Replace(" ", ",");
                 foreach (var item in data.Split(',').ToList())
                 {
                     result.Add(item);

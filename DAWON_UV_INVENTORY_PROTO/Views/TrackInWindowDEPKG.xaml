@@ -1,67 +1,146 @@
-﻿<syncfusion:ChromelessWindow x:Class="DAWON_UV_INVENTORY_PROTO.Views.TrackInWindowDepkg"
-                             xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
-                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                             xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
-                             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-                             xmlns:sfSkinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-                             sfSkinManager:SfSkinManager.VisualStyle="Office2016White"
-                             mc:Ignorable="d"
-                             d:DataContext="{d:DesignInstance viewmodel:TrackInWindowDepkgViewModel}"
-        Title="대덕전자 PKG 전산 받기 리스트" Height="450" Width="680">
+﻿<syncfusion:ChromelessWindow
+    x:Class="DAWON_UV_INVENTORY_PROTO.Views.TrackInWindowDepkg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sfSkinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+    Title="대덕전자 PKG 전산 받기 리스트"
+    Width="680"
+    Height="450"
+    d:DataContext="{d:DesignInstance viewmodel:TrackInWindowDepkgViewModel}"
+    sfSkinManager:SfSkinManager.VisualStyle="Office2016White"
+    mc:Ignorable="d">
     <syncfusion:ChromelessWindow.Resources>
         <Style TargetType="syncfusion:GridRowHeaderCell">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="syncfusion:GridRowHeaderCell">
-                        <Border x:Name="PART_RowHeaderCellBorder"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border
+                            x:Name="PART_RowHeaderCellBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid>
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding RowIndex,RelativeSource={RelativeSource TemplatedParent}}"
-                                           TextAlignment="Center" />
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding RowIndex, RelativeSource={RelativeSource TemplatedParent}}"
+                                    TextAlignment="Center" />
                             </Grid>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <viewmodel:GridTrackinDepkgColorConverter x:Key="ColorConverter" />
     </syncfusion:ChromelessWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition/>
+            <RowDefinition Height="100" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="10,10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <syncfusion:SfTextInputLayout Hint="대덕PKG 작업장 선택" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,5"  Width="150">
-                <ComboBox x:Name="CmbInputSegment" Margin="5,5" HorizontalContentAlignment="Center" DisplayMemberPath="WORKCENTERNAME" SelectedValuePath="WORKCENTERID" ItemsSource="{Binding SegementDataTable}" SelectedValue="{Binding WorkcenterId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmb_input_segment_SelectionChanged"/>
+        <StackPanel
+            Grid.Row="0"
+            Margin="10,10"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <syncfusion:SfTextInputLayout
+                Width="150"
+                Margin="5,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Hint="대덕PKG 작업장 선택">
+                <ComboBox
+                    x:Name="CmbInputSegment"
+                    Margin="5,5"
+                    HorizontalContentAlignment="Center"
+                    DisplayMemberPath="WORKCENTERNAME"
+                    ItemsSource="{Binding SegementDataTable}"
+                    SelectedValue="{Binding WorkcenterId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="WORKCENTERID"
+                    SelectionChanged="cmb_input_segment_SelectionChanged" />
             </syncfusion:SfTextInputLayout>
-            <Button x:Name="BtnAddOnly" Content="장부등록"  FontSize="16" FontWeight="Bold" Padding="5,5" Height="50" Margin="20,10" Click="BtnAddOnly_OnClick"/>
-            <Button x:Name="BtnExeRcv" Content="장부등록+MES받기" FontSize="16" FontWeight="Bold" Padding="5,5" Height="50" Margin="15,10" Click="btn_exe_rcv_Click"/>
+            <Button
+                x:Name="BtnAddOnly"
+                Height="50"
+                Margin="20,10"
+                Padding="5,5"
+                Click="BtnAddOnly_OnClick"
+                Content="장부등록"
+                FontSize="16"
+                FontWeight="Bold" />
+            <Button
+                x:Name="BtnExeRcv"
+                Height="50"
+                Margin="15,10"
+                Padding="5,5"
+                Click="btn_exe_rcv_Click"
+                Content="장부등록+MES받기"
+                FontSize="16"
+                FontWeight="Bold" />
         </StackPanel>
 
-        <syncfusion:SfDataGrid x:Name="GridRcv" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                                   ColumnSizer="AutoWithLastColumnFill"
-                               AutoGenerateColumns="False"
-                                   CanMaintainScrollPosition="True"
-                                   ShowRowHeader="True"
-                                   
-                                   SelectionMode="Multiple"
-                                   MouseDoubleClick="grid_rcv_MouseDoubleClick"
-                               ItemsSource="{Binding RcvLotList}">
+        <syncfusion:SfDataGrid
+            x:Name="GridRcv"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            AutoGenerateColumns="False"
+            CanMaintainScrollPosition="True"
+            ColumnSizer="AutoWithLastColumnFill"
+            ItemsSource="{Binding RcvLotList}"
+            MouseDoubleClick="grid_rcv_MouseDoubleClick"
+            SelectionMode="Multiple"
+            ShowRowHeader="True">
+            <syncfusion:SfDataGrid.SortColumnDescriptions>
+                <syncfusion:SortColumnDescription ColumnName="IsRegist" SortDirection="Descending" />
+
+            </syncfusion:SfDataGrid.SortColumnDescriptions>
+
+            <syncfusion:SfDataGrid.Resources>
+                <ResourceDictionary>
+
+                    <Style TargetType="syncfusion:VirtualizingCellsControl">
+                        <Setter Property="Background" Value="{Binding Converter={StaticResource ColorConverter}}" />
+                    </Style>
+
+                </ResourceDictionary>
+            </syncfusion:SfDataGrid.Resources>
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridCheckBoxSelectorColumn MappingName = "SelectorColumn" Width="30"/>
-                <syncfusion:GridTextColumn MappingName="TRANSFERPROC" HeaderText="전공정" Width="80" TextAlignment="Center"/>
-                <syncfusion:GridTextColumn MappingName="ProductDefinition" HeaderText="모델명" Width="180" TextAlignment="Center"/>
-                <syncfusion:GridTextColumn MappingName="ProductRevision" HeaderText="REV" Width="80" TextAlignment="Center"/>
-                <syncfusion:GridTextColumn MappingName="SPECNR" HeaderText="TOOL" Width="110" TextAlignment="Center"/>
-                <syncfusion:GridTextColumn MappingName="PannelQty" HeaderText="수량" Width="80" TextAlignment="Center"/>
-                <syncfusion:GridTextColumn MappingName="LOTID" HeaderText="LOT" TextAlignment="Center"/>
+                <syncfusion:GridCheckBoxSelectorColumn Width="30" MappingName="SelectorColumn" />
+                <syncfusion:GridTextColumn
+                    Width="80"
+                    HeaderText="전공정"
+                    MappingName="TRANSFERPROC"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="180"
+                    HeaderText="모델명"
+                    MappingName="ProductDefinition"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="80"
+                    HeaderText="REV"
+                    MappingName="ProductRevision"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="110"
+                    HeaderText="TOOL"
+                    MappingName="SPECNR"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="80"
+                    HeaderText="수량"
+                    MappingName="PannelQty"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    HeaderText="LOT"
+                    MappingName="LOTID"
+                    TextAlignment="Center" />
             </syncfusion:SfDataGrid.Columns>
 
         </syncfusion:SfDataGrid>

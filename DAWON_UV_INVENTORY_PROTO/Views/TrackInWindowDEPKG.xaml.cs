@@ -4,6 +4,7 @@ using ConnectorDEPKG.Models;
 using ConnectorDEPKG.RuleServiceOI;
 using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using DataRow = System.Data.DataRow;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -23,6 +26,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
         public TrackInWindowDepkgViewModel TrackinDepkgViewmodel = new TrackInWindowDepkgViewModel();
         DepkgHelper _depkgHelper = new DepkgHelper();
+        private List<string> notRegistedTool = new List<string>();
         public TrackInWindowDepkg()
         {
 
@@ -32,10 +36,66 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
         }
 
+       private bool GetRegist(string tool)
+        {
+            var registed = MainWindow._mainwindowViewModel.ToolInfos.Select(s=>s.CustToolno).ToList<string>();
+            //var registed2 = MainWindow._mainwindowViewModel.Customer.Select(s => s.CustName).ToList<string>();
+            var result = registed.Contains(tool);
+            return result;
+        }
         private void cmb_input_segment_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            var rcvdt = _depkgHelper.getRcvlotListDataTable();
 
-            GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+            rcvdt.Columns.Add("IsRegist");
+
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+            
+            foreach (var item in toollist)
+            {
+                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                    .ForEach(r => r["IsRegist"] = GetRegist(item));
+            }
+
+            GridRcv.ItemsSource = rcvdt;
+
+            //Binding bindbg = new Binding();
+            //bindbg.Converter = new GridTrackinDepkgColorConverter();           
+
+            //var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+            //rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+
+            //GridRcv.RowStyle = rowStyle;
+            //GridRcv.View.RefreshFilter();
+
+        }
+
+        private void UpdateGridRcv()
+        {
+            var rcvdt = _depkgHelper.getRcvlotListDataTable();
+
+            rcvdt.Columns.Add("IsRegist");
+
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+
+            foreach (var item in toollist)
+            {
+                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                    .ForEach(r => r["IsRegist"] = GetRegist(item));
+            }
+
+            GridRcv.ItemsSource = rcvdt;
+
+            //Binding bindbg = new Binding();
+            //bindbg.Converter = new GridTrackinDepkgColorConverter();           
+
+            //var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+            //rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+
+            //GridRcv.RowStyle = rowStyle;
+            //GridRcv.View.RefreshFilter();
 
         }
 
@@ -95,7 +155,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         context.TbUvWorkorder.AddAsync(inputTemp);
                         context.SaveChanges();
                         ExecuteRcv(lot);
-                        GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                        UpdateGridRcv();
                     }
                     else if (lotcount != 0)
                     {
@@ -104,7 +164,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             context.TbUvWorkorder.AddAsync(inputTemp);
                             context.SaveChanges();
                             ExecuteRcv(lot);
-                            GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                            UpdateGridRcv();
                         }
                     }
                 }
@@ -112,7 +172,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                UpdateGridRcv();
             }
         }
 
@@ -134,7 +194,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tool = pC.GetValue(rowdata, "SPECNR") as String;
                         var lot = pC.GetValue(rowdata, "LOTID") as String;
 
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty") as String);
                         var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                         bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
                         var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
@@ -190,11 +250,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                    UpdateGridRcv();
                 }
 
             }
-            GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+            UpdateGridRcv();
             BtnAddOnly.IsEnabled = true;
             BtnExeRcv.IsEnabled = true;
         }
@@ -220,7 +280,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tool = pC.GetValue(rowdata, "SPECNR") as String;
                         lot = pC.GetValue(rowdata, "LOTID") as String;
 
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty") as String);
                         var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                         bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
 
@@ -279,7 +339,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+                    UpdateGridRcv();
                 }
 
             }
@@ -288,7 +348,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             else if (rcvlist.Count > 1)
                 ExecuteMultiRcv(rcvlist);
 
-            GridRcv.ItemsSource = _depkgHelper.getRcvlotListDataTable();
+            UpdateGridRcv();
 
             BtnAddOnly.IsEnabled = true;
             BtnExeRcv.IsEnabled = true;
