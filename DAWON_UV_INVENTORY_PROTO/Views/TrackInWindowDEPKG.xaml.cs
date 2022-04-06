@@ -4,7 +4,6 @@ using ConnectorDEPKG.Models;
 using ConnectorDEPKG.RuleServiceOI;
 using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
-using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using DataRow = System.Data.DataRow;
 
@@ -36,9 +34,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
         }
 
-       private bool GetRegist(string tool)
+        private bool GetRegist(string tool)
         {
-            var registed = MainWindow._mainwindowViewModel.ToolInfos.Select(s=>s.CustToolno).ToList<string>();
+            var registed = MainWindow._mainwindowViewModel.ToolInfos.Select(s => s.CustToolno).ToList<string>();
             //var registed2 = MainWindow._mainwindowViewModel.Customer.Select(s => s.CustName).ToList<string>();
             var result = registed.Contains(tool);
             return result;
@@ -50,7 +48,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             rcvdt.Columns.Add("IsRegist");
 
             var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
-            
+
             foreach (var item in toollist)
             {
                 rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
@@ -194,7 +192,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tool = pC.GetValue(rowdata, "SPECNR") as String;
                         var lot = pC.GetValue(rowdata, "LOTID") as String;
 
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty") as String);
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
                         var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                         bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
                         var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
@@ -280,7 +278,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tool = pC.GetValue(rowdata, "SPECNR") as String;
                         lot = pC.GetValue(rowdata, "LOTID") as String;
 
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty") as String);
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PannelQty"));
                         var lotdetailinfo = _depkgHelper.MesLotDetailInfoQry(lot, tool);
                         bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
 

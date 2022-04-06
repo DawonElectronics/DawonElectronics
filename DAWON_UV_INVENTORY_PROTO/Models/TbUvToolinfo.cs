@@ -61,6 +61,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public bool? CamFinished { get; set; }
         public string SemCsdata { get; set; }
         public string SemSsdata { get; set; }
+        public string YpeDatarev { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbPrctype PrcCodeNavigation { get; set; }

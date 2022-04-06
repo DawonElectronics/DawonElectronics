@@ -24,7 +24,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
             if (obj is GridRecordContextMenuInfo)
             {
-                
+
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorderDone;
                 var lot = record.Lotid;
                 var cancelTrackinMsg = MessageBox.Show(" 출고취소할까요?", "출고취소", MessageBoxButton.YesNo,
@@ -46,7 +46,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                                 db.SaveChanges();
                                 using (var mw = new MainWindow())
-                                { 
+                                {
                                     mw.UpdateFiltered_WorkorderSearchList();
                                     mw.UpdateFiltered_WorkorderList();
                                 }

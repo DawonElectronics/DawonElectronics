@@ -3,7 +3,6 @@ using DAWON_UV_INVENTORY_PROTO.Views;
 using Syncfusion.Data.Extensions;
 using Syncfusion.UI.Xaml.Grid;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -14,7 +13,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
     public static class GridWipContextMenuCommands
     {
-        #region 재공 이력 컨텍스트 메뉴(받기취소처리-db처리)
+        #region 인수취소(받기취소처리-db처리)
 
         static BaseCommand _cancelTrackinRecordCommand;
         public static BaseCommand CancelTrackinRecordCommand
@@ -30,7 +29,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (obj is GridRecordContextMenuInfo)
             {
 
-                
+                var gridcontext = ((obj as GridRecordContextMenuInfo).DataGrid.DataContext as MainWindowViewModel);
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
                 var cancelTrackinMsg = MessageBox.Show(" 장부에서 반납처리할까요?\n 예(반납으로 이력 남김)/ 아니오(장부 이력 삭제)", "입고취소", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
@@ -55,11 +54,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                     result.IsDone = true;
                                     result.LotType = "반납";
                                     db.SaveChanges();
-
-
-                                    mw.UpdateFiltered_WorkorderList();
-                                    mw.UpdateFiltered_WorkorderSearchList();
-
+                                    MainWindow._mainwindowViewModel.WorkOrderList.Remove(record);
+                                    
+                                    mw.GetWipCount();
 
                                     MessageBox.Show("처리되었습니다");
                                 }
@@ -76,10 +73,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                 {
                                     db.Remove(result);
                                     db.SaveChanges();
-
-
-                                    mw.UpdateFiltered_WorkorderList();
-
+                                    MainWindow._mainwindowViewModel.WorkOrderList.Remove(record);
+                                    
+                                    mw.GetWipCount();
 
                                     MessageBox.Show("처리되었습니다");
                                 }
@@ -115,7 +111,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
-                        
+
                         if (result != null)
                         {
                             MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = true;
@@ -135,9 +131,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                             (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
                             (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Clear();
-                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName= "WaitTrackout" ,SortDirection= ListSortDirection.Descending });
+                            (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "WaitTrackout", SortDirection = ListSortDirection.Descending });
                             (obj as GridRecordContextMenuInfo).DataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "TrackinTime", SortDirection = ListSortDirection.Ascending });
-                            (obj as GridRecordContextMenuInfo).DataGrid.View.RefreshFilter();                          
+                            (obj as GridRecordContextMenuInfo).DataGrid.View.RefreshFilter();
 
 
                             result.WaitTrackout = true;
@@ -168,13 +164,13 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var lot = record.Lotid;
-                
+
                 if (record != null)
                 {
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
-                        
+
                         if (result != null)
                         {
                             MainWindow._mainwindowViewModel.SelectedGridWip.WaitTrackout = false;
@@ -201,7 +197,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                             result.WaitTrackout = false;
                             await db.SaveChangesAsync();
-                           
+
                         }
                     }
                 }
@@ -285,7 +281,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (obj is GridRecordContextMenuInfo)
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
-                
+
 
                 if (record != null)
                 {
@@ -318,7 +314,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.CamFinished = true;
 
                             db.SaveChanges();
-                            
+
                         }
                     }
                 }
@@ -343,7 +339,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-               
+
 
                 if (record != null)
                 {
@@ -381,7 +377,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
 
                             await db.SaveChangesAsync();
-                           
+
                         }
                     }
                 }
@@ -407,7 +403,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-               
+
 
                 if (record != null)
                 {
@@ -441,7 +437,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.White.ToString();
 
                             await db.SaveChangesAsync();
-                            
+
                         }
                     }
                 }
@@ -463,7 +459,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                
+
 
                 if (record != null)
                 {
@@ -496,7 +492,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatBg = Colors.White.ToString();
                             result.FormatFg = Colors.Black.ToString();
 
-                            await db.SaveChangesAsync();                           
+                            await db.SaveChangesAsync();
 
                         }
                     }
@@ -520,7 +516,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-               
+
 
                 if (record != null)
                 {
@@ -554,7 +550,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.Black.ToString();
 
                             await db.SaveChangesAsync();
-                            
+
                         }
                     }
                 }
@@ -577,7 +573,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                
+
 
                 if (record != null)
                 {
@@ -611,7 +607,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.White.ToString();
 
                             await db.SaveChangesAsync();
-                            
+
                         }
                     }
                 }
@@ -634,7 +630,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
                 var qryid = Convert.ToInt64(record.Id);
-                
+
 
                 if (record != null)
                 {
@@ -670,7 +666,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.FormatFg = Colors.Black.ToString();
 
                             await db.SaveChangesAsync();
-                            
+
                         }
                     }
                 }

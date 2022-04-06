@@ -238,11 +238,13 @@
                                 Foreground="Black"
                                 SearchItemPath="CustToolno"
                                 SuggestionMode="Contains"
+                                SelectedItem="{Binding SelectedInputTool, Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
                                 Text="{Binding Toolno2Pid, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                                 <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
@@ -262,6 +264,7 @@
                                                 FontSize="11"
                                                 FontWeight="Normal"
                                                 Text="{Binding MesPrcName}" />
+                                          
                                         </Grid>
                                     </DataTemplate>
                                 </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
@@ -657,8 +660,7 @@
                         CurrentCellEndEdit="grid_wip_CurrentCellEndEdit"
                         FrozenColumnCount="6"
                         HeaderStyle="{StaticResource HeaderStyle}"
-                        ItemsSource="{Binding WorkOrderList, Mode=OneWay}"
-                        Loaded="GridWip_Loaded"
+                        ItemsSource="{Binding WorkOrderList, Mode=OneWay}"                        
                         RowHeight="30"
                         RowSelectionBrush="DarkOliveGreen"
                         ScrollMode="None"
@@ -673,7 +675,7 @@
 
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="WaitTrackout" SortDirection="Descending" />
-                            <syncfusion:SortColumnDescription ColumnName="TrackinTime" SortDirection="Ascending" />
+                            <syncfusion:SortColumnDescription ColumnName="Lotid" SortDirection="Ascending" />
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
 
                         <syncfusion:SfDataGrid.Resources>
@@ -859,7 +861,7 @@
                                 CellTemplate="{StaticResource SsComboTemplate}"
                                 HeaderText="SS호기"
                                 MappingName="MachineSs" />-->
-                          
+
 
                             <!--<syncfusion:GridTemplateColumn
                                 Width="100"
@@ -867,10 +869,10 @@
                                 HeaderText="CS호기"
                                 MappingName="MachineCs"
                                 TextAlignment="Center"
-                                syncfusion:FocusManagerHelper.WantsKeyInput= "True">                                
+                                syncfusion:FocusManagerHelper.WantsKeyInput= "True">
                                 <syncfusion:GridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <syncfusion:SfTextBoxExt 
+                                        <syncfusion:SfTextBoxExt
                                             x:Name="sftxt_machinecs"
                                             TokensWrapMode="Wrap"
                                             MultiSelectMode="Delimiter"
@@ -881,8 +883,8 @@
                                             syncfusion:FocusManagerHelper.FocusedElement="True"
                                             SuggestionMode="Contains"
                                             AutoWordSelection="True"
-                                            AutoCompleteSource="{Binding DataContext.MachineList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, FallbackValue={x:Null}, TargetNullValue={x:Null}}" 
-                                                                                
+                                            AutoCompleteSource="{Binding DataContext.MachineList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
+
                                             ShowSuggestionsOnFocus="True"
                                             />
                                     </DataTemplate>
@@ -940,6 +942,11 @@
                                 HeaderText="Id"
                                 IsHidden="True"
                                 MappingName="Id"
+                                TextAlignment="Center" />
+                            <syncfusion:GridTextColumn
+                                HeaderText="고객사"
+                                IsHidden="True"
+                                MappingName="CustName"
                                 TextAlignment="Center" />
                             <syncfusion:GridCheckBoxColumn IsHidden="True" MappingName="WaitTrackout" />
 

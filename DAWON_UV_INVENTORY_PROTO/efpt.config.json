@@ -14,6 +14,10 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
+         "Name": "[dbo].[tb_bom_ype_material]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[tb_customer]",
          "ObjectType": 0
       },

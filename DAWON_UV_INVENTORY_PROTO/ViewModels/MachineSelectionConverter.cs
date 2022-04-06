@@ -1,9 +1,7 @@
-﻿using DAWON_UV_INVENTORY_PROTO.Models;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
@@ -15,7 +13,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         {
             var data = value as string;
             var result = new ObservableCollection<object>();
-            
+
             if (data != null)
             {
                 data = data.Replace(" ", ",");
@@ -23,7 +21,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 {
                     result.Add(item);
                 }
-            } 
+            }
 
             return result;
         }

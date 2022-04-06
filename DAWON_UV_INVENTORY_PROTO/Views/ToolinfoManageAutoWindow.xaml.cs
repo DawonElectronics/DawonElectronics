@@ -4,7 +4,6 @@ using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;

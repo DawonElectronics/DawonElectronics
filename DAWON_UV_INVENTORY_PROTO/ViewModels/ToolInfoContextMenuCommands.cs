@@ -51,8 +51,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
         private static void RefreshToolinfo(object obj)
         {
-           using( var mw = new MainWindow())
-           { mw.UpdateToolInfoList(); }
+            using (var mw = new MainWindow())
+            { mw.UpdateToolInfoList(); }
         }
         #endregion
 

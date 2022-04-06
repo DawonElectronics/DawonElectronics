@@ -3,7 +3,6 @@ using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;

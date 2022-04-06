@@ -1,0 +1,37 @@
+{
+    "head": {
+        "endPoint": [
+            "http://172.16.4.70:7010/do"
+        ],
+        "startPoint": "192.168.0.194",
+        "key": "",
+        "agent": "dotnet"
+    },
+    "transaction": {
+        "id": "QueryService",
+        "uiid": "MES",
+        "user": "51038",
+        "languageType": "ko-KR",
+        "saveHistory": true,
+        "transactionTimeout": 120,
+        "queryTimeout": 300,
+        "clientTimeZoneID": "Asia/Seoul"
+    },
+    "body": {
+        "result": {
+            "executeType": "QueryForDataset",
+            "id": "GetSpecChangedLots",
+            "version": "10001",
+            "parameter": {
+                "lotid": "210422Y047-1-FG00-004-001"
+            },
+            "dataSource": null
+        }
+    },
+    "result": {
+        "data": null,
+        "code": "0",
+        "errcode": "0",
+        "message": ""
+    }
+}

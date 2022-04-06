@@ -1,0 +1,57 @@
+{
+"head":{
+"endPoint":[
+"http://172.16.4.70:7010/do"
+],
+"startPoint":"192.168.0.20",
+"key":"",
+"agent":"dotnet"
+},
+"transaction":{
+"id":"OutsourcedWarehouseShipment",
+"uiid":"MES",
+"user":"51038",
+"languageType":"ko-KR",
+"saveHistory":false,
+"transactionTimeout":120,
+"queryTimeout":300,
+"clientTimeZoneID":"Asia/Seoul"
+},
+"body":{
+"list":[
+{
+"ENTERPRISEID":"YOUNGPOONG",
+"PLANTID":"YPE",
+"RECEIPTUSER":"51180057",
+"SENDUSER":"51038",
+"RECEIPTSEQUENCE":1.0,
+"LOTHISTKEY":"20201123021128114396",
+"LOTTYPE":"Production",
+"RECEIPTDATE":"2020-11-23 06:48:06.840",
+"RECEIPTUSERNAME":"ì ì°í¸",
+"PRODUCTDEFID":"1132054-A",
+"PRODUCTDEFVERSION":"4",
+"PRODUCTDEFNAME":"T3",
+"LOTID":"201022Y006-1-FG00-067-001",
+"USERSEQUENCE":"350",
+"PROCESSSEGMENTID":"2032001",
+"PROCESSSEGMENTNAME":"Co2 LASER 1ì°¨",
+"AREAID":"K9A00026",
+"AREANAME":"ë¤ìì ì",
+"PCSQTY":2880.0,
+"PANELQTY":60.0,
+"OSPMM":8.5714285714285712,
+"PREVPROCESSSEGMENTID":"1526002",
+"PREVPROCESSSEGMENTNAME":"E/T 2ì°¨",
+"PREVAREAID":"K2A03002",
+"PREVAREANAME":"ì ì§ì ì_P2-3F_íë¡"
+}
+]
+},
+"result":{
+"data":null,
+"code":"0",
+"errcode":"0",
+"message":""
+}
+}

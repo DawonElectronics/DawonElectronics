@@ -1,20 +1,9 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
@@ -26,14 +15,14 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         ViewUvWorkorder record;
         List<TbUsers> _users = new List<TbUsers>();
         GridRecordContextMenuInfo objsender = new GridRecordContextMenuInfo();
-         public EditUserWindow(object obj)
+        public EditUserWindow(object obj)
         {
             InitializeComponent();
-            
+
             record = (ViewUvWorkorder)(obj as GridRecordContextMenuInfo).Record;
             objsender = (obj as GridRecordContextMenuInfo);
             _users = MainWindow._mainwindowViewModel.UserList;
-            ComboTrackinUserList.ItemsSource = _users.Where(x=>x.IsRetired==false).Select(x=>x.UserName).ToList<string>();
+            ComboTrackinUserList.ItemsSource = _users.Where(x => x.IsRetired == false).Select(x => x.UserName).ToList<string>();
             ComboTrackoutUserList.ItemsSource = _users.Where(x => x.IsRetired == false).Select(x => x.UserName).ToList<string>();
 
             if (record != null)
@@ -48,7 +37,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     ComboTrackinUserList.SelectedValue = record.TrackinUsername;
                 }
             }
-           
+
         }
 
         private void BtnEditUser_Click(object sender, RoutedEventArgs e)
@@ -73,10 +62,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     else if (record.IsDone == false)
                     {
                         var inuser = ComboTrackinUserList.SelectedValue.ToString();
-                        
+
 
                         result.TrackinUserId = _users.Where(x => x.UserName == inuser).Select(x => x.UserId).FirstOrDefault();
-                        
+
                         MainWindow._mainwindowViewModel.SelectedGridWip.TrackinUsername = inuser;
                         objsender.DataGrid.View.Refresh();
                         db.SaveChanges();
@@ -88,10 +77,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             if (MessageBox.Show("변경되었습니다", "변경완료",
                    MessageBoxButton.OK, MessageBoxImage.Information) == MessageBoxResult.OK)
             {
-               this.Close();
+                this.Close();
             }
         }
 
-       
+
     }
 }

@@ -1,0 +1,45 @@
+{
+
+    "head":{
+        "endPoint":[
+            "http://172.16.4.70:7010/do"
+        ],
+        "startPoint":"192.168.2.111",
+        "key":"",
+        "agent":"dotnet"
+    },
+    "transaction":{
+        "id":"QueryService",
+        "uiid":"MES",
+        "user":"51038",
+        "languageType":"ko-KR",
+        "saveHistory":true,
+        "transactionTimeout":120,
+        "queryTimeout":300,
+        "clientTimeZoneID":"Asia/Seoul"
+    },
+    "body":{
+        "result":{
+            "executeType":"QueryForDataset",
+            "id":"GetProductDEFInfo",
+            "version":"10001",
+            "parameter":{
+                "p_PRODUCTDEFVERSION":"O",
+                "p_PRODUCTNAME":"",
+                "p_PLANTID":"",
+                "p_PRODUCTDEFID":"H580005-A",
+                "enterpriseid":"YOUNGPOONG",
+                "plantid":"",
+                "languagetype":"ko-KR"
+            },
+            "dataSource":null
+        }
+    },
+    "result":{
+        "data":null,
+        "code":"0",
+        "errcode":"0",
+        "message":""
+    }
+
+}

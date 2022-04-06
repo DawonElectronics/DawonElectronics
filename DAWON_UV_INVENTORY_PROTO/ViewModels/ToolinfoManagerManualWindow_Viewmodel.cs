@@ -1,7 +1,6 @@
 ﻿using DAWON_UV_INVENTORY_PROTO.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels

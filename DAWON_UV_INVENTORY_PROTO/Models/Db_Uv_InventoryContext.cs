@@ -32,6 +32,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
             }
         }
+        public virtual DbSet<TbBomYpeMaterial> TbBomYpeMaterial { get; set; }
         public virtual DbSet<TbCustomer> TbCustomer { get; set; }
         public virtual DbSet<TbMachine> TbMachine { get; set; }
         public virtual DbSet<TbPrctype> TbPrctype { get; set; }
@@ -44,6 +45,122 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TbBomYpeMaterial>(entity =>
+            {
+                entity.HasKey(e => e.Bomid);
+
+                entity.ToTable("tb_bom_ype_material");
+
+                entity.Property(e => e.Bomid)
+                    .HasMaxLength(100)
+                    .HasColumnName("bomid");
+
+                entity.Property(e => e.Arraypcs).HasColumnName("arraypcs");
+
+                entity.Property(e => e.Assemblyitembomid)
+                    .HasMaxLength(100)
+                    .HasColumnName("assemblyitembomid");
+
+                entity.Property(e => e.Assemblyitemid)
+                    .HasMaxLength(100)
+                    .HasColumnName("assemblyitemid");
+
+                entity.Property(e => e.Assemblyitemversion)
+                    .HasMaxLength(100)
+                    .HasColumnName("assemblyitemversion");
+
+                entity.Property(e => e.Assemblyqty).HasColumnName("assemblyqty");
+
+                entity.Property(e => e.Botassemblyitemname)
+                    .HasMaxLength(200)
+                    .HasColumnName("botassemblyitemname");
+
+                entity.Property(e => e.Calculatepcs)
+                    .HasColumnType("numeric(18, 0)")
+                    .HasColumnName("calculatepcs");
+
+                entity.Property(e => e.Color)
+                    .HasMaxLength(100)
+                    .HasColumnName("color");
+
+                entity.Property(e => e.Consumabletype)
+                    .HasMaxLength(100)
+                    .HasColumnName("consumabletype");
+
+                entity.Property(e => e.Consumabletype2)
+                    .HasMaxLength(300)
+                    .HasColumnName("consumabletype2");
+
+                entity.Property(e => e.Inktype)
+                    .HasMaxLength(300)
+                    .HasColumnName("inktype");
+
+                entity.Property(e => e.Lvl).HasColumnName("lvl");
+
+                entity.Property(e => e.Maker)
+                    .HasMaxLength(100)
+                    .HasColumnName("maker");
+
+                entity.Property(e => e.Parentbomid)
+                    .HasColumnType("ntext")
+                    .HasColumnName("parentbomid");
+
+                entity.Property(e => e.ParentsAssemblyitemid)
+                    .HasColumnType("ntext")
+                    .HasColumnName("parents_assemblyitemid");
+
+                entity.Property(e => e.ParentsAssemblyitemversion)
+                    .HasColumnType("ntext")
+                    .HasColumnName("parents_assemblyitemversion");
+
+                entity.Property(e => e.Plantid)
+                    .HasMaxLength(100)
+                    .HasColumnName("plantid");
+
+                entity.Property(e => e.Pnlsize)
+                    .HasColumnType("ntext")
+                    .HasColumnName("pnlsize");
+
+                entity.Property(e => e.Pnlsizexaxis).HasColumnName("pnlsizexaxis");
+
+                entity.Property(e => e.Pnlsizeyaxis).HasColumnName("pnlsizeyaxis");
+
+                entity.Property(e => e.Requirementqty).HasColumnName("requirementqty");
+
+                entity.Property(e => e.RootAssemblyitemid)
+                    .HasMaxLength(100)
+                    .HasColumnName("root_assemblyitemid");
+
+                entity.Property(e => e.RootAssemblyitemversion)
+                    .HasMaxLength(100)
+                    .HasColumnName("root_assemblyitemversion");
+
+                entity.Property(e => e.RootBomid)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("root_bomid");
+
+                entity.Property(e => e.Spec)
+                    .HasMaxLength(100)
+                    .HasColumnName("spec");
+
+                entity.Property(e => e.Userlayer)
+                    .HasMaxLength(300)
+                    .HasColumnName("userlayer");
+
+                entity.Property(e => e.Usersequence)
+                    .HasColumnType("ntext")
+                    .HasColumnName("usersequence");
+
+                entity.Property(e => e.Workmethod)
+                    .HasMaxLength(200)
+                    .HasColumnName("workmethod");
+
+                entity.Property(e => e.Worksurface)
+                    .HasColumnType("ntext")
+                    .HasColumnName("worksurface");
+            });
+
             modelBuilder.Entity<TbCustomer>(entity =>
             {
                 entity.HasKey(e => e.CustId);
@@ -336,6 +453,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpeDatarev)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("ype_datarev");
 
                 entity.HasOne(d => d.Cust)
                     .WithMany(p => p.TbUvToolinfo)
@@ -655,6 +777,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpeDatarev)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("ype_datarev");
             });
 
             modelBuilder.Entity<ViewUvWorkorder2>(entity =>
@@ -985,6 +1112,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpeDatarev)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("ype_datarev");
             });
 
             OnModelCreatingPartial(modelBuilder);

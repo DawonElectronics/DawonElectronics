@@ -1,0 +1,55 @@
+{
+"head":{
+"endPoint":[
+"http://172.16.4.70:7010/do"
+],
+"startPoint":"192.168.0.20",
+"key":"",
+"agent":"dotnet"
+},
+"transaction":{
+"id":"OutsourcedWarehouseWear",
+"uiid":"MES",
+"user":"51038",
+"languageType":"ko-KR",
+"saveHistory":false,
+"transactionTimeout":120,
+"queryTimeout":300,
+"clientTimeZoneID":"Asia/Seoul"
+},
+"body":{
+"list":[
+{
+"ENTERPRISEID":"YOUNGPOONG",
+"PLANTID":"YPE",
+"OSPRECEIPTUSER":"51038",
+"LOTHISTKEY":"20201123081257304564",
+"LOTID":"201022Y006-1-FG00-417-001",
+"LOTTYPE":"Production",
+"PRODUCTDEFID":"1132054-A",
+"PRODUCTDEFVERSION":"4",
+"PRODUCTDEFNAME":"T3",
+"USERSEQUENCE":"350",
+"PROCESSSEGMENTID":"2032001",
+"PROCESSSEGMENTNAME":"Co2 LASER 1ì°¨",
+"AREAID":"K9A00026",
+"AREANAME":"ë¤ìì ì",
+"PREVPROCESSSEGMENTID":"1526002",
+"PREVPROCESSSEGMENTNAME":"E/T 2ì°¨",
+"PREVAREAID":"K2A04004",
+"PREVAREANAME":"ë¤ìì ì_P2-4F_íë¡",
+"PCSQTY":2880.0,
+"PANELQTY":60.0,
+"OSPMM":8.5714285714285712,
+"PATHSEQUENCESTART":35,
+"PATHSEQUENCEEND":35
+}
+]
+},
+"result":{
+"data":null,
+"code":"0",
+"errcode":"0",
+"message":""
+}
+}

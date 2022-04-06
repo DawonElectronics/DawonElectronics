@@ -6,7 +6,6 @@ using ObjectsComparer;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Cells;
 using Syncfusion.UI.Xaml.Grid.Converter;
-using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
 using System;
@@ -28,27 +27,23 @@ namespace DAWON_UV_INVENTORY_PROTO
     /// </summary>
     public partial class MainWindow : RibbonWindow, IDisposable
     {
-        readonly IDisposable disposable;
-        private double _scrollbarValue;
+
+
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
 
-        public double Scrollbarvalue
-        {
-            get { return _scrollbarValue; }
-            set { _scrollbarValue = value; }
-        }
+
         DateTime starttime1;
-        DateTime endtime1;
+
         public static MainWindowViewModel _mainwindowViewModel = new MainWindowViewModel();
-        public List<TbMachine> Tbmachine = new List<TbMachine>();
-        public List<TbPrctype> Tbprctype = new List<TbPrctype>();
-        public static List<TbCustomer> Tbcustomer = new List<TbCustomer>();
+        public List<TbMachine> Tbmachine = new();
+        public List<TbPrctype> Tbprctype = new();
+        public static List<TbCustomer> Tbcustomer = new();
 
         public static bool IsCellEditing = false;
-        ObservableCollection<ViewUvWorkorder> tmpdb=new ObservableCollection<ViewUvWorkorder>();
+        ObservableCollection<ViewUvWorkorder> tmpdb = new();
 
-        GridRowSizingOptions gridRowResizingOptions = new GridRowSizingOptions();
-        double autoHeight=0;
+        GridRowSizingOptions gridRowResizingOptions = new();
+        double autoHeight = 0;
 
         private DispatcherTimer? Timer { get; set; }
 
@@ -106,32 +101,24 @@ namespace DAWON_UV_INVENTORY_PROTO
 
             if (!Application.Current.Windows.OfType<UserSelectPopup>().Any())
             {
-                var userSelectPopup = new UserSelectPopup();
-                userSelectPopup.Topmost = true;
-                userSelectPopup.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                var userSelectPopup = new UserSelectPopup
+                {
+                    Topmost = true,
+                    WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
+                };
 
                 userSelectPopup.Show();
                 CmbWipCust.SelectedIndex = 1;
                 CmbWipOrdertype.SelectedIndex = 0;
             }
 
-            GridWip.ItemsSourceChanged += GridWip_ItemsSourceChanged;
             GridWip.QueryRowHeight += GridWip_QueryRowHeight;
             GridFinish.QueryRowHeight += GridFinish_QueryRowHeight;
-            
-            if (GridWip!=null && GridWip.View != null)
-            {
-                GridWip.View.Filter = FilterCustomerWo;
-                GridWip.View.RefreshFilter();
-            }
+
+          
         }
 
-        private void GridWip_ItemsSourceChanged(object? sender, GridItemsSourceChangedEventArgs e)
-        {
-            var time2 = DateTime.Now;
-            Debug.WriteLine("grid rendered  " + (time2 - starttime1).TotalMilliseconds);
 
-        }
 
 
 
@@ -179,28 +166,34 @@ namespace DAWON_UV_INVENTORY_PROTO
             UpdateFiltered_WorkorderList();
         }
 
-        void GridWip_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
+        void GridWip_QueryRowHeight(object? sender, QueryRowHeightEventArgs e)
         {
-            if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
-                    out autoHeight))
+            if (sender != null)
             {
-                if (autoHeight > 30 && e.RowIndex > 0 )
+                if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
+                        out autoHeight))
                 {
-                    e.Height = autoHeight;
-                    e.Handled = true;
+                    if (autoHeight > 30 && e.RowIndex > 0)
+                    {
+                        e.Height = autoHeight;
+                        e.Handled = true;
+                    }
                 }
             }
         }
 
-        void GridFinish_QueryRowHeight(object sender, QueryRowHeightEventArgs e)
+        void GridFinish_QueryRowHeight(object? sender, QueryRowHeightEventArgs e)
         {
-            if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
-                    out autoHeight))
+            if (sender != null)
             {
-                if (autoHeight > 30 && e.RowIndex > 0)
+                if (((SfDataGrid)sender).GridColumnSizer.GetAutoRowHeight(e.RowIndex, gridRowResizingOptions,
+                    out autoHeight))
                 {
-                    e.Height = autoHeight;
-                    e.Handled = true;
+                    if (autoHeight > 30 && e.RowIndex > 0)
+                    {
+                        e.Height = autoHeight;
+                        e.Handled = true;
+                    }
                 }
             }
         }
@@ -226,6 +219,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                 //LOT입력, 필수항목으로 입력 여부 체크
                 if (tbox_lotid.Text != null && tbox_lotid.Text.Length > 2)
                 {
+                    if(_mainwindowViewModel.SelectedCustomerWo.Contains("대덕"))
+                    { input_temp.Lotid = tbox_lotid.Text.Replace("-",""); }
+                    else { input_temp.Lotid = tbox_lotid.Text; }
                     input_temp.Lotid = tbox_lotid.Text;
                 }
                 else if (tbox_lotid.Text == null || tbox_lotid.Text.Length < 2)
@@ -306,8 +302,10 @@ namespace DAWON_UV_INVENTORY_PROTO
         {
             if (!Application.Current.Windows.OfType<UserManageWindow>().Any())
             {
-                var userManager = new UserManageWindow();
-                userManager.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                var userManager = new UserManageWindow
+                {
+                    WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
+                };
                 userManager.Show();
             }
         }
@@ -391,7 +389,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
                             var parsed = MachineStringParse(newCellValue.ToString(), out valid);
 
-                            if(valid)
+                            if (valid)
                             {
                                 _mainwindowViewModel.SelectedGridWip.MachineCs = parsed;
                                 result.MachineCs = parsed;
@@ -443,7 +441,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 }
 
                 IsCellEditing = false;
-                GridWip.GetVisualContainer().InvalidateMeasureInfo();
+                GridWip.View.RefreshFilter();
             }
 
         }
@@ -457,13 +455,13 @@ namespace DAWON_UV_INVENTORY_PROTO
             newCellValue = newCellValue.Replace(" ", ",");
             var numofsplited = 0;
 
-            if(Regex.IsMatch(newCellValue, @"^\d") && !newCellValue.Contains(","))
+            if (Regex.IsMatch(newCellValue, @"^\d") && !newCellValue.Contains(","))
             {
-                newCellValue= "D" + Convert.ToInt16(newCellValue).ToString("D2");
+                newCellValue = "D" + Convert.ToInt16(newCellValue).ToString("D2");
                 numofsplited = 1;
             }
-            else if (newCellValue.Contains(",")) 
-            { 
+            else if (newCellValue.Contains(","))
+            {
                 numofsplited = newCellValue.ToString().ToUpper().Split(',').Count();
                 var splitstring = newCellValue.ToString().Split(",");
 
@@ -493,25 +491,13 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
             return result;
         }
-        public bool FilterCustomerWo(object o)
-        {
-            string filterText = _mainwindowViewModel.SelectedCustomerWo;
-            var item = o as ViewUvWorkorder;
-
-            if (item != null)
-            {
-
-                if (item.CustName.Equals(filterText))
-                    return true;
-            }
-            return false;
-        }
+       
 
         public void GetWipCount()
         {
-            if ((GridWip.DataContext as MainWindowViewModel).WorkOrderList != null)
+            if (_mainwindowViewModel.WorkOrderList != null)
             {
-                var tmpwolist = (GridWip.DataContext as MainWindowViewModel).WorkOrderList;
+                var tmpwolist = _mainwindowViewModel.WorkOrderList;
                 _mainwindowViewModel.WipCount_Dems = tmpwolist.Where(w => w.CustName == "대덕전자(MS)").Count().ToString();
                 _mainwindowViewModel.WipCount_Depkg = tmpwolist.Where(w => w.CustName == "대덕전자(PKG)").Count().ToString();
                 _mainwindowViewModel.WipCount_Yp = tmpwolist.Where(w => w.CustName == "영풍전자").Count().ToString();
@@ -534,7 +520,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
                 Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
-                
+
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
 
                 GetWipCount();
@@ -557,10 +543,11 @@ namespace DAWON_UV_INVENTORY_PROTO
                     //Print results
                     Debug.WriteLine(isEqual ? "Objects are equal" : string.Join(Environment.NewLine, differences));
 
-                     if (!isEqual)
+                    if (!isEqual)
                     {
                         //_mainwindowViewModel.WorkOrderList = dbWorkOrderList;
-                        _mainwindowViewModel.WorkOrderList = tmpwolist;                      
+                        _mainwindowViewModel.WorkOrderList = tmpwolist;
+                        GetWipCount();
                     }
 
                 }
@@ -568,21 +555,19 @@ namespace DAWON_UV_INVENTORY_PROTO
                 Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 if (GridWip != null)
                 {
-                    //GridWip.Columns.Clear();
+                    GridWip.Columns.Clear();
 
                     if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
                     {
-                        //GridWipColumnDems();
+                        GridWipColumnDems();
                     }
                     else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
                     {
-                        //GridWipColumnDepkg();
+                        GridWipColumnDepkg();
                     }
-                   
-                    if (GridWip.View != null)
+                    else if (_mainwindowViewModel.SelectedCustomerWo == "영풍전자")
                     {
-                        GridWip.View.Filter = FilterCustomerWo;
-                        GridWip.View.RefreshFilter();
+                        GridWipColumnYpe();
                     }
 
                 }
@@ -605,7 +590,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 else if (_mainwindowViewModel.SelectedIsSampleWo == "샘플") issample = true;
                 Debug.WriteLine("양산샘플  " + (DateTime.Now - starttime1).TotalMilliseconds);
                 var tmpwolist = new ObservableCollection<ViewUvWorkorder>(db.ViewUvWorkorder);
-                
+
                 Debug.WriteLine("dbcontext  " + (DateTime.Now - starttime1).TotalMilliseconds);
 
                 GetWipCount();
@@ -617,24 +602,32 @@ namespace DAWON_UV_INVENTORY_PROTO
 
 
                 Debug.WriteLine("workorderlist update  " + (DateTime.Now - starttime1).TotalMilliseconds);
+
                 if (GridWip != null)
                 {
 
-                    //GridWip.Columns.Clear();
+                    GridWip.Columns.Clear();
 
                     if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(MS)")
                     {
-                        //GridWipColumnDems();
+                        GridWipColumnDems();
+                        
+
                     }
                     else if (_mainwindowViewModel.SelectedCustomerWo == "대덕전자(PKG)")
                     {
-                        //GridWipColumnDepkg();
+                        GridWipColumnDepkg();
+                        GridWip.Columns["CustName"].FilterPredicates.Clear();
+                        GridWip.Columns["CustName"].FilterPredicates.Add(new Syncfusion.Data.FilterPredicate() { FilterType = Syncfusion.Data.FilterType.Equals, FilterValue = "대덕전자(PKG)" });
                     }
-                    if (GridWip.View != null)
+                    else if (_mainwindowViewModel.SelectedCustomerWo == "영풍전자")
                     {
-                        GridWip.View.Filter = FilterCustomerWo;
-                        GridWip.View.RefreshFilter();
+                        GridWipColumnYpe();
+                        GridWip.Columns["CustName"].FilterPredicates.Clear();
+                        GridWip.Columns["CustName"].FilterPredicates.Add(new Syncfusion.Data.FilterPredicate() { FilterType = Syncfusion.Data.FilterType.Equals, FilterValue = "영풍전자" });
                     }
+
+
                 }
                 //GC.Collect();
                 var time2 = DateTime.Now;
@@ -673,9 +666,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var datefrom = DateTime.Parse(DtpickWipsearchFrom.SelectedDate.ToString()).AddDays(-1);
                 var dateto = DateTime.Parse(DtpickWipsearchTo.SelectedDate.ToString()).AddDays(1);
 
-                bool isLot = lot.Count() > 1 ? true : false;
-                bool isTool = tool.Count() > 3 ? true : false;
-                bool isModelName = modelname.Count() > 3 ? true : false;
+                bool isLot = lot.Length > 1;
+                bool isTool = tool.Length > 3;
+                bool isModelName = modelname.Length > 3;
 
                 if (isLot && isTool && isModelName)
                 {
@@ -854,6 +847,16 @@ namespace DAWON_UV_INVENTORY_PROTO
                     trackinwindow.Show();
                 }
             }
+            else if (_mainwindowViewModel.SelectedCustomerWo == "영풍전자")
+            {
+                if (!Application.Current.Windows.OfType<TrackInWindowYPE>().Any())
+                {
+                    var trackinwindow = new TrackInWindowYPE();
+                    trackinwindow.Topmost = true;
+                    trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    trackinwindow.Show();
+                }
+            }
 
             else
             {
@@ -1022,7 +1025,7 @@ namespace DAWON_UV_INVENTORY_PROTO
         {
             tblksearchlot.Text = string.Empty;
             PerformSearchGridWip();
-            
+
         }
 
         #region 재공현황 로트 검색
@@ -1134,14 +1137,7 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-        private void GridWip_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (GridWip.View != null)
-            {
-                GridWip.View.Filter = FilterCustomerWo;
-                GridWip.View.RefreshFilter();
-            }
-        }
+        
 
         private void SfTextBoxExt_KeyDown(object sender, KeyEventArgs e)
         {

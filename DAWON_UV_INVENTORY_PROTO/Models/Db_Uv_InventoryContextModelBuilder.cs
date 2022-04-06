@@ -12,6 +12,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
     {
         partial void Initialize()
         {
+            var tbBomYpeMaterial = TbBomYpeMaterialEntityType.Create(this);
             var tbCustomer = TbCustomerEntityType.Create(this);
             var tbMachine = TbMachineEntityType.Create(this);
             var tbPrctype = TbPrctypeEntityType.Create(this);
@@ -29,6 +30,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             TbUvWorkorderEntityType.CreateForeignKey3(tbUvWorkorder, tbUsers);
             TbUvWorkorderEntityType.CreateForeignKey4(tbUvWorkorder, tbUsers);
 
+            TbBomYpeMaterialEntityType.CreateAnnotations(tbBomYpeMaterial);
             TbCustomerEntityType.CreateAnnotations(tbCustomer);
             TbMachineEntityType.CreateAnnotations(tbMachine);
             TbPrctypeEntityType.CreateAnnotations(tbPrctype);

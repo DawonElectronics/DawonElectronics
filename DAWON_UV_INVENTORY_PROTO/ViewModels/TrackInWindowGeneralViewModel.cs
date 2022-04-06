@@ -10,8 +10,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
     public class TrackInWindowGeneralViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;    
-        
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         private void OnPropertyChanged(String info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
@@ -112,25 +112,25 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         public string CustToolno { get; set; }
         public string MesPrcName { get; set; }
         public string MesSeqCode { get; set; }
-        public string PrcName { get; set; }       
+        public string PrcName { get; set; }
         public short? Pnlqty { get; set; }
-        
-        public string LotType { get; set; }        
-       
+
+        public string LotType { get; set; }
+
         public string LotNotes { get; set; }
-        
+
         public bool? Sample { get; set; }
-        
+
         public int? Layer { get; set; }
-       
+
         public string PrcLayer1 { get; set; }
-        public string PrcLayer2 { get; set; }  
-      
+        public string PrcLayer2 { get; set; }
+
         public string PrcCode { get; set; }
 
         public string CustName { get; set; }
-        
-        
+
+
     }
 
 }

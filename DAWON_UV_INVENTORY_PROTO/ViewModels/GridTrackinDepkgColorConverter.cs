@@ -1,7 +1,5 @@
-﻿using DAWON_UV_INVENTORY_PROTO.Models;
-using System;
+﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -29,8 +27,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             if (data != null)
             {
                 if (System.Convert.ToBoolean(data.Row["IsRegist"]) == false)
-                { result = BrushFromHex("#FFD966"); }               
-                
+                { result = BrushFromHex("#FFD966"); }
+
                 else
                 { result = DependencyProperty.UnsetValue; }
             }

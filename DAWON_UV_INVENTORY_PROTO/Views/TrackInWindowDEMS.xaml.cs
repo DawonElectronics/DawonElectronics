@@ -114,12 +114,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             var rcvdt = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
 
             rcvdt.Columns.Add("IsRegist");
-
-            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("TOOLNUMBER")).ToList<string>();
 
             foreach (var item in toollist)
             {
-                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                rcvdt.Select(string.Format("[TOOLNUMBER] = '{0}'", item)).ToList<DataRow>()
                     .ForEach(r => r["IsRegist"] = GetRegist(item));
             }
 
@@ -133,11 +132,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
             rcvdt.Columns.Add("IsRegist");
 
-            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("SPECNR")).ToList<string>();
+            var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("TOOLNUMBER")).ToList<string>();
 
             foreach (var item in toollist)
             {
-                rcvdt.Select(string.Format("[SPECNR] = '{0}'", item)).ToList<DataRow>()
+                rcvdt.Select(string.Format("[TOOLNUMBER] = '{0}'", item)).ToList<DataRow>()
                     .ForEach(r => r["IsRegist"] = GetRegist(item));
             }
 
@@ -259,6 +258,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             context.TbUvWorkorder.Add(inputTemp);
                             context.SaveChanges();
                             ExecuteRcv(lot);
+                        }
+                        else
+                        {
+                            ExecuteRcv(lot);
+
                         }
                     }
                 }
@@ -626,33 +630,41 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
                     foreach (var seq in ldrillinfoSeq)
                     {
-                        if (tools.Where(x => x.MesSeqCode == seq).Count() == 0)
+                        if (seq != "")
                         {
-                            var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq, issample);
-                            context.TbUvToolinfo.AddAsync(tempTool);
-                            context.SaveChanges();
-                            MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
-                        }
+                            if (tools.Where(x => x.MesSeqCode == seq).Count() == 0)
+                            {
+                                var tempTool = GetTbUvToolinfo_DE_MS(tool, workcenter, lot, seq, issample);
+                                context.TbUvToolinfo.AddAsync(tempTool);
+                                context.SaveChanges();
+                                MainWindow._mainwindowViewModel.ToolInfos =
+                                    new List<TbUvToolinfo>(context.TbUvToolinfo);
+                            }
 
-                        else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
-                        {
-                            continue;
+                            else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
+                            {
+                                continue;
+                            }
                         }
                     }
 
                     foreach (var seq in lbcutinfoSeq)
                     {
-                        if (tools.Where(x => x.MesSeqCode == seq).Count() == 0)
+                        if (seq != "")
                         {
-                            var tempTool = GetTbUvToolinfo_DE_MS_lbcut(tool, workcenter, lot, seq, issample, seqnr);
-                            context.TbUvToolinfo.AddAsync(tempTool);
-                            context.SaveChanges();
-                            MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
-                        }
+                            if (tools.Where(x => x.MesSeqCode == seq).Count() == 0)
+                            {
+                                var tempTool = GetTbUvToolinfo_DE_MS_lbcut(tool, workcenter, lot, seq, issample, seqnr);
+                                context.TbUvToolinfo.AddAsync(tempTool);
+                                context.SaveChanges();
+                                MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(context.TbUvToolinfo);
+                            }
 
-                        else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
-                        {
-                            continue;
+                            else if (tools.Where(x => x.MesSeqCode == seq).Count() > 0)
+                            {
+                                continue;
+                            }
+
                         }
                     }
 
@@ -799,6 +811,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 }
             }
 
+
             catch (Exception ex)
             { MessageBox.Show(ex.Message); }
 
@@ -810,66 +823,66 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             var tempTool = new TbUvToolinfo();
 
-            try
+            //try
+            //{
+
+            using (var context = new Db_Uv_InventoryContext())
+
             {
+                var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
+                var lotinfo = _demsClient.MesLotInfoQry(lot);
+                var specinfo = _demsClient.MesSpecInfoQry(tool, lotdetailinfo.Seqnr);
+                var lbcutinfo = _demsClient.MesLBodyCutInfoQry(tool, seqnr);
 
-                using (var context = new Db_Uv_InventoryContext())
+                tempTool.CustId = "UV_01";
+                tempTool.CustName = "대덕전자(MS)";
 
-                {
-                    var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
-                    var lotinfo = _demsClient.MesLotInfoQry(lot);
-                    var specinfo = _demsClient.MesSpecInfoQry(tool, lotdetailinfo.Seqnr);
-                    var lbcutinfo = _demsClient.MesLBodyCutInfoQry(tool, seqnr);
+                tempTool.CustModelname = lotdetailinfo.ModelName;
+                tempTool.CustRevision = lotdetailinfo.ModelRev.Trim();
+                tempTool.CustToolno = lotdetailinfo.ToolNo;
+                tempTool.Layer = lotdetailinfo.LayerTotal;
+                tempTool.EndCustomer = lotdetailinfo.Kname;
+                tempTool.CustomerShipto = lotdetailinfo.Shipto;
+                tempTool.ProductType = lotdetailinfo.SpecType2;
+                tempTool.MesSeqCode = seq;
+                tempTool.MesPrcName = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcName;
+                tempTool.MesPrcCode = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcCode;
 
-                    tempTool.CustId = "UV_01";
-                    tempTool.CustName = "대덕전자(MS)";
+                tempTool.StackType = lotdetailinfo.SpecType1;
+                tempTool.PrdCategory = lotdetailinfo.ProductType;
+                tempTool.LayerStructure = lotdetailinfo.LayerStructure;
+                tempTool.CustComment = lotdetailinfo.Reason;
+                tempTool.CreateDate = lotdetailinfo.Okdat;
 
-                    tempTool.CustModelname = lotdetailinfo.ModelName;
-                    tempTool.CustRevision = lotdetailinfo.ModelRev.Trim();
-                    tempTool.CustToolno = lotdetailinfo.ToolNo;
-                    tempTool.Layer = lotdetailinfo.LayerTotal;
-                    tempTool.EndCustomer = lotdetailinfo.Kname;
-                    tempTool.CustomerShipto = lotdetailinfo.Shipto;
-                    tempTool.ProductType = lotdetailinfo.SpecType2;
-                    tempTool.MesSeqCode = seq;
-                    tempTool.MesPrcName = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcName;
-                    tempTool.MesPrcCode = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcCode;
+                tempTool.ArrayBlk = specinfo.Arrayx * specinfo.Arrayy;
+                tempTool.WorksizeX = specinfo.Worksizex;
+                tempTool.WorksizeY = specinfo.Worksizey;
+                tempTool.Pcs = specinfo.Pcppanel;
 
-                    tempTool.StackType = lotdetailinfo.SpecType1;
-                    tempTool.PrdCategory = lotdetailinfo.ProductType;
-                    tempTool.LayerStructure = lotdetailinfo.LayerStructure;
-                    tempTool.CustComment = lotdetailinfo.Reason;
-                    tempTool.CreateDate = lotdetailinfo.Okdat;
+                tempTool.MainHoleSize = lbcutinfo.Where(t => t.ProcSeq == seq).First().HoleSize.Trim();
 
-                    tempTool.ArrayBlk = specinfo.Arrayx * specinfo.Arrayy;
-                    tempTool.WorksizeX = specinfo.Worksizex;
-                    tempTool.WorksizeY = specinfo.Worksizey;
-                    tempTool.Pcs = specinfo.Pcppanel;
+                tempTool.PrcLayerFrom1 = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcLayerFrom;
+                tempTool.PrcLayerTo1 = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
+                tempTool.HoleCount = "길이:" + lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcDistance;
+                tempTool.Depth = Convert.ToDecimal(lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Depth.Trim());
+                tempTool.ToolNotes = "가공면:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Side + " Tool순번:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ToolSeq; ;
 
-                    tempTool.MainHoleSize = lbcutinfo.Where(t => t.ProcSeq == seq).First().HoleSize.Trim();
+                if (issample == true)
+                { tempTool.Sample = true; }
+                else if (issample != true)
+                { tempTool.Sample = false; }
 
-                    tempTool.PrcLayerFrom1 = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcLayerFrom;
-                    tempTool.PrcLayerTo1 = lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
-                    tempTool.HoleCount = "길이:" + lbcutinfo.Where(t => t.ProcSeq == seq).First().ProcDistance;
-                    tempTool.Depth = Convert.ToDecimal(lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Depth.Trim());
-                    tempTool.ToolNotes = "가공면:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().Side + " Tool순번:" + lbcutinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ToolSeq; ;
+                tempTool.PrcCode = "UV_SHT_CUT_007";
+                tempTool.PrcName = "컷(BODY)";
 
-                    if (issample == true)
-                    { tempTool.Sample = true; }
-                    else if (issample != true)
-                    { tempTool.Sample = false; }
-
-                    tempTool.PrcCode = "UV_SHT_CUT_007";
-                    tempTool.PrcName = "컷(BODY)";
-
-                    var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-DEM-UV-";
-                    var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
-                    tempTool.ProductId = thisyear + prdidNo.ToString("D4");
-                }
+                var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-DEM-UV-";
+                var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                tempTool.ProductId = thisyear + prdidNo.ToString("D4");
             }
+            //}
 
-            catch (Exception ex)
-            { MessageBox.Show(ex.Message); }
+            //catch (Exception ex)
+            //{ MessageBox.Show(ex.Message); }
 
             return tempTool;
         }

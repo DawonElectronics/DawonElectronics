@@ -1,0 +1,105 @@
+﻿<syncfusion:ChromelessWindow
+    x:Class="DAWON_UV_INVENTORY_PROTO.Views.TrackInWindowYPE"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sfSkinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+    Title="영풍전자 인수 등록"
+    Width="680"
+    Height="450"
+    d:DataContext="{d:DesignInstance viewmodel:TrackInWindowYPEViewModel}"
+    sfSkinManager:SfSkinManager.VisualStyle="Office2016White"
+    mc:Ignorable="d">
+    <syncfusion:ChromelessWindow.Resources>
+        <Style TargetType="syncfusion:GridRowHeaderCell">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="syncfusion:GridRowHeaderCell">
+                        <Border
+                            x:Name="PART_RowHeaderCellBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding RowIndex, RelativeSource={RelativeSource TemplatedParent}}"
+                                    TextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <viewmodel:GridTrackinDepkgColorConverter x:Key="ColorConverter" />
+    </syncfusion:ChromelessWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Margin="10,10"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+           
+            <Button
+                x:Name="BtnAddOnly"
+                Height="50"
+                Margin="20,10"
+                Padding="5,5"
+                
+                Content="장부등록"
+                FontSize="16"
+                FontWeight="Bold" />
+            <Button
+                x:Name="BtnExeRcv"
+                Height="50"
+                Margin="15,10"
+                Padding="5,5"
+                
+                Content="장부등록+MES받기"
+                FontSize="16"
+                FontWeight="Bold" />
+            <Button x:Name="BtnReg"
+                    Content="모델등록"
+                    Click="BtnReg_Click"/>
+        </StackPanel>
+
+        <syncfusion:SfDataGrid
+            x:Name="GridRcv"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            AutoGenerateColumns="True"
+            CanMaintainScrollPosition="True"
+            ColumnSizer="AutoWithLastColumnFill"
+            ItemsSource="{Binding RcvLotList}"
+            
+            SelectionMode="Multiple"
+            ShowRowHeader="True">
+           
+
+            <syncfusion:SfDataGrid.Resources>
+                <ResourceDictionary>
+
+                    <!--<Style TargetType="syncfusion:VirtualizingCellsControl">
+                        <Setter Property="Background" Value="{Binding Converter={StaticResource ColorConverter}}" />
+                    </Style>-->
+
+                </ResourceDictionary>
+            </syncfusion:SfDataGrid.Resources>
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridCheckBoxSelectorColumn Width="30" MappingName="SelectorColumn" />
+            </syncfusion:SfDataGrid.Columns>
+
+        </syncfusion:SfDataGrid>
+
+    </Grid>
+</syncfusion:ChromelessWindow>

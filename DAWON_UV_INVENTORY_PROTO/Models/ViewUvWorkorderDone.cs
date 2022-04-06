@@ -48,6 +48,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string InsulType { get; set; }
         public string MainHoleSize { get; set; }
         public string MesSeqCode { get; set; }
+        public string YpeDatarev { get; set; }
         public string PrcCode { get; set; }
         public bool? IsDone { get; set; }
         public bool? IsPrinted { get; set; }

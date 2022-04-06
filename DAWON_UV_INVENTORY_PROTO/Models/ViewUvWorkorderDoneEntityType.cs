@@ -479,6 +479,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             worksizeY.AddAnnotation("Relational:ColumnType", "decimal(6, 2)");
             worksizeY.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var ypeDatarev = runtimeEntityType.AddProperty(
+                "YpeDatarev",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorderDone).GetProperty("YpeDatarev", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorderDone).GetField("<YpeDatarev>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            ypeDatarev.AddAnnotation("Relational:ColumnName", "ype_datarev");
+            ypeDatarev.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             return runtimeEntityType;
         }
 

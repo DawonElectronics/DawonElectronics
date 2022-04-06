@@ -10,11 +10,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
@@ -26,7 +23,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        
+
         private void OnPropertyChanged(String info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
@@ -43,8 +40,8 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             WipLotSearchCommand = new DelegateCommand(OnWipLotSearchRecordClicked);
             ToolInfos = new List<TbUvToolinfo>();
             Machines = new List<TbMachine>();
-            
-            WorkOrderList = new ObservableCollection<ViewUvWorkorder>();   
+
+            WorkOrderList = new ObservableCollection<ViewUvWorkorder>();
 
             _selectedDateFromWoSearch = DateTime.Now.AddMonths(-1);
             _selectedDateToWoSearch = DateTime.Now;
@@ -116,7 +113,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
             if (selData != null)
             {
-                var gridrecord = (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Where(x=>x.Id == selData.Id).First();
+                var gridrecord = (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Where(x => x.Id == selData.Id).First();
                 if (((selData.PrcLayer2.Length > 1) && (selData.PrcName.Contains("BVH"))))
                 {
                     if (selData.MachineSs == null || selData.MachineCs == null)
@@ -167,7 +164,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                             result.LotType = "완료";
                             result.WaitTrackout = false;
                             db.SaveChanges();
-                            
+
                             (mainWindow.GridWip.DataContext as MainWindowViewModel).WorkOrderList.Remove(gridrecord);
                             mainWindow.GridWip.View.RefreshFilter();
                             mainWindow.GetWipCount();
@@ -222,9 +219,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                 timer.Stop();
                 var deque = string.Empty;
                 trackoutque.TryDequeue(out deque);
-                ExecuteResult = ExecuteResult.Replace(deque,"");
+                ExecuteResult = ExecuteResult.Replace(deque, "");
             };
-            
+
         }
 
         #region Tool 자동완성
@@ -304,6 +301,18 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 _selectedGridWip = value;
                 OnPropertyChanged(nameof(SelectedGridWip));
+            }
+        }
+
+
+        private TbUvToolinfo? _selectedInputTool;
+        public TbUvToolinfo? SelectedInputTool
+        {
+            get { return _selectedInputTool; }
+            set
+            {
+                _selectedInputTool = value;
+                OnPropertyChanged(nameof(SelectedInputTool));
             }
         }
 
@@ -541,8 +550,12 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             get { return _toolno2pid; }
             set
             {
-                _toolno2pid = ToolInfos.Where(w => w.CustToolno == value).Select(s => s.ProductId).FirstOrDefault();
-                OnPropertyChanged(nameof(Toolno2Pid));
+                if (SelectedInputTool != null)
+                {
+                    _toolno2pid = SelectedInputTool.ProductId;
+                }
+            
+            OnPropertyChanged(nameof(Toolno2Pid));
             }
         }
         private string? _executeResult;

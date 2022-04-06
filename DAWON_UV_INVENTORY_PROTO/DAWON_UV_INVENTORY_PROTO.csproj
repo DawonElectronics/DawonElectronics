@@ -73,6 +73,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ConnectorDEMS\ConnectorDEMS.csproj" />
     <ProjectReference Include="..\ConnectorDEPKG\ConnectorDEPKG.csproj" />
+    <ProjectReference Include="..\ConnectorYPE\ConnectorYPE.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -95,10 +96,18 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\TrackInWindowYPE.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
 </Project>
