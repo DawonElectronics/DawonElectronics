@@ -113,9 +113,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("CustRevision", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<CustRevision>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             custRevision.AddAnnotation("Relational:ColumnName", "cust_revision");
-            custRevision.AddAnnotation("Relational:IsFixedLength", true);
             custRevision.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var custToolno = runtimeEntityType.AddProperty(
@@ -264,7 +263,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("MesPrcCode", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<MesPrcCode>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 100);
             mesPrcCode.AddAnnotation("Relational:ColumnName", "mes_prc_code");
             mesPrcCode.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -274,7 +273,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("MesPrcName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<MesPrcName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 30);
+                maxLength: 200);
             mesPrcName.AddAnnotation("Relational:ColumnName", "mes_prc_name");
             mesPrcName.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -342,7 +341,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("PrcLayerFrom1", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<PrcLayerFrom1>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 4);
+                maxLength: 10);
             prcLayerFrom1.AddAnnotation("Relational:ColumnName", "PrcLayerFrom_1");
             prcLayerFrom1.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -352,7 +351,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("PrcLayerFrom2", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<PrcLayerFrom2>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 4);
+                maxLength: 10);
             prcLayerFrom2.AddAnnotation("Relational:ColumnName", "PrcLayerFrom_2");
             prcLayerFrom2.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -362,7 +361,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("PrcLayerTo1", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<PrcLayerTo1>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 4);
+                maxLength: 10);
             prcLayerTo1.AddAnnotation("Relational:ColumnName", "PrcLayerTo_1");
             prcLayerTo1.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -372,7 +371,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("PrcLayerTo2", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<PrcLayerTo2>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 4);
+                maxLength: 10);
             prcLayerTo2.AddAnnotation("Relational:ColumnName", "PrcLayerTo_2");
             prcLayerTo2.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -501,6 +500,26 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             worksizeY.AddAnnotation("Relational:ColumnName", "worksize_y");
             worksizeY.AddAnnotation("Relational:ColumnType", "decimal(6, 2)");
             worksizeY.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypNextResourceDefault = runtimeEntityType.AddProperty(
+                "YpNextResourceDefault",
+                typeof(string),
+                propertyInfo: typeof(TbUvToolinfo).GetProperty("YpNextResourceDefault", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvToolinfo).GetField("<YpNextResourceDefault>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 200);
+            ypNextResourceDefault.AddAnnotation("Relational:ColumnName", "yp_next_resource_default");
+            ypNextResourceDefault.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypNextResourcelist = runtimeEntityType.AddProperty(
+                "YpNextResourcelist",
+                typeof(string),
+                propertyInfo: typeof(TbUvToolinfo).GetProperty("YpNextResourcelist", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvToolinfo).GetField("<YpNextResourcelist>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            ypNextResourcelist.AddAnnotation("Relational:ColumnName", "yp_next_resourcelist");
+            ypNextResourcelist.AddAnnotation("Relational:ColumnType", "ntext");
+            ypNextResourcelist.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var ypeDatarev = runtimeEntityType.AddProperty(
                 "YpeDatarev",

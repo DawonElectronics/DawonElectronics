@@ -29,6 +29,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string FormatBg { get; set; }
         public string FormatFg { get; set; }
         public bool? FormatBold { get; set; }
+        public string YpNextResource { get; set; }
+        public string RtrLoss { get; set; }
+        public string NftOrderserial { get; set; }
+        public string SampleDep { get; set; }
+        public string YpShortlot { get; set; }
+        public string LotHistory { get; set; }
         public string LotNotes { get; set; }
         public string HoleCount { get; set; }
         public string MachineCs { get; set; }
@@ -49,6 +55,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string MainHoleSize { get; set; }
         public string MesSeqCode { get; set; }
         public string YpeDatarev { get; set; }
+        public string YpNextResourcelist { get; set; }
+        public string YpNextResourceDefault { get; set; }
         public string PrcCode { get; set; }
         public bool? IsDone { get; set; }
         public bool? IsPrinted { get; set; }

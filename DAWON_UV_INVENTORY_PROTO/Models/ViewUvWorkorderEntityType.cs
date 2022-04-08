@@ -90,9 +90,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("CustRevision", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<CustRevision>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             custRevision.AddAnnotation("Relational:ColumnName", "cust_revision");
-            custRevision.AddAnnotation("Relational:IsFixedLength", true);
             custRevision.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var custToolno = runtimeEntityType.AddProperty(
@@ -210,6 +209,15 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             layer.AddAnnotation("Relational:ColumnName", "layer");
             layer.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var lotHistory = runtimeEntityType.AddProperty(
+                "LotHistory",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("LotHistory", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<LotHistory>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            lotHistory.AddAnnotation("Relational:ColumnType", "ntext");
+            lotHistory.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var lotNotes = runtimeEntityType.AddProperty(
                 "LotNotes",
                 typeof(string),
@@ -276,7 +284,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("MesPrcCode", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<MesPrcCode>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 100);
             mesPrcCode.AddAnnotation("Relational:ColumnName", "mes_prc_code");
             mesPrcCode.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -286,7 +294,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("MesPrcName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<MesPrcName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 30);
+                maxLength: 200);
             mesPrcName.AddAnnotation("Relational:ColumnName", "mes_prc_name");
             mesPrcName.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -299,6 +307,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 maxLength: 10);
             mesSeqCode.AddAnnotation("Relational:ColumnName", "mes_seq_code");
             mesSeqCode.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var nftOrderserial = runtimeEntityType.AddProperty(
+                "NftOrderserial",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("NftOrderserial", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<NftOrderserial>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 10,
+                unicode: false);
+            nftOrderserial.AddAnnotation("Relational:ColumnName", "nft_orderserial");
+            nftOrderserial.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var pcs = runtimeEntityType.AddProperty(
                 "Pcs",
@@ -333,7 +352,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 typeof(string),
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("PrcLayer1", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<PrcLayer1>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                maxLength: 9);
+                maxLength: 21);
             prcLayer1.AddAnnotation("Relational:ColumnName", "prc_layer1");
             prcLayer1.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -342,7 +361,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 typeof(string),
                 propertyInfo: typeof(ViewUvWorkorder).GetProperty("PrcLayer2", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorder).GetField("<PrcLayer2>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                maxLength: 9);
+                maxLength: 21);
             prcLayer2.AddAnnotation("Relational:ColumnName", "prc_layer2");
             prcLayer2.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -375,6 +394,17 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             productType.AddAnnotation("Relational:ColumnName", "product_type");
             productType.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var rtrLoss = runtimeEntityType.AddProperty(
+                "RtrLoss",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("RtrLoss", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<RtrLoss>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            rtrLoss.AddAnnotation("Relational:ColumnName", "rtr_loss");
+            rtrLoss.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var sample = runtimeEntityType.AddProperty(
                 "Sample",
                 typeof(bool?),
@@ -383,6 +413,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 nullable: true);
             sample.AddAnnotation("Relational:ColumnName", "sample");
             sample.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var sampleDep = runtimeEntityType.AddProperty(
+                "SampleDep",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("SampleDep", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<SampleDep>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100);
+            sampleDep.AddAnnotation("Relational:ColumnName", "sample_dep");
+            sampleDep.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var sampleOrder = runtimeEntityType.AddProperty(
                 "SampleOrder",
@@ -478,6 +518,47 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             worksizeY.AddAnnotation("Relational:ColumnName", "worksize_y");
             worksizeY.AddAnnotation("Relational:ColumnType", "decimal(6, 2)");
             worksizeY.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypNextResource = runtimeEntityType.AddProperty(
+                "YpNextResource",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("YpNextResource", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<YpNextResource>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 200);
+            ypNextResource.AddAnnotation("Relational:ColumnName", "yp_next_resource");
+            ypNextResource.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypNextResourceDefault = runtimeEntityType.AddProperty(
+                "YpNextResourceDefault",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("YpNextResourceDefault", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<YpNextResourceDefault>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 200);
+            ypNextResourceDefault.AddAnnotation("Relational:ColumnName", "yp_next_resource_default");
+            ypNextResourceDefault.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypNextResourcelist = runtimeEntityType.AddProperty(
+                "YpNextResourcelist",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("YpNextResourcelist", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<YpNextResourcelist>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            ypNextResourcelist.AddAnnotation("Relational:ColumnName", "yp_next_resourcelist");
+            ypNextResourcelist.AddAnnotation("Relational:ColumnType", "ntext");
+            ypNextResourcelist.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var ypShortlot = runtimeEntityType.AddProperty(
+                "YpShortlot",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("YpShortlot", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<YpShortlot>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 10,
+                unicode: false);
+            ypShortlot.AddAnnotation("Relational:ColumnName", "yp_shortlot");
+            ypShortlot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var ypeDatarev = runtimeEntityType.AddProperty(
                 "YpeDatarev",

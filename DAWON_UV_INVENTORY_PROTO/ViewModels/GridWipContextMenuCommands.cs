@@ -705,6 +705,34 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
         #endregion
+
+        #region 영풍 초도 완료 및 홀수 입력
+
+        static BaseCommand _camFinishYpeCommand;
+        public static BaseCommand CamFinishYpeCommand
+        {
+            get
+            {
+                _camFinishYpeCommand = new BaseCommand(CamFinishYpe);
+                return _camFinishYpeCommand;
+            }
+        }
+        private static void CamFinishYpe(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+
+                if (!Application.Current.Windows.OfType<CamFinishYpe>().Any() && record != null && record.CustName == "영풍전자")
+                {
+                    var mcWindow = new CamFinishYpe(obj);
+                    mcWindow.Topmost = true;
+                    mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    mcWindow.Show();
+                }
+            }
+        }
+        #endregion
     }
 
 }

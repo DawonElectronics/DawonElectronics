@@ -308,9 +308,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("cust_name");
 
                 entity.Property(e => e.CustRevision)
-                    .HasMaxLength(10)
-                    .HasColumnName("cust_revision")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("cust_revision");
 
                 entity.Property(e => e.CustToolno)
                     .IsRequired()
@@ -369,11 +368,11 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("main_hole_size");
 
                 entity.Property(e => e.MesPrcCode)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .HasColumnName("mes_prc_code");
 
                 entity.Property(e => e.MesPrcName)
-                    .HasMaxLength(30)
+                    .HasMaxLength(200)
                     .HasColumnName("mes_prc_name");
 
                 entity.Property(e => e.MesSeqCode)
@@ -397,19 +396,19 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("prc_code");
 
                 entity.Property(e => e.PrcLayerFrom1)
-                    .HasMaxLength(4)
+                    .HasMaxLength(10)
                     .HasColumnName("PrcLayerFrom_1");
 
                 entity.Property(e => e.PrcLayerFrom2)
-                    .HasMaxLength(4)
+                    .HasMaxLength(10)
                     .HasColumnName("PrcLayerFrom_2");
 
                 entity.Property(e => e.PrcLayerTo1)
-                    .HasMaxLength(4)
+                    .HasMaxLength(10)
                     .HasColumnName("PrcLayerTo_1");
 
                 entity.Property(e => e.PrcLayerTo2)
-                    .HasMaxLength(4)
+                    .HasMaxLength(10)
                     .HasColumnName("PrcLayerTo_2");
 
                 entity.Property(e => e.PrcName)
@@ -453,6 +452,14 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpNextResourceDefault)
+                    .HasMaxLength(200)
+                    .HasColumnName("yp_next_resource_default");
+
+                entity.Property(e => e.YpNextResourcelist)
+                    .HasColumnType("ntext")
+                    .HasColumnName("yp_next_resourcelist");
 
                 entity.Property(e => e.YpeDatarev)
                     .HasMaxLength(100)
@@ -577,6 +584,10 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.WaitTrackout).HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.YpNextResource)
+                    .HasMaxLength(200)
+                    .HasColumnName("yp_next_resource");
+
                 entity.Property(e => e.YpShortlot)
                     .HasMaxLength(10)
                     .IsUnicode(false)
@@ -632,9 +643,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("cust_name");
 
                 entity.Property(e => e.CustRevision)
-                    .HasMaxLength(10)
-                    .HasColumnName("cust_revision")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("cust_revision");
 
                 entity.Property(e => e.CustToolno)
                     .IsRequired()
@@ -677,6 +687,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.Layer).HasColumnName("layer");
 
+                entity.Property(e => e.LotHistory).HasColumnType("ntext");
+
                 entity.Property(e => e.LotNotes)
                     .HasColumnType("ntext")
                     .HasColumnName("lot_notes");
@@ -702,16 +714,21 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("main_hole_size");
 
                 entity.Property(e => e.MesPrcCode)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .HasColumnName("mes_prc_code");
 
                 entity.Property(e => e.MesPrcName)
-                    .HasMaxLength(30)
+                    .HasMaxLength(200)
                     .HasColumnName("mes_prc_name");
 
                 entity.Property(e => e.MesSeqCode)
                     .HasMaxLength(10)
                     .HasColumnName("mes_seq_code");
+
+                entity.Property(e => e.NftOrderserial)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("nft_orderserial");
 
                 entity.Property(e => e.Pcs).HasColumnName("pcs");
 
@@ -723,12 +740,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.PrcLayer1)
                     .IsRequired()
-                    .HasMaxLength(9)
+                    .HasMaxLength(21)
                     .HasColumnName("prc_layer1");
 
                 entity.Property(e => e.PrcLayer2)
                     .IsRequired()
-                    .HasMaxLength(9)
+                    .HasMaxLength(21)
                     .HasColumnName("prc_layer2");
 
                 entity.Property(e => e.PrcName)
@@ -744,7 +761,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(20)
                     .HasColumnName("product_type");
 
+                entity.Property(e => e.RtrLoss)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_loss");
+
                 entity.Property(e => e.Sample).HasColumnName("sample");
+
+                entity.Property(e => e.SampleDep)
+                    .HasMaxLength(100)
+                    .HasColumnName("sample_dep");
 
                 entity.Property(e => e.SampleOrder).HasColumnName("sample_order");
 
@@ -777,6 +803,23 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpNextResource)
+                    .HasMaxLength(200)
+                    .HasColumnName("yp_next_resource");
+
+                entity.Property(e => e.YpNextResourceDefault)
+                    .HasMaxLength(200)
+                    .HasColumnName("yp_next_resource_default");
+
+                entity.Property(e => e.YpNextResourcelist)
+                    .HasColumnType("ntext")
+                    .HasColumnName("yp_next_resourcelist");
+
+                entity.Property(e => e.YpShortlot)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("yp_shortlot");
 
                 entity.Property(e => e.YpeDatarev)
                     .HasMaxLength(100)
@@ -1012,6 +1055,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.Layer).HasColumnName("layer");
 
+                entity.Property(e => e.LotHistory).HasColumnType("ntext");
+
                 entity.Property(e => e.LotNotes)
                     .HasColumnType("ntext")
                     .HasColumnName("lot_notes");
@@ -1037,16 +1082,21 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("main_hole_size");
 
                 entity.Property(e => e.MesPrcCode)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .HasColumnName("mes_prc_code");
 
                 entity.Property(e => e.MesPrcName)
-                    .HasMaxLength(30)
+                    .HasMaxLength(200)
                     .HasColumnName("mes_prc_name");
 
                 entity.Property(e => e.MesSeqCode)
                     .HasMaxLength(10)
                     .HasColumnName("mes_seq_code");
+
+                entity.Property(e => e.NftOrderserial)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("nft_orderserial");
 
                 entity.Property(e => e.Pcs).HasColumnName("pcs");
 
@@ -1058,12 +1108,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
 
                 entity.Property(e => e.PrcLayer1)
                     .IsRequired()
-                    .HasMaxLength(9)
+                    .HasMaxLength(21)
                     .HasColumnName("prc_layer1");
 
                 entity.Property(e => e.PrcLayer2)
                     .IsRequired()
-                    .HasMaxLength(9)
+                    .HasMaxLength(21)
                     .HasColumnName("prc_layer2");
 
                 entity.Property(e => e.PrcName)
@@ -1079,7 +1129,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(20)
                     .HasColumnName("product_type");
 
+                entity.Property(e => e.RtrLoss)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_loss");
+
                 entity.Property(e => e.Sample).HasColumnName("sample");
+
+                entity.Property(e => e.SampleDep)
+                    .HasMaxLength(100)
+                    .HasColumnName("sample_dep");
 
                 entity.Property(e => e.SampleOrder).HasColumnName("sample_order");
 
@@ -1112,6 +1171,15 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 entity.Property(e => e.WorksizeY)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("worksize_y");
+
+                entity.Property(e => e.YpNextResource)
+                    .HasMaxLength(200)
+                    .HasColumnName("yp_next_resource");
+
+                entity.Property(e => e.YpShortlot)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("yp_shortlot");
 
                 entity.Property(e => e.YpeDatarev)
                     .HasMaxLength(100)

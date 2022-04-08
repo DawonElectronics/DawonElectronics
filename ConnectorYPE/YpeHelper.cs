@@ -39,6 +39,7 @@ namespace ConnectorYPE
         JObject qry_specinfo_json = JObject.Parse(Encoding.UTF8.GetString(ResourceYPE.Qry_SpecInfo));
         JObject qry_materialinfo_json = JObject.Parse(Encoding.UTF8.GetString(ResourceYPE.Qry_MaterialInfo));
         JObject qry_spec_comment_json = JObject.Parse(Encoding.UTF8.GetString(ResourceYPE.Qry_SpecComment));
+        JObject qry_routingresource_json = JObject.Parse(Encoding.UTF8.GetString(ResourceYPE.Qry_RoutingResource));
 
         Regex revreg = new Regex(@"REV.(\w+)");
         Regex holesizereg = new Regex(@"Φ(\d.\d+)");
@@ -100,6 +101,32 @@ namespace ConnectorYPE
             resultList = JsonConvert.DeserializeObject<List<WipModel>>(result["result"]["data"]["result"]["Rows"].ToString()); 
 
             return resultList;
+        }
+
+        public async Task<string> QryRoutingResource(string opid)
+        {
+            var resultString = string.Empty;
+
+            //공정코드 적용
+            qry_routingresource_json["body"]["result"]["parameter"]["OPERATIONID"] = opid;
+
+            var result = await Post(qry_routingresource_json);
+            var resultList = JsonConvert.DeserializeObject<List<YPRoutingResource>>(result["result"]["data"]["result"]["Rows"].ToString());
+
+            foreach (var item in resultList)
+            {
+                if (resultString == string.Empty)
+                {
+                    resultString = item.areaname;
+                }
+                else
+                {
+                    resultString += ","+item.areaname;
+                }
+            }
+
+
+            return resultString;
         }
 
         public async Task<List<YPRoutingInfoModel>> QryRoutingInfo(string tool, string subrev)
@@ -182,10 +209,6 @@ namespace ConnectorYPE
             var materialinfo = await QryMaterialInfo(tool, subrev);
             var speccomment = await QrySpecComment(tool, subrev);
             var routinginfo = await QryRoutingInfo(tool, subrev);
-
-            
-
-
             var uvroutingList = routinginfo.Where(x =>((Convert.ToInt16(x.processsegmentid.Substring(0,4)))>2015 && (Convert.ToInt16(x.processsegmentid.Substring(0, 4))) < 2030)).Select(x=>x.processsegmentid).ToList();
 
             foreach (var item in uvroutingList)
@@ -217,12 +240,19 @@ namespace ConnectorYPE
                 else if (item.Contains("2024"))
                 {
                     tmpitem.PrcLayerFrom1 = picutlayerfromreg.Match(tmpitem.ToolNotes).Groups[1].Value;
-                    if(picutlayertoreg.IsMatch(tmpitem.ToolNotes))
-                    { tmpitem.PrcLayerTo1 = picutlayertoreg.Match(tmpitem.ToolNotes).Groups[1].Value; }
+                    tmpitem.PrcLayerTo1 = picutlayerfromreg.Match(tmpitem.ToolNotes).Groups[1].Value;
+                    if (picutlayertoreg.IsMatch(tmpitem.ToolNotes))
+                    {
+                        tmpitem.PrcLayerFrom2 = picutlayertoreg.Match(tmpitem.ToolNotes).Groups[1].Value;
+                        tmpitem.PrcLayerTo2 = picutlayertoreg.Match(tmpitem.ToolNotes).Groups[1].Value;
+                    }
                     
                 }
 
-
+                var tmpseq = routinginfo.Where(x => x.processsegmentid == item)
+                    .Select(x => Convert.ToInt16(x.usersequence)).FirstOrDefault();
+                tmpitem.NextOpid = routinginfo.Where(x => Convert.ToInt16(x.usersequence) > tmpseq)
+                    .OrderBy(x=> Convert.ToInt16(x.usersequence)).Select(x => x.operationid).FirstOrDefault();
                 tmpitem.InsulInfo = materialinfo[0].root_bomid;
                 tmpitem.Layer = specinfo[0].layer;
                 resultList.Add(tmpitem);

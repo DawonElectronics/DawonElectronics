@@ -30,6 +30,7 @@ namespace DAWON_UV_INVENTORY_PROTO
 
 
         Regex _reDelot = new Regex(@".[0-9]{6}-[0-9]{1}.[0-9]{2}.");
+        Regex re_yplot = new Regex(@"[0-9]{6}.[0-9]{3}.[0-9].[A-Z]{2}[0-9]{2}.[0-9]{3}.[0-9]{3}");
 
 
         DateTime starttime1;
@@ -221,6 +222,13 @@ namespace DAWON_UV_INVENTORY_PROTO
                 {
                     if(_mainwindowViewModel.SelectedCustomerWo.Contains("대덕"))
                     { input_temp.Lotid = tbox_lotid.Text.Replace("-",""); }
+
+                    if (_mainwindowViewModel.SelectedCustomerWo.Contains("영풍"))
+                    {
+                        input_temp.Lotid = tbox_lotid.Text;
+                        if(re_yplot.IsMatch(tbox_lotid.Text))
+                        {input_temp.YpShortlot = tbox_lotid.Text.Substring(8, 2) + tbox_lotid.Text.Substring(18, 3) + tbox_lotid.Text.Substring(24, 1);}
+                    }
                     else { input_temp.Lotid = tbox_lotid.Text; }
                     input_temp.Lotid = tbox_lotid.Text;
                 }
@@ -665,7 +673,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 var modelname = _mainwindowViewModel.SrchInputModelName;
                 var datefrom = DateTime.Parse(DtpickWipsearchFrom.SelectedDate.ToString()).AddDays(-1);
                 var dateto = DateTime.Parse(DtpickWipsearchTo.SelectedDate.ToString()).AddDays(1);
-
+                var custname = _mainwindowViewModel.SelectedCustomerWoSearch;
                 bool isLot = lot.Length > 1;
                 bool isTool = tool.Length > 3;
                 bool isModelName = modelname.Length > 3;
@@ -721,7 +729,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                         db.ViewUvWorkorderDone.Where(
                             x => x.Lotid == lot && x.CreateTime >= datefrom && x.CreateTime <= dateto));
                 }
-
+                GridFinish.Columns["CustName"].FilterPredicates.Clear();
+                GridFinish.Columns["CustName"].FilterPredicates.Add(new Syncfusion.Data.FilterPredicate() { FilterType = Syncfusion.Data.FilterType.Equals, FilterValue = custname });
+                GridFinish.View.RefreshFilter();
             }
         }
 
@@ -929,48 +939,56 @@ namespace DAWON_UV_INVENTORY_PROTO
         private void BtnWipSearchDEMS_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "대덕전자(MS)";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchDEPKG_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "대덕전자(PKG)";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchYPE_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "영풍전자";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchBH_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "BHFLEX";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchIFC_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "인터플렉스";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchSEMCO_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "삼성전기";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchNFT_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "뉴프렉스";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
         private void BtnWipSearchSI_OnClick(object sender, RoutedEventArgs e)
         {
             _mainwindowViewModel.SelectedCustomerWoSearch = "SIFLEX";
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
             UpdateFiltered_WorkorderSearchList();
         }
 
@@ -988,6 +1006,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                     db.ViewUvWorkorderDone.Where(x =>
                         x.SampleOrder == issample && x.CreateTime >= datefrom && x.CreateTime <= dateto));
             }
+
+            
+            
         }
 
         #endregion
@@ -1013,6 +1034,9 @@ namespace DAWON_UV_INVENTORY_PROTO
                         (x.Lotid.Contains(keyword) || x.CustModelname.Contains(keyword) ||
                          x.CustToolno.Contains(keyword))));
             }
+            var custname = _mainwindowViewModel.SelectedCustomerWoSearch;
+            GridFinish.Columns["CustName"].FilterPredicates.Clear();
+            GridFinish.Columns["CustName"].FilterPredicates.Add(new Syncfusion.Data.FilterPredicate() { FilterType = Syncfusion.Data.FilterType.Equals, FilterValue = custname });
         }
 
         private void grid_wip_CurrentCellBeginEdit(object sender, CurrentCellBeginEditEventArgs e)
@@ -1137,17 +1161,6 @@ namespace DAWON_UV_INVENTORY_PROTO
             }
         }
 
-        
-
-        private void SfTextBoxExt_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void SfTextBoxExt_SuggestionPopupOpened(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
     }
 
 }

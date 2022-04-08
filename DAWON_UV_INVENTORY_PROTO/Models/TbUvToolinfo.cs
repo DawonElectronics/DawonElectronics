@@ -62,6 +62,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string SemCsdata { get; set; }
         public string SemSsdata { get; set; }
         public string YpeDatarev { get; set; }
+        public string YpNextResourcelist { get; set; }
+        public string YpNextResourceDefault { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbPrctype PrcCodeNavigation { get; set; }

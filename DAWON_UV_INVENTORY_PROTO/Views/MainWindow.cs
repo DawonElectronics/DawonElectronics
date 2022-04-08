@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Controls.Input;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using DAWON_UV_INVENTORY_PROTO.Models;
+using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 namespace DAWON_UV_INVENTORY_PROTO
 {
@@ -174,17 +177,19 @@ namespace DAWON_UV_INVENTORY_PROTO
 
         private void GridWipColumnYpe()
         {
-            var trackoutcol = new GridTemplateColumn() { MappingName = "ExecuteTrackout", HeaderText = "출고", Width = 70 };
+            var trackoutcol = new GridTemplateColumn() { MappingName = "ExecuteTrackout", HeaderText = "출고", Width = 60 };
             trackoutcol.CellTemplate = this.FindResource("trackoutTemplate") as DataTemplate;
 
             var createtimecol = new GridDateTimeColumn() { MappingName = "CreateTime", HeaderText = "생성일", Width = 80, CustomPattern = "yyyy/MM/dd hh:mm", Pattern = Syncfusion.Windows.Shared.DateTimePattern.ShortDate, TextAlignment = TextAlignment.Center };
-            var lotcol = new GridTextColumn() { MappingName = "Lotid", HeaderText = "LOT", Width = 120, TextAlignment = TextAlignment.Center, AllowFiltering = false };
-            var modelnamecol = new GridTextColumn() { MappingName = "CustModelname", HeaderText = "모델명", AllowFiltering = true, Width = 150, TextAlignment = TextAlignment.Center };
-            var revcol = new GridTextColumn() { MappingName = "CustRevision", HeaderText = "REV", Width = 55, TextAlignment = TextAlignment.Center };
-            var ypdatarevcol = new GridTextColumn() { MappingName = "YpeDatarev", HeaderText = "데이터", Width = 55, TextAlignment = TextAlignment.Center };
+            var lotcol = new GridTextColumn() { MappingName = "Lotid", HeaderText = "LOT", Width = 170, TextAlignment = TextAlignment.Center, AllowFiltering = false };
+            //var ypshortlotcol = new GridTextColumn() { MappingName = "YpShortlot", HeaderText = "LOT2", Width = 60, TextAlignment = TextAlignment.Center, AllowFiltering = false };
+            var modelnamecol = new GridTextColumn() { MappingName = "CustModelname", HeaderText = "모델명", AllowFiltering = true, Width = 170, TextAlignment = TextAlignment.Center };
+            var revcol = new GridTextColumn() { MappingName = "CustRevision", HeaderText = "REV", Width = 50, TextAlignment = TextAlignment.Center };
+            //var ypdatarevcol = new GridTextColumn() { MappingName = "YpeDatarev", HeaderText = "데이터", Width = 55, TextAlignment = TextAlignment.Center };
             var toolcol = new GridTextColumn() { MappingName = "CustToolno", HeaderText = "TOOL", AllowFiltering = true, Width = 80, TextAlignment = TextAlignment.Center };
             var mesprcnamecol = new GridTextColumn() { MappingName = "MesPrcName", HeaderText = "공정명", AllowFiltering = true, Width = 130, TextAlignment = TextAlignment.Center };
             var prcnamecol = new GridTextColumn() { MappingName = "PrcName", HeaderText = "공법", Width = 80, TextAlignment = TextAlignment.Center };
+            prcnamecol.CellStyle = this.FindResource("PrcTypeBgStyle") as Style; 
             var pnlqtycol = new GridTextColumn() { MappingName = "Pnlqty", HeaderText = "수량", Width = 50, TextAlignment = TextAlignment.Center, AllowEditing = true };
             var trackintimecol = new GridDateTimeColumn() { MappingName = "TrackinTime", HeaderText = "입고시간", Width = 80, CustomPattern = "MM/dd HH:mm", Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern, TextAlignment = TextAlignment.Center };
             var trackinusercol = new GridTextColumn() { MappingName = "TrackinUsername", HeaderText = "입고자", Width = 60, TextAlignment = TextAlignment.Center };
@@ -195,7 +200,7 @@ namespace DAWON_UV_INVENTORY_PROTO
                 AllowEditing = true,
                 TextAlignment = TextAlignment.Center,
                 MaximumWidth = 450,
-                MinimumWidth = 200,
+                MinimumWidth = 100,
                 TextWrapping = TextWrapping.Wrap
             };
             
@@ -212,20 +217,26 @@ namespace DAWON_UV_INVENTORY_PROTO
             var waittrackoutcol = new GridCheckBoxColumn() { MappingName = "WaitTrackout", IsHidden = true };
             var custnamecol = new GridCheckBoxColumn() { MappingName = "CustName", IsHidden = true };
             var prdtypecol = new GridTextColumn() { MappingName = "ProductType", HeaderText = "제품타입", Width = 70, TextAlignment = TextAlignment.Center };
+            var nextresourcecol = new GridTemplateColumn()
+                {MappingName = "YpNextResource", HeaderText = "인계처", Width = 180, TextAlignment = TextAlignment.Center};
+            nextresourcecol.CellTemplate = this.FindResource("YpNextResourceTemplate") as DataTemplate;
 
             GridWip.Columns.Add(trackoutcol);
             GridWip.Columns.Add(createtimecol);
             GridWip.Columns.Add(lotcol);
+            //GridWip.Columns.Add(ypshortlotcol);
             GridWip.Columns.Add(modelnamecol);
-            GridWip.Columns.Add(revcol);
-            GridWip.Columns.Add(ypdatarevcol);
             GridWip.Columns.Add(toolcol);
+            GridWip.Columns.Add(revcol);
+            //GridWip.Columns.Add(ypdatarevcol);
+            
             GridWip.Columns.Add(mesprcnamecol);
             GridWip.Columns.Add(prcnamecol);
             GridWip.Columns.Add(pnlqtycol);
             GridWip.Columns.Add(trackintimecol);
             GridWip.Columns.Add(trackinusercol);
             GridWip.Columns.Add(lotnotescol);
+            GridWip.Columns.Add(nextresourcecol);
             GridWip.Columns.Add(machinecscol);
             GridWip.Columns.Add(machinesscol);
             GridWip.Columns.Add(toolnotescol);
@@ -247,6 +258,24 @@ namespace DAWON_UV_INVENTORY_PROTO
             GridWip.SortColumnDescriptions.Add(new SortColumnDescription() { ColumnName = "WaitTrackout", SortDirection = ListSortDirection.Descending });
             GridWip.SortColumnDescriptions.Add(new SortColumnDescription() { ColumnName = "Lotid", SortDirection = ListSortDirection.Ascending });
 
+        }
+
+
+        private async void YpNextResourceCombo_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_mainwindowViewModel.SelectedGridWip != null)
+            {
+                var record = _mainwindowViewModel.SelectedGridWip;
+
+                using (var db = new Db_Uv_InventoryContext())
+                {
+                    var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == record.Id);
+
+                    result.YpNextResource = record.YpNextResource;
+                    await db.SaveChangesAsync();
+                }
+            }
+           
         }
     }
 }

@@ -55,7 +55,8 @@
         <viewmodel:GridWipFGConverter x:Key="FgConverter" />
         <viewmodel:GridWipDoneFGConverter x:Key="DoneFgConverter" />
         <viewmodel:MachineSelectionConverter x:Key="MachineConverter" />
-
+        <viewmodel:YpNextResourceConverter x:Key="YpNextResourceConverterConverter" />
+        <viewmodel:GridWipPrcTypeBGConverter x:Key="PrcTypeBgConverter" />
         <DataTemplate x:Key="trackoutTemplate">
             <Button
                 Margin="0,0"
@@ -98,7 +99,22 @@
                 SelectedValueDelimiter="," />
         </DataTemplate>
 
-        <!--<viewmodel:MainWindowViewModel x:Key="viewModel" />-->
+        <DataTemplate x:Key="YpNextResourceTemplate">
+            <syncfusion:ComboBoxAdv
+                x:Name="YpNextResourceCombo"
+                Margin="0,0"
+                HorizontalContentAlignment="Center"
+                syncfusion:FocusManagerHelper.FocusedElement="True"
+                BorderBrush="CornflowerBlue"
+                BorderThickness="1"
+                FontWeight="Bold"
+                ItemsSource="{Binding DataContext.YpNextResourcelist, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource YpNextResourceConverterConverter}}"
+                SelectedValue="{Binding YpNextResource}"
+                SelectionChanged="YpNextResourceCombo_OnSelectionChanged" />
+        </DataTemplate>
+        <Style x:Key="PrcTypeBgStyle" TargetType="syncfusion:GridCell">
+            <Setter Property="Background" Value="{Binding Converter={StaticResource PrcTypeBgConverter}}" />
+        </Style>
 
     </syncfusion:RibbonWindow.Resources>
 
@@ -237,8 +253,8 @@
                                 FontWeight="Bold"
                                 Foreground="Black"
                                 SearchItemPath="CustToolno"
+                                SelectedItem="{Binding SelectedInputTool, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                 SuggestionMode="Contains"
-                                SelectedItem="{Binding SelectedInputTool, Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
                                 Text="{Binding Toolno2Pid, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                                 <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
                                     <DataTemplate>
@@ -264,7 +280,7 @@
                                                 FontSize="11"
                                                 FontWeight="Normal"
                                                 Text="{Binding MesPrcName}" />
-                                          
+
                                         </Grid>
                                     </DataTemplate>
                                 </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
@@ -537,9 +553,6 @@
 
                         </syncfusion:SfTextInputLayout>
 
-
-
-
                         <Button
                             x:Name="BtnInputLot"
                             Width="90"
@@ -660,7 +673,7 @@
                         CurrentCellEndEdit="grid_wip_CurrentCellEndEdit"
                         FrozenColumnCount="6"
                         HeaderStyle="{StaticResource HeaderStyle}"
-                        ItemsSource="{Binding WorkOrderList, Mode=OneWay}"                        
+                        ItemsSource="{Binding WorkOrderList, Mode=OneWay}"
                         RowHeight="30"
                         RowSelectionBrush="DarkOliveGreen"
                         ScrollMode="None"
@@ -714,6 +727,10 @@
                                     Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.ExecuteCamFinishCommand}}"
                                     CommandParameter="{Binding}"
                                     Header="초도 캠 작업 완료" />
+                                <MenuItem
+                                    Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.CamFinishYpeCommand}}"
+                                    CommandParameter="{Binding}"
+                                    Header="영풍 초도 캠 작업 완료" />
 
                                 <!--<MenuItem
                                     Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.AssignMachineCsCommand}}"
@@ -1327,6 +1344,11 @@
                                 HeaderText="Id"
                                 IsHidden="True"
                                 MappingName="Id"
+                                TextAlignment="Center" />
+                            <syncfusion:GridTextColumn
+                                HeaderText="고객사"
+                                IsHidden="True"
+                                MappingName="CustName"
                                 TextAlignment="Center" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>

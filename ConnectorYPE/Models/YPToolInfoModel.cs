@@ -36,6 +36,7 @@ namespace ConnectorYPE.Models
         public string InsulInfo { get; set; }
         public string? InsulThickness { get; set; }
         public string? CuThickness { get; set; }
+        public string? NextOpid { get; set; }
 
     }
 }

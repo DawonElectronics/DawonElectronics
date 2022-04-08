@@ -1,0 +1,115 @@
+﻿<syncfusion:ChromelessWindow
+    x:Class="DAWON_UV_INVENTORY_PROTO.Views.CamFinishYpe"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+    Title="영풍전자 캠 완료처리"
+    Width="400"
+    Height="300"
+    syncfusion:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=FluentLight}"
+    mc:Ignorable="d">
+    <syncfusion:ChromelessWindow.Resources>
+        <viewmodel:YpNextResourceConverter x:Key="YpNextResourceConverterConverter" />
+    </syncfusion:ChromelessWindow.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+            <StackPanel
+                Grid.Row="0" Grid.Column="0" 
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    x:Name="TblkModelName"
+                    Margin="10,5"
+                    FontSize="16"
+                    FontWeight="Bold" />
+                <TextBlock
+                    x:Name="TblkTool"
+                    Margin="10,5"
+                    FontSize="16"
+                    FontWeight="Bold" />
+                <TextBlock
+                    Grid.Row="1"
+                    x:Name="TblkMesPrcName"
+                    Margin="10,5"
+                    FontSize="16"
+                    FontWeight="Bold" />
+            </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Center">
+            <syncfusion:SfTextInputLayout
+                Width="180"
+                Margin="5,10"
+                HelperTextVisibility="Collapsed"
+                Hint="CS 홀 수">
+                <syncfusion:SfTextBoxExt
+                    x:Name="TboxCsHoleCount"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    ShowClearButton="True"
+                    TextAlignment="Center" />
+            </syncfusion:SfTextInputLayout>
+            <syncfusion:SfTextInputLayout
+                Width="180"
+                Margin="5,10"
+                HelperTextVisibility="Collapsed"
+                Hint="SS 홀 수">
+                <syncfusion:SfTextBoxExt
+                    x:Name="TboxSsHoleCount"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    ShowClearButton="True"
+                    TextAlignment="Center" />
+            </syncfusion:SfTextInputLayout>
+            <syncfusion:SfTextInputLayout
+                Width="180"
+                Margin="5,10"
+                HelperTextVisibility="Collapsed"
+                Hint="기본인계처(선택)">
+                <syncfusion:ComboBoxAdv
+                    x:Name="CmbNextResource"
+                    HorizontalContentAlignment="Center"
+                    Foreground="Black"
+                    ItemsSource="{Binding YpNextResourceList}" />
+            </syncfusion:SfTextInputLayout>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+            <Button
+                x:Name="BtnComplete"
+                Width="80"
+                Height="35"
+                Margin="5,30"
+                Click="BtnComplete_OnClick"
+                Content="완료" />
+            <Button
+                x:Name="BtnReset"
+                Width="80"
+                Height="35"
+                Margin="5,10"
+                Click="BtnReset_OnClick"
+                Content="초기화" />
+        </StackPanel>
+
+
+    </Grid>
+</syncfusion:ChromelessWindow>

@@ -289,6 +289,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             waitTrackout.AddAnnotation("Relational:DefaultValueSql", "((0))");
             waitTrackout.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var ypNextResource = runtimeEntityType.AddProperty(
+                "YpNextResource",
+                typeof(string),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("YpNextResource", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<YpNextResource>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 200);
+            ypNextResource.AddAnnotation("Relational:ColumnName", "yp_next_resource");
+            ypNextResource.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var ypShortlot = runtimeEntityType.AddProperty(
                 "YpShortlot",
                 typeof(string),
