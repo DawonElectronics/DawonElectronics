@@ -35,6 +35,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string SampleDep { get; set; }
         public string YpShortlot { get; set; }
         public string LotHistory { get; set; }
+        public short? Rtrpnlqty { get; set; }
+        public string RtrLot { get; set; }
         public string LotNotes { get; set; }
         public string HoleCount { get; set; }
         public string MachineCs { get; set; }

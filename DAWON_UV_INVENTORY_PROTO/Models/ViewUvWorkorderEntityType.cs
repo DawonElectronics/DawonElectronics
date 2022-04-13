@@ -405,6 +405,26 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             rtrLoss.AddAnnotation("Relational:ColumnName", "rtr_loss");
             rtrLoss.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var rtrLot = runtimeEntityType.AddProperty(
+                "RtrLot",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("RtrLot", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<RtrLot>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            rtrLot.AddAnnotation("Relational:ColumnName", "rtr_lot");
+            rtrLot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var rtrpnlqty = runtimeEntityType.AddProperty(
+                "Rtrpnlqty",
+                typeof(short?),
+                propertyInfo: typeof(ViewUvWorkorder).GetProperty("Rtrpnlqty", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorder).GetField("<Rtrpnlqty>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            rtrpnlqty.AddAnnotation("Relational:ColumnName", "rtrpnlqty");
+            rtrpnlqty.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var sample = runtimeEntityType.AddProperty(
                 "Sample",
                 typeof(bool?),

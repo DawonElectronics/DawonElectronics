@@ -172,9 +172,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("HoleCount1", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<HoleCount1>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             holeCount1.AddAnnotation("Relational:ColumnName", "hole_count_1");
-            holeCount1.AddAnnotation("Relational:IsFixedLength", true);
             holeCount1.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var holeCount2 = runtimeEntityType.AddProperty(
@@ -183,9 +182,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("HoleCount2", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<HoleCount2>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             holeCount2.AddAnnotation("Relational:ColumnName", "hole_count_2");
-            holeCount2.AddAnnotation("Relational:IsFixedLength", true);
             holeCount2.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var holeCountPth = runtimeEntityType.AddProperty(
@@ -194,9 +192,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(TbUvToolinfo).GetProperty("HoleCountPth", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TbUvToolinfo).GetField("<HoleCountPth>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             holeCountPth.AddAnnotation("Relational:ColumnName", "hole_count_pth");
-            holeCountPth.AddAnnotation("Relational:IsFixedLength", true);
             holeCountPth.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var insulInfo = runtimeEntityType.AddProperty(

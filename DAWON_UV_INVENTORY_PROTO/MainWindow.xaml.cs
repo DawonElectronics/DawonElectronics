@@ -260,6 +260,12 @@ namespace DAWON_UV_INVENTORY_PROTO
                     return;
                 }
 
+                if (_mainwindowViewModel.ToolInfos.Where(w => w.ProductId == tblk_productid.Text).FirstOrDefault()
+                    .PrcName.Contains("RTR"))
+                {
+                    input_temp.Rtrpnlqty = Convert.ToInt16(tbox_pnlqty.Text);
+                }
+
                 if (chkbox_issample.IsChecked == true)
                 { input_temp.SampleOrder = true; }
                 else if (chkbox_issample.IsChecked != true)

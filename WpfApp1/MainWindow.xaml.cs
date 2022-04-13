@@ -12,17 +12,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using ConnectorBHE;
 namespace WpfApp1
 {
     /// <summary>
-    /// MainWindow.xaml에 대한 상호 작용 논리
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            update();
+        }
+
+        private async void update()
+        {
+            var a = new BheHelper();
+            var dt =  a.GetWip(DateTime.Today.AddMonths(-1), DateTime.Today);
+            Grid.ItemsSource = dt.Tables[0].DefaultView;
         }
     }
 }

@@ -728,9 +728,13 @@
                                     CommandParameter="{Binding}"
                                     Header="초도 캠 작업 완료" />
                                 <MenuItem
-                                    Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.CamFinishYpeCommand}}"
+                                    Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.YpeNextResourceManageCommand}}"
                                     CommandParameter="{Binding}"
-                                    Header="영풍 초도 캠 작업 완료" />
+                                    Header="영풍 인계처 관리" />
+                                <MenuItem
+                                    Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.RtrLossInputWindowCommand}}"
+                                    CommandParameter="{Binding}"
+                                    Header="RTR 로스/추가 입력" />
 
                                 <!--<MenuItem
                                     Command="{Binding Source={x:Static Member=viewmodel:GridWipContextMenuCommands.AssignMachineCsCommand}}"

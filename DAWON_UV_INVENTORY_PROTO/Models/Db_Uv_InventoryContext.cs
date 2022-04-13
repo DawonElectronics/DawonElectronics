@@ -333,19 +333,16 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("hole_count");
 
                 entity.Property(e => e.HoleCount1)
-                    .HasMaxLength(10)
-                    .HasColumnName("hole_count_1")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("hole_count_1");
 
                 entity.Property(e => e.HoleCount2)
-                    .HasMaxLength(10)
-                    .HasColumnName("hole_count_2")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("hole_count_2");
 
                 entity.Property(e => e.HoleCountPth)
-                    .HasMaxLength(10)
-                    .HasColumnName("hole_count_pth")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("hole_count_pth");
 
                 entity.Property(e => e.InsulInfo)
                     .HasColumnType("ntext")
@@ -558,6 +555,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .IsUnicode(false)
                     .HasColumnName("rtr_lot");
 
+                entity.Property(e => e.Rtrpnlqty).HasColumnName("rtrpnlqty");
+
                 entity.Property(e => e.SampleDep)
                     .HasMaxLength(100)
                     .HasColumnName("sample_dep");
@@ -765,6 +764,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("rtr_loss");
+
+                entity.Property(e => e.RtrLot)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_lot");
+
+                entity.Property(e => e.Rtrpnlqty).HasColumnName("rtrpnlqty");
 
                 entity.Property(e => e.Sample).HasColumnName("sample");
 
@@ -1010,9 +1016,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasColumnName("cust_name");
 
                 entity.Property(e => e.CustRevision)
-                    .HasMaxLength(10)
-                    .HasColumnName("cust_revision")
-                    .IsFixedLength();
+                    .HasMaxLength(20)
+                    .HasColumnName("cust_revision");
 
                 entity.Property(e => e.CustToolno)
                     .IsRequired()
@@ -1133,6 +1138,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("rtr_loss");
+
+                entity.Property(e => e.RtrLot)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("rtr_lot");
+
+                entity.Property(e => e.Rtrpnlqty).HasColumnName("rtrpnlqty");
 
                 entity.Property(e => e.Sample).HasColumnName("sample");
 

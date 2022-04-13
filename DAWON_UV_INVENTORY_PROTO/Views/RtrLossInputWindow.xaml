@@ -1,0 +1,110 @@
+﻿<syncfusion:ChromelessWindow
+    x:Class="DAWON_UV_INVENTORY_PROTO.Views.RtrLossInputWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DAWON_UV_INVENTORY_PROTO.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
+    Title="RTR 로스 입력 화면"
+    Width="240"
+    Height="350"
+    syncfusion:SfSkinManager.Theme="{syncfusion:SkinManagerExtension ThemeName=FluentLight}"
+    mc:Ignorable="d">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="5,5"  HorizontalAlignment="Center" >
+            <TextBlock Text="RTR 추가 생산분" Height="30" Margin="5,5" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="[부족]초/말품 Test" Height="30" Margin="5,5" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="[부족]이음매" Height="30" Margin="5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="[부족]뒷주름" Height="30" Margin="5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="[부족]초도승인용" Height="30" Margin="5,5" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="[부족]기타" Height="30" Margin="5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="5,5" HorizontalAlignment="Center">
+                
+            <syncfusion:IntegerTextBox x:Name="tbox_additional" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MinValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="추가 작업분"
+                                       />
+
+            <syncfusion:IntegerTextBox x:Name="TboxLoss1" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MaxValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="초/말품 Test"
+            />
+            <syncfusion:IntegerTextBox x:Name="TboxLoss2" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MaxValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="이음매"
+            />
+            <syncfusion:IntegerTextBox x:Name="TboxLoss3" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MaxValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="뒷주름"
+            />
+            <syncfusion:IntegerTextBox x:Name="TboxLoss4" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MaxValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="초도 승인용"
+            />
+            <syncfusion:IntegerTextBox x:Name="TboxLoss5" 
+                                       Width="80" Height="30" 
+                                       Padding="5,5" 
+                                       Margin="5,5" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       IsScrollingOnCircle="True" 
+                                       ScrollInterval="1"
+                                       MaxValue="0"
+                                       CornerRadius="5"
+                                       ToolTip="기타"
+            />           
+
+
+
+        </StackPanel>
+        <Button x:Name="BtnComplete" Content="입력완료" Grid.ColumnSpan="2" FontSize="14" FontWeight="Bold"
+                Margin="20,20" Width="80" Height="40" VerticalAlignment="Bottom" Click="BtnComplete_OnClick" />
+    </Grid>
+</syncfusion:ChromelessWindow>

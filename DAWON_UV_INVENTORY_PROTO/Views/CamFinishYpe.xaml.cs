@@ -73,8 +73,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         {
             try
             {
-
-
                 using (var db = new Db_Uv_InventoryContext())
                 {
                     var result = db.TbUvToolinfo.SingleOrDefault(x => x.ProductId == record.ProductId);
@@ -95,6 +93,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                             result.HoleCount = "SS: " + TboxSsHoleCount.Text;
                         }
 
+                        result.YpNextResourceDefault = CmbNextResource.SelectedValue.ToString();
                         result.CamFinished = true;
                         db.SaveChanges();
                         this.Close();

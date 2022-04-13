@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/XN.Manager.MsSql.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/XN.Manager.MsSql.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/XN.Manager" />
+  <xs:complexType name="ExecuteInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CallerInfo" nillable="true" type="tns:CallerInfo" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="CommandType" type="q1:CommandType" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ConnectionType" type="q2:ConnectionType" />
+      <xs:element minOccurs="0" name="DatabaseInfo" nillable="true" type="tns:CustomDatabaseInfo" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteDBType" type="q3:DataBaseType" />
+      <xs:element minOccurs="0" name="ExecuteQuery" nillable="true" type="xs:string" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteService" type="q4:ExecuteService" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteType" type="q5:ExecuteType" />
+      <xs:element minOccurs="0" name="GMT" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LstBatchInfo" nillable="true" type="tns:ArrayOfBatchInfo" />
+      <xs:element minOccurs="0" name="Parameters" nillable="true" type="tns:ArrayOfMsSqlParameter" />
+      <xs:element minOccurs="0" name="StoredProcedureName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="XNTransactionScope" type="q6:XNTransactionScope" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExecuteInfo" nillable="true" type="tns:ExecuteInfo" />
+  <xs:complexType name="CallerInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Plant_Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Screen_Path" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Session_ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserGroup_Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="User_ID" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CallerInfo" nillable="true" type="tns:CallerInfo" />
+  <xs:complexType name="CustomDatabaseInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MsSqlDatabaseName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MsSqlServer" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MsSqlUserID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MsSqlUserPassword" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomDatabaseInfo" nillable="true" type="tns:CustomDatabaseInfo" />
+  <xs:complexType name="ArrayOfBatchInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BatchInfo" nillable="true" type="tns:BatchInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBatchInfo" nillable="true" type="tns:ArrayOfBatchInfo" />
+  <xs:complexType name="BatchInfo">
+    <xs:sequence>
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="CommandType" type="q7:CommandType" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ConnectionType" type="q8:ConnectionType" />
+      <xs:element minOccurs="0" name="DatabaseInfo" nillable="true" type="tns:CustomDatabaseInfo" />
+      <xs:element minOccurs="0" name="Details" nillable="true" type="tns:ArrayOfBatchInfo" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteDBType" type="q9:DataBaseType" />
+      <xs:element minOccurs="0" name="ExecuteQuery" nillable="true" type="xs:string" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteService" type="q10:ExecuteService" />
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ExecuteType" type="q11:ExecuteType" />
+      <xs:element minOccurs="0" name="GMT" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Parameters" nillable="true" type="tns:ArrayOfMsSqlParameter" />
+      <xs:element minOccurs="0" name="StoredProcedureName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="XNTransactionScope" type="q12:XNTransactionScope" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BatchInfo" nillable="true" type="tns:BatchInfo" />
+  <xs:complexType name="ArrayOfMsSqlParameter">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MsSqlParameter" nillable="true" type="tns:MsSqlParameter" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMsSqlParameter" nillable="true" type="tns:ArrayOfMsSqlParameter" />
+  <xs:complexType name="MsSqlParameter">
+    <xs:sequence>
+      <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="AutoRollback" type="q13:AutoRollback" />
+      <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="Direction" type="q14:ParamDirection" />
+      <xs:element minOccurs="0" name="IsString" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ParameterType" type="q15:ParameterType" />
+      <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ReturnValueType" type="q16:DatabaseReturnType" />
+      <xs:element minOccurs="0" name="ToParameterName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MsSqlParameter" nillable="true" type="tns:MsSqlParameter" />
+  <xs:complexType name="ExecuteResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ExceptionMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExecuteSuccess" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ResultDataSet" nillable="true">
+        <xs:complexType>
+          <xs:annotation>
+            <xs:appinfo>
+              <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+            </xs:appinfo>
+          </xs:annotation>
+          <xs:sequence>
+            <xs:element ref="xs:schema" />
+            <xs:any />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="ResultVariable" nillable="true" type="tns:ArrayOfReturnValueItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExecuteResult" nillable="true" type="tns:ExecuteResult" />
+  <xs:complexType name="ArrayOfReturnValueItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ReturnValueItem" nillable="true" type="tns:ReturnValueItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfReturnValueItem" nillable="true" type="tns:ArrayOfReturnValueItem" />
+  <xs:complexType name="ReturnValueItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Key" nillable="true" type="xs:string" />
+      <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/XN.Manager" minOccurs="0" name="ParameterType" type="q17:ParameterType" />
+      <xs:element minOccurs="0" name="ToParameterName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReturnValueItem" nillable="true" type="tns:ReturnValueItem" />
+</xs:schema>

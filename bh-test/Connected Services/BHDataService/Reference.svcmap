@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="fc0aa444-17da-4ab0-be53-2c5857318f03" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MsSqlDataService.xsd" MetadataType="Schema" ID="90eeb386-36f2-4bb3-8397-dea3bf14356f" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MsSqlDataService1.xsd" MetadataType="Schema" ID="4db256c9-adc1-479b-b76b-18001388eccd" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MsSqlDataService2.xsd" MetadataType="Schema" ID="48e662e5-3ff0-4eb6-a329-90bd516560dd" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MsSqlDataService.wsdl" MetadataType="Wsdl" ID="e22c48fc-1d8e-4b5f-926a-679e815e8277" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?wsdl" />
+    <MetadataFile FileName="MsSqlDataService3.xsd" MetadataType="Schema" ID="90df1c25-db95-4d9d-94ba-1e93629584f2" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MsSqlDataService4.xsd" MetadataType="Schema" ID="5aaec2f6-9594-4596-90d4-5cd44155f0de" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd5" />
+    <MetadataFile FileName="MsSqlDataService5.xsd" MetadataType="Schema" ID="e545df3e-25e9-4a5b-aecc-175636dd1ba6" SourceId="1" SourceUrl="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

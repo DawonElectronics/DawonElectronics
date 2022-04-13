@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/XN.Manager" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/XN.Manager" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://mes.bhe.kr/Service/DataService/MsSqlDataService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:simpleType name="CommandType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="StoredProcedure" />
+      <xs:enumeration value="BatchExecute" />
+      <xs:enumeration value="Text" />
+      <xs:enumeration value="HeaderDetail" />
+      <xs:enumeration value="HeaderDetailList" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CommandType" nillable="true" type="tns:CommandType" />
+  <xs:simpleType name="ConnectionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="Custom" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ConnectionType" nillable="true" type="tns:ConnectionType" />
+  <xs:simpleType name="DataBaseType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="MsSql" />
+      <xs:enumeration value="Oracle" />
+      <xs:enumeration value="DB2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DataBaseType" nillable="true" type="tns:DataBaseType" />
+  <xs:simpleType name="ExecuteService">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoneTransaction" />
+      <xs:enumeration value="Transaction" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ExecuteService" nillable="true" type="tns:ExecuteService" />
+  <xs:simpleType name="ExecuteType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Return" />
+      <xs:enumeration value="NonReturn" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ExecuteType" nillable="true" type="tns:ExecuteType" />
+  <xs:simpleType name="AutoRollback">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Rollback" />
+      <xs:enumeration value="Message" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AutoRollback" nillable="true" type="tns:AutoRollback" />
+  <xs:simpleType name="ParamDirection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Input">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Output">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="InputOutput">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ReturnValue">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ParamDirection" nillable="true" type="tns:ParamDirection" />
+  <xs:simpleType name="ParameterType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DetailParam" />
+      <xs:enumeration value="None" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ParameterType" nillable="true" type="tns:ParameterType" />
+  <xs:simpleType name="DatabaseReturnType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Cursor" />
+      <xs:enumeration value="Value" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DatabaseReturnType" nillable="true" type="tns:DatabaseReturnType" />
+  <xs:simpleType name="XNTransactionScope">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Start" />
+      <xs:enumeration value="Proceed" />
+      <xs:enumeration value="End" />
+      <xs:enumeration value="None" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="XNTransactionScope" nillable="true" type="tns:XNTransactionScope" />
+</xs:schema>

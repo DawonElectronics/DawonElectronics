@@ -212,6 +212,15 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             rtrLot.AddAnnotation("Relational:ColumnName", "rtr_lot");
             rtrLot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var rtrpnlqty = runtimeEntityType.AddProperty(
+                "Rtrpnlqty",
+                typeof(short?),
+                propertyInfo: typeof(TbUvWorkorder).GetProperty("Rtrpnlqty", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(TbUvWorkorder).GetField("<Rtrpnlqty>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            rtrpnlqty.AddAnnotation("Relational:ColumnName", "rtrpnlqty");
+            rtrpnlqty.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var sampleDep = runtimeEntityType.AddProperty(
                 "SampleDep",
                 typeof(string),

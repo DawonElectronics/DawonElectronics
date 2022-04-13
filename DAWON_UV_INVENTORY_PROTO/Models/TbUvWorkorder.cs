@@ -36,6 +36,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
         public string NftOrderserial { get; set; }
         public string RtrLoss { get; set; }
         public string YpNextResource { get; set; }
+        public short? Rtrpnlqty { get; set; }
 
         public virtual TbCustomer Cust { get; set; }
         public virtual TbUvToolinfo Product { get; set; }

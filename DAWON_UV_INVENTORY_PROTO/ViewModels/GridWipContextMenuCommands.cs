@@ -55,7 +55,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                     result.LotType = "반납";
                                     db.SaveChanges();
                                     MainWindow._mainwindowViewModel.WorkOrderList.Remove(record);
-                                    
+
                                     mw.GetWipCount();
 
                                     MessageBox.Show("처리되었습니다");
@@ -74,7 +74,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
                                     db.Remove(result);
                                     db.SaveChanges();
                                     MainWindow._mainwindowViewModel.WorkOrderList.Remove(record);
-                                    
+
                                     mw.GetWipCount();
 
                                     MessageBox.Show("처리되었습니다");
@@ -285,38 +285,47 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
-                    using (var db = new Db_Uv_InventoryContext())
+                    if (record.CustName.Contains("영풍"))
                     {
-                        var result = db.TbUvToolinfo.SingleOrDefault(x => x.ProductId == record.ProductId);
-
-                        if (result != null)
+                        if (!Application.Current.Windows.OfType<CamFinishYpe>().Any() && record != null && record.CustName == "영풍전자")
                         {
-                            MainWindow._mainwindowViewModel.SelectedGridWip.CamFinished = true;
-
-                            Binding bindbg = new Binding();
-                            bindbg.Converter = new GridWipColorConverter();
-                            Binding bindfg = new Binding();
-                            bindfg.Converter = new GridWipFGConverter();
-                            Binding bindbold = new Binding();
-                            bindbold.Converter = new GridWipBoldConverter();
-
-                            var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
-
-                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
-                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
-                            rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
-
-                            (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
-
-
-
-                            result.CamFinished = true;
-
-                            db.SaveChanges();
-
+                            var mcWindow = new CamFinishYpe(obj);
+                            mcWindow.Topmost = true;
+                            mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                            mcWindow.Show();
                         }
                     }
+                    else
+                    {
+                        using (var db = new Db_Uv_InventoryContext())
+                        {
+                            var result = db.TbUvToolinfo.SingleOrDefault(x => x.ProductId == record.ProductId);
+
+                            if (result != null)
+                            {
+                                MainWindow._mainwindowViewModel.SelectedGridWip.CamFinished = true;
+
+                                Binding bindbg = new Binding();
+                                bindbg.Converter = new GridWipColorConverter();
+                                Binding bindfg = new Binding();
+                                bindfg.Converter = new GridWipFGConverter();
+                                Binding bindbold = new Binding();
+                                bindbold.Converter = new GridWipBoldConverter();
+
+                                var rowStyle = new Style { TargetType = typeof(VirtualizingCellsControl) };
+
+                                rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.BackgroundProperty, bindbg));
+                                rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.ForegroundProperty, bindfg));
+                                rowStyle.Setters.Add(new Setter(VirtualizingCellsControl.FontWeightProperty, bindbold));
+
+                                (obj as GridRecordContextMenuInfo).DataGrid.RowStyle = rowStyle;
+
+                                result.CamFinished = true;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                   
                 }
             }
         }
@@ -343,7 +352,6 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -407,7 +415,6 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -463,7 +470,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
+                    
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -520,7 +527,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
+                    
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -577,7 +584,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
+                    
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -634,7 +641,7 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 
                 if (record != null)
                 {
-                    //장부이력 반납처리
+                   
                     using (var db = new Db_Uv_InventoryContext())
                     {
                         var result = db.TbUvWorkorder.SingleOrDefault(x => x.Id == qryid);
@@ -706,26 +713,26 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         }
         #endregion
 
-        #region 영풍 초도 완료 및 홀수 입력
+        #region 영풍 인계처 관리
 
-        static BaseCommand _camFinishYpeCommand;
-        public static BaseCommand CamFinishYpeCommand
+        static BaseCommand _ypeNextResourceManageCommand;
+        public static BaseCommand YpeNextResourceManageCommand
         {
             get
             {
-                _camFinishYpeCommand = new BaseCommand(CamFinishYpe);
-                return _camFinishYpeCommand;
+                _ypeNextResourceManageCommand = new BaseCommand(YpeNextResourceManage);
+                return _ypeNextResourceManageCommand;
             }
         }
-        private static void CamFinishYpe(object obj)
+        private static void YpeNextResourceManage(object obj)
         {
             if (obj is GridRecordContextMenuInfo)
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
 
-                if (!Application.Current.Windows.OfType<CamFinishYpe>().Any() && record != null && record.CustName == "영풍전자")
+                if (!Application.Current.Windows.OfType<YpeNextResourceManageWindow>().Any() && record.CustName.Contains("영풍"))
                 {
-                    var mcWindow = new CamFinishYpe(obj);
+                    var mcWindow = new YpeNextResourceManageWindow();
                     mcWindow.Topmost = true;
                     mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                     mcWindow.Show();
@@ -733,6 +740,35 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
         #endregion
+
+        #region RTR 로스/추가 입력
+
+        static BaseCommand _rtrLossInputWindowCommand;
+        public static BaseCommand RtrLossInputWindowCommand
+        {
+            get
+            {
+                _rtrLossInputWindowCommand = new BaseCommand(RtrLossInputWindow);
+                return _rtrLossInputWindowCommand;
+            }
+        }
+        private static void RtrLossInputWindow(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo )
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
+
+                if (!Application.Current.Windows.OfType<RtrLossInputWindow>().Any() && record.PrcName.Contains("RTR"))
+                {
+                    var mcWindow = new RtrLossInputWindow(record);
+                    mcWindow.Topmost = true;
+                    mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    mcWindow.Show();
+                }
+            }
+        }
+        #endregion
+
     }
 
 }

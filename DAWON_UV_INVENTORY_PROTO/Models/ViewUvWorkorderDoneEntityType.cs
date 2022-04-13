@@ -90,9 +90,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 propertyInfo: typeof(ViewUvWorkorderDone).GetProperty("CustRevision", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ViewUvWorkorderDone).GetField("<CustRevision>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
-                maxLength: 10);
+                maxLength: 20);
             custRevision.AddAnnotation("Relational:ColumnName", "cust_revision");
-            custRevision.AddAnnotation("Relational:IsFixedLength", true);
             custRevision.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var custToolno = runtimeEntityType.AddProperty(
@@ -405,6 +404,26 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
                 unicode: false);
             rtrLoss.AddAnnotation("Relational:ColumnName", "rtr_loss");
             rtrLoss.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var rtrLot = runtimeEntityType.AddProperty(
+                "RtrLot",
+                typeof(string),
+                propertyInfo: typeof(ViewUvWorkorderDone).GetProperty("RtrLot", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorderDone).GetField("<RtrLot>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 100,
+                unicode: false);
+            rtrLot.AddAnnotation("Relational:ColumnName", "rtr_lot");
+            rtrLot.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var rtrpnlqty = runtimeEntityType.AddProperty(
+                "Rtrpnlqty",
+                typeof(short?),
+                propertyInfo: typeof(ViewUvWorkorderDone).GetProperty("Rtrpnlqty", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ViewUvWorkorderDone).GetField("<Rtrpnlqty>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            rtrpnlqty.AddAnnotation("Relational:ColumnName", "rtrpnlqty");
+            rtrpnlqty.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var sample = runtimeEntityType.AddProperty(
                 "Sample",
