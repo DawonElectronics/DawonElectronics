@@ -9,10 +9,10 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodel="clr-namespace:DAWON_UV_INVENTORY_PROTO.ViewModels"
     Title="영풍전자 인수 등록"
-    Width="680"
-    Height="450"
+    Width="800"
+    Height="600"
     d:DataContext="{d:DesignInstance viewmodel:TrackInWindowYPEViewModel}"
-    sfSkinManager:SfSkinManager.VisualStyle="Office2016White"
+    sfSkinManager:SfSkinManager.VisualStyle="FluentLight"
     mc:Ignorable="d">
     <syncfusion:ChromelessWindow.Resources>
         <Style TargetType="syncfusion:GridRowHeaderCell">
@@ -36,67 +36,117 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <viewmodel:GridTrackinDepkgColorConverter x:Key="ColorConverter" />
+        <viewmodel:GridTrackinYpeColorConverter x:Key="ColorConverter" />
     </syncfusion:ChromelessWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
         <StackPanel
             Grid.Row="0"
             Margin="10,10"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
-           
+            <syncfusion:SfBusyIndicator
+                Name="sfBusyIndicator"
+                Margin="5"
+                VerticalAlignment="Center"
+                AnimationType="DotCircle"
+                IsBusy="True"
+                ViewboxHeight="70"
+                ViewboxWidth="70" />
             <Button
                 x:Name="BtnAddOnly"
-                Height="50"
+                Height="40"
                 Margin="20,10"
                 Padding="5,5"
-                
                 Content="장부등록"
                 FontSize="16"
                 FontWeight="Bold" />
             <Button
                 x:Name="BtnExeRcv"
-                Height="50"
+                Height="40"
                 Margin="15,10"
                 Padding="5,5"
-                
                 Content="장부등록+MES받기"
                 FontSize="16"
                 FontWeight="Bold" />
-            <Button x:Name="BtnReg"
-                    Content="모델등록"
-                    Click="BtnReg_Click"/>
+            <syncfusion:SfTextBoxExt
+                x:Name="tboxLot"
+                Width="350"
+                Height="40"
+                Margin="15,10"
+                VerticalContentAlignment="Center"
+                FontSize="14"
+                KeyUp="TboxLot_OnKeyUp"
+                TextAlignment="Center" />
+            <!--<Button
+                x:Name="BtnReg"
+                Click="BtnReg_Click"
+                Content="모델등록" />-->
+
         </StackPanel>
 
         <syncfusion:SfDataGrid
             x:Name="GridRcv"
             Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            AutoGenerateColumns="True"
+            AutoGenerateColumns="False"
             CanMaintainScrollPosition="True"
             ColumnSizer="AutoWithLastColumnFill"
             ItemsSource="{Binding RcvLotList}"
-            
+            ItemsSourceChanged="GridRcv_OnItemsSourceChanged"
+            PreviewKeyDown="GridRcv_OnPreviewKeyDown"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionMode="Multiple"
             ShowRowHeader="True">
-           
+
 
             <syncfusion:SfDataGrid.Resources>
                 <ResourceDictionary>
 
-                    <!--<Style TargetType="syncfusion:VirtualizingCellsControl">
+                    <Style TargetType="syncfusion:VirtualizingCellsControl">
                         <Setter Property="Background" Value="{Binding Converter={StaticResource ColorConverter}}" />
-                    </Style>-->
+                    </Style>
 
                 </ResourceDictionary>
             </syncfusion:SfDataGrid.Resources>
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridCheckBoxSelectorColumn Width="30" MappingName="SelectorColumn" />
+                <syncfusion:GridTextColumn
+                    Width="120"
+                    HeaderText="공정명"
+                    MappingName="processsegmentname"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="150"
+                    HeaderText="모델명"
+                    MappingName="productdefname"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="50"
+                    HeaderText="REV"
+                    MappingName="productrevision"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="90"
+                    HeaderText="TOOL"
+                    MappingName="productdefid"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    Width="70"
+                    HeaderText="수량"
+                    MappingName="wiptotalpnl"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    HeaderText="LOT"
+                    MappingName="lotid"
+                    TextAlignment="Center" />
+                <syncfusion:GridTextColumn
+                    HeaderText="상태"
+                    MappingName="state"
+                    TextAlignment="Center" />
             </syncfusion:SfDataGrid.Columns>
 
         </syncfusion:SfDataGrid>

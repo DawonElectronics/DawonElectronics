@@ -8,7 +8,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using AutoMapper;
+using Syncfusion.Data.Extensions;
+using Syncfusion.UI.Xaml.Grid;
 using DataRow = System.Data.DataRow;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
@@ -18,7 +24,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
     /// </summary>
     public partial class TrackInWindowYPE : ChromelessWindow
     {
-
+        Regex re_yplot = new Regex(@"[0-9]{6}.[0-9]{3}.[0-9].[A-Z]{2}[0-9]{2}.[0-9]{3}.[0-9]{3}");
         public TrackInWindowYPEViewModel TrackinYpeViewmodel = new TrackInWindowYPEViewModel();
         YpeHelper ypeHelper = new YpeHelper();
         private List<string> notRegistedTool = new List<string>();
@@ -29,7 +35,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             InitializeComponent();
 
             this.DataContext = TrackinYpeViewmodel;
-
+            
             UpdateGridRcv();
         }
 
@@ -45,22 +51,43 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         private async void UpdateGridRcv()
         {
 
-            var rcvdt = await ypeHelper.QryWipDT();
-            //var rcvlist = await ypeHelper.QryWipList();
+            //var rcvdt = await ypeHelper.QryWipDT();
 
-            rcvdt.Columns.Add("IsRegist");
 
-            var lotlist = rcvdt.AsEnumerable().Select(w => w.Field<string>("lotid")).ToList<string>();
+            //DataTable rcvdt2 = rcvdt.AsEnumerable()
+            //    .Where(r =>((Convert.ToInt16(r.Field<string>("processsegmentid").Substring(0, 4))) > 2015 && (Convert.ToInt16(r.Field<string>("processsegmentid").Substring(0, 4))) < 2030))
+            //    .CopyToDataTable();
 
-            foreach (var item in lotlist)
+
+            //rcvdt2.Columns.Add("IsRegist");
+
+            //var lotlist = rcvdt2.AsEnumerable().Select(w => w.Field<string>("lotid")).ToList<string>();
+
+            //foreach (var item in lotlist)
+            //{
+            //    rcvdt2.Select(string.Format("[lotid] = '{0}'", item)).ToList<DataRow>()
+            //        .ForEach(r => r["IsRegist"] = GetRegist(r["processdefid"].ToString(), r["productrevision"].ToString(), r["processsegmentid"].ToString()));
+            //}
+
+           
+            var rcvlist = await ypeHelper.QryWipList();
+            var rcvlist2 = new List<WipModelAfterToolValidation>();
+            VisualStateManager.GoToState(this.GridRcv, "Busy", true);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<WipModel, WipModelAfterToolValidation>());
+            var mapper = new Mapper(config);
+            var tmprcvlist = rcvlist.Where(x => (Convert.ToInt16(x.processsegmentid.Substring(0, 4)) > 2015 
+                                                 && Convert.ToInt16(x.processsegmentid.Substring(0, 4)) < 2030) &&(x.processstate.Contains("WaitForReceive") || x.processstate.Contains("Wait"))).ToList<WipModel>();
+            rcvlist2 = mapper.Map<List<WipModel>, List<WipModelAfterToolValidation>>(tmprcvlist);
+
+            foreach (var item in rcvlist2)
             {
-                rcvdt.Select(string.Format("[lotid] = '{0}'", item)).ToList<DataRow>()
-                    .ForEach(r => r["IsRegist"] = GetRegist(r["processdefid"].ToString(), r["productrevision"].ToString(), r["processsegmentid"].ToString()));
+                item.IsRegist = GetRegist(item.processdefid, item.productrevision, item.processsegmentid);
             }
-
-            GridRcv.ItemsSource = rcvdt;
-
-
+            
+            TrackinYpeViewmodel.RcvLotList = rcvlist2;
+            if(GridRcv.IsLoaded)
+            { VisualStateManager.GoToState(this.GridRcv, "Normal", true); }
+            
         }
 
         private async void BtnReg_Click(object sender, RoutedEventArgs e)
@@ -157,8 +184,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tmptool = new TbUvToolinfo();
 
                         var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-YPE-UV-";
-                        var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
-
+                        //var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                        var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).OrderBy(s => s.ProductId).Select(s => Convert.ToInt16(s.ProductId.Substring(10, 4))).LastOrDefault() + 1;
                         tmptool.ProductId = thisyear + prdidNo.ToString("D4");
 
 
@@ -245,8 +272,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         var tmptool = new TbUvToolinfo();
 
                         var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-YPE-UV-";
-                        var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
-
+                        //var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                        var prdidNo = db.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).OrderBy(s => s.ProductId).Select(s => Convert.ToInt16(s.ProductId.Substring(10, 4))).LastOrDefault() + 1;
                         tmptool.ProductId = thisyear + prdidNo.ToString("D4");
 
                         tmptool.CustToolno = tool;
@@ -335,6 +362,80 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 }
                 MainWindow._mainwindowViewModel.ToolInfos = new List<TbUvToolinfo>(db.TbUvToolinfo);
             }
+        }
+
+        private void GridRcv_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+           if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            { 
+                if (re_yplot.IsMatch(e.Key.ToString())) e.Handled = true;
+                var a = Clipboard.GetText();
+                foreach (var item in TrackinYpeViewmodel.RcvLotList)
+                {
+                    WipModelAfterToolValidation record = item;
+                    
+                    
+                    
+                     if (record.lotid == a )
+                    {
+                        //TrackinYpeViewmodel.SelectedItem = item;
+                        GridRcv.SelectedItems.Add(item);
+                        break;
+                    }
+
+                }
+        }
+    }
+
+        private async void GridRcv_OnItemsSourceChanged(object? sender, GridItemsSourceChangedEventArgs e)
+        {
+            await Task.Delay(1900);
+            sfBusyIndicator.IsBusy = false;
+        }
+
+        private void UIElement_OnPreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (!re_yplot.IsMatch(e.Key.ToString())) e.Handled = true;
+            var lot = re_yplot.Match(tboxLot.Text).Groups[1].Value;
+
+            foreach (var item in TrackinYpeViewmodel.RcvLotList)
+            {
+                WipModelAfterToolValidation record = item;
+
+                if (record.lotid == lot)
+                {
+                    GridRcv.SelectedItems.Add(item);
+                    tboxLot.Text = string.Empty;
+                    tboxLot.Focus();
+                    break;
+                }
+
+            }
+        }
+
+        private void TboxLot_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (re_yplot.IsMatch(e.Key.ToString())) e.Handled = true;
+            var lot = re_yplot.Match(tboxLot.Text).Value;
+
+            foreach (var item in TrackinYpeViewmodel.RcvLotList)
+            {
+                WipModelAfterToolValidation record = item;
+
+                if (record.lotid == lot)
+                {
+                    GridRcv.SelectedItems.Add(item);
+                    tboxLot.Text = string.Empty;
+                    tboxLot.Focus();
+                    break;
+                }
+
+            }
+        }
+
+        private void TboxLot_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

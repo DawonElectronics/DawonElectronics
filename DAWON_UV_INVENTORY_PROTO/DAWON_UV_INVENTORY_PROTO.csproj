@@ -37,32 +37,37 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
     <PackageReference Include="ObjectsComparer" Version="1.4.1" />
-    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Licensing" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Themes.Office2016White.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Shared.Base" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Themes.Office2016White.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="20.1.0.48" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="System.Private.ServiceModel" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
@@ -71,6 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConnectorBHE\ConnectorBHE.csproj" />
     <ProjectReference Include="..\ConnectorDEMS\ConnectorDEMS.csproj" />
     <ProjectReference Include="..\ConnectorDEPKG\ConnectorDEPKG.csproj" />
     <ProjectReference Include="..\ConnectorYPE\ConnectorYPE.csproj" />

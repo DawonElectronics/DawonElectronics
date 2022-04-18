@@ -22,13 +22,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Models
             if (!optionsBuilder.IsConfigured && MainWindow._mainwindowViewModel.SelectedUser == "테스트" && MainWindow._mainwindowViewModel.ChkTest == true)
             {
                 //optionsBuilder.UseNpgsql("Host=192.168.0.21;Database=uv_inventory;Username=uv_inventory;Password=Ekdnjs3637!");
-                optionsBuilder.UseSqlServer("server=192.168.0.12;database=db_uv_inventory;user=uv_inventory;password=Ekdnjs3637!");
+                optionsBuilder.UseSqlServer("server=192.168.0.12;database=db_uv_inventory;TrustServerCertificate=True;user=uv_inventory;password=Ekdnjs3637!");
                 optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
 
             }
             else if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("server=192.168.0.3;database=db_uv_inventory;user=uv_inventory;password=Ekdnjs3637!");
+                optionsBuilder.UseSqlServer("server=192.168.0.3;database=db_uv_inventory;TrustServerCertificate=True;user=uv_inventory;password=Ekdnjs3637!");
                 optionsBuilder.UseModel(Db_Uv_InventoryContextModel.Instance);
             }
         }

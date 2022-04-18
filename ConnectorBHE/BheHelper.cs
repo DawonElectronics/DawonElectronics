@@ -12,7 +12,7 @@ namespace ConnectorBHE
 {
     public class BheHelper
     {
-        public DataSet GetWip(DateTime datefrom, DateTime dateto)
+        public DataTable GetWip(DateTime datefrom, DateTime dateto)
         {
             var client = new XNDataManagerServiceClient(XNDataManagerServiceClient.EndpointConfiguration.DataServiceBinding);
 
@@ -40,7 +40,12 @@ namespace ConnectorBHE
 
             var result = client.ExecuteQuery(exInfo);
 
-            return result.ResultDataSet;
+            // SCM_FLAG = N 인수 대기 상태/ SCM_FLAG = R 인수완료 상태
+            result.ResultDataSet.Tables[0].DefaultView.RowFilter="SCM_FLAG = 'N'";
+            var resultdt = result.ResultDataSet.Tables[0].DefaultView.ToTable();
+
+
+            return resultdt;
         }
     }
 }

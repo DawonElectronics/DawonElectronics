@@ -53,20 +53,6 @@ namespace DAWON_UV_INVENTORY_PROTO
             InitializeComponent();
             this.Loaded += OnLoaded;
             _mainwindowViewModel.OnViewInitialized(this);
-
-            //System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor> colors = new System.Collections.ObjectModel.ObservableCollection<Syncfusion.Windows.Tools.Controls.CustomColor>();
-            //colors.Add(new CustomColor() { Color = Colors.White, ColorName = "White" });
-            //colors.Add(new CustomColor() { Color = Colors.Yellow, ColorName = "Yellow" });
-            //colors.Add(new CustomColor() { Color = Colors.LightCoral, ColorName = "Light Coral" });
-            //colors.Add(new CustomColor() { Color = Color.FromRgb(255, 192, 0) });
-            //colors.Add(new CustomColor() { Color = Color.FromRgb(83, 141, 213) });
-            //colors.Add(new CustomColor() { Color = Color.FromRgb(220, 120, 120) });
-
-            //((ColorPickerPalette)GridWip.RecordContextMenu.Items[7]).CustomColorsCollection = colors;
-
-
-
-            //(ComboBoxAdv)GridWip.Columns["MachineCs"].CellTemplate.FindName("cmbMachineCS", GridWip.Columns["MachineCs"].CellTemplate)
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -868,6 +854,16 @@ namespace DAWON_UV_INVENTORY_PROTO
                 if (!Application.Current.Windows.OfType<TrackInWindowYPE>().Any())
                 {
                     var trackinwindow = new TrackInWindowYPE();
+                    trackinwindow.Topmost = true;
+                    trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    trackinwindow.Show();
+                }
+            }
+            else if (_mainwindowViewModel.SelectedCustomerWo == "BHFLEX")
+            {
+                if (!Application.Current.Windows.OfType<TrackinWindowBH>().Any())
+                {
+                    var trackinwindow = new TrackinWindowBH();
                     trackinwindow.Topmost = true;
                     trackinwindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                     trackinwindow.Show();

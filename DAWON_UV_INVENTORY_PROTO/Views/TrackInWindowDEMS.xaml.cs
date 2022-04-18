@@ -720,14 +720,25 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
                     if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 1)
                     {
-                        //temp_tool.HoleCount = ldrillinfo.Where(t => t.ProcSeq == seq).First().HoleCount.Trim();
-                        tempTool.PrcLayerFrom1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerFrom;
-                        tempTool.PrcLayerTo1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
-                        tempTool.HoleCount1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().HoleCount;
-                        tempTool.HoleCount = "CS:" + tempTool.HoleCount1;
+                        if (ldrillinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode && (t.LaserProcType.Contains("PTH")))
+                            .Any())
+                        {
+                            tempTool.PrcLayerFrom1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerFrom;
+                            tempTool.PrcLayerTo1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
+                            tempTool.HoleCountPth = ldrillinfo.Where(t => t.ProcSeq == seq).First().HoleCount;
+                            tempTool.HoleCount = "PTH:" + tempTool.HoleCountPth;
+                        }
+                        else
+                        {
+                            tempTool.PrcLayerFrom1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerFrom;
+                            tempTool.PrcLayerTo1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().ProcLayerTo;
+                            tempTool.HoleCount1 = ldrillinfo.Where(t => t.ProcSeq == seq).First().HoleCount;
+                            tempTool.HoleCount = "CS:" + tempTool.HoleCount1;
+                        }
+                        
                     }
 
-                    if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 2)
+                    else if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 2)
                     {
                         tempTool.PrcLayerFrom1 = ldrillinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ProcLayerFrom;
                         tempTool.PrcLayerTo1 = ldrillinfo.Where(t => t.ProcSeq == tempTool.MesSeqCode).First().ProcLayerTo;
@@ -740,7 +751,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                         tempTool.HoleCount = "CS:" + tempTool.HoleCount1 + " SS:" + tempTool.HoleCount2;
                     }
 
-                    if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 3)
+                    else if (ldrillinfo.FindAll(f => f.ProcSeq == seq).Count() == 3)
                     {
                         tempTool.HoleCount = ldrillinfo.Where(t => t.ProcSeq == seq).Sum(s => Convert.ToInt32(s.HoleCount)).ToString().Trim();
 
@@ -769,13 +780,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
                     if (laserprctype.Count() == 1)
                     {
-                        if (laserprctype.Contains("PTH"))
+                        if (laserprctype[0].Contains("PTH"))
                         {
                             tempTool.PrcCode = "UV_SHT_DR_002";
                             tempTool.PrcName = "드릴(PTH)";
                         }
 
-                        else if (laserprctype.Contains("BVH"))
+                        else if (laserprctype[0].Contains("BVH"))
                         {
                             tempTool.PrcCode = "UV_SHT_DR_001";
                             tempTool.PrcName = "드릴(BVH)";
@@ -876,7 +887,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 tempTool.PrcName = "컷(BODY)";
 
                 var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-DEM-UV-";
-                var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                //var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).OrderBy(s => s.ProductId).Select(s => Convert.ToInt16(s.ProductId.Substring(10, 4))).LastOrDefault() + 1;
                 tempTool.ProductId = thisyear + prdidNo.ToString("D4");
             }
             //}

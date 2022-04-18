@@ -692,7 +692,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
 
 
                 var thisyear = DateTime.Now.Year.ToString().Substring(2) + "-DEP-UV-";
-                var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                //var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).Count() + 1;
+                var prdidNo = context.TbUvToolinfo.Where(x => x.ProductId.Contains(thisyear)).OrderBy(s => s.ProductId).Select(s => Convert.ToInt16(s.ProductId.Substring(10, 4))).LastOrDefault() + 1;
 
                 tempTool.ProductId = thisyear + prdidNo.ToString("D4");
 

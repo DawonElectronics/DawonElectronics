@@ -12,7 +12,7 @@
     Width="680"
     Height="450"
     d:DataContext="{d:DesignInstance viewmodel:TrackInWindowDemsViewModel}"
-    sfSkinManager:SfSkinManager.VisualStyle="Office2016White"
+    sfSkinManager:SfSkinManager.VisualStyle="FluentLight"
     mc:Ignorable="d">
     <syncfusion:ChromelessWindow.Resources>
         <Style TargetType="syncfusion:GridRowHeaderCell">
