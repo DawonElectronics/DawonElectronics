@@ -304,6 +304,17 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             }
         }
 
+        private ViewUvWorkorderDone? _selectedGridFinish;
+        public ViewUvWorkorderDone? SelectedGridFinish
+        {
+            get { return _selectedGridFinish; }
+            set
+            {
+                _selectedGridFinish = value;
+                OnPropertyChanged(nameof(SelectedGridFinish));
+            }
+        }
+
 
         private TbUvToolinfo? _selectedInputTool;
         public TbUvToolinfo? SelectedInputTool

@@ -1,8 +1,10 @@
-﻿using DAWON_UV_INVENTORY_PROTO.Models;
+﻿using ConnectorDEPKG.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+
+
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -11,16 +13,20 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         public DataTable? SegementDataTable { get; set; }
         public string WorkcenterId { get; set; }
-        private List<DemsRcvList>? _rcvLotlist;
-        public List<DemsRcvList>? RcvLotList
+        private List<DePkgRcvModelAfterValidation>? _rcvLotlist;
+        public List<DePkgRcvModelAfterValidation>? RcvLotList
         {
             get { return _rcvLotlist; }
-            set { _rcvLotlist = value; }
+            set
+            {
+                _rcvLotlist = value;
+                OnPropertyChanged(nameof(RcvLotList));
+            }
         }
 
         public TrackInWindowDepkgViewModel()
         {
-            RcvLotList = new List<DemsRcvList>();
+            RcvLotList = new List<DePkgRcvModelAfterValidation>();
         }
         private void OnPropertyChanged(String info)
         {

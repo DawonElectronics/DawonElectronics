@@ -9,9 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using AutoMapper;
+using Syncfusion.Data.Extensions;
 using DataRow = System.Data.DataRow;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
@@ -19,13 +22,64 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
     /// <summary>
     /// Interaction logic for TrackInWindow.xaml
     /// </summary>
+    ///
+    public class AutoMapperProfileDePkg : Profile
+    {
+
+        public AutoMapperProfileDePkg()
+        {
+            //源类=>目标类
+            //CreateMap<DogModel, Dog2Model>();
+
+            //DataTable=>Model
+            IMappingExpression<DataRow, DePkgRcvModelAfterValidation> mappingExpression;
+            mappingExpression = CreateMap<DataRow, DePkgRcvModelAfterValidation>();
+            mappingExpression.ForMember(d => d.IsRegist, o => o.MapFrom(s => s["IsRegist"]));
+            mappingExpression.ForMember(d => d.LOTID, o => o.MapFrom(s => s["LOTID"]));
+            mappingExpression.ForMember(d => d.CHK, o => o.MapFrom(s => s["CHK"]));
+            mappingExpression.ForMember(d => d.HotType, o => o.MapFrom(s => s["HotType"]));
+            mappingExpression.ForMember(d => d.IntransitTimeHour, o => o.MapFrom(s => s["IntransitTimeHour"]));
+            mappingExpression.ForMember(d => d.KSHORTNAME, o => o.MapFrom(s => s["KSHORTNAME"]));
+            mappingExpression.ForMember(d => d.KUNNR, o => o.MapFrom(s => s["KUNNR"]));
+            mappingExpression.ForMember(d => d.LAYERDIVISION, o => o.MapFrom(s => s["LAYERDIVISION"]));
+            mappingExpression.ForMember(d => d.LPST, o => o.MapFrom(s => s["LPST"]));
+            mappingExpression.ForMember(d => d.OrderPriority, o => o.MapFrom(s => s["OrderPriority"]));
+            mappingExpression.ForMember(d => d.PLANCOMPLETE, o => o.MapFrom(s => s["PLANCOMPLETE"]));
+            mappingExpression.ForMember(d => d.PLANEQUIPMENT, o => o.MapFrom(s => s["PLANEQUIPMENT"]));
+            mappingExpression.ForMember(d => d.PLANSTART, o => o.MapFrom(s => s["PLANSTART"]));
+            mappingExpression.ForMember(d => d.PROCESSSEQ, o => o.MapFrom(s => s["PROCESSSEQ"]));
+            mappingExpression.ForMember(d => d.PRODUCT_LAYER, o => o.MapFrom(s => s["PRODUCT_LAYER"]));
+            mappingExpression.ForMember(d => d.PannelQty, o => o.MapFrom(s => s["PannelQty"]));
+            mappingExpression.ForMember(d => d.PieceQty, o => o.MapFrom(s => s["PieceQty"]));
+            mappingExpression.ForMember(d => d.ProductCode, o => o.MapFrom(s => s["ProductCode"]));
+            mappingExpression.ForMember(d => d.SHIPTO, o => o.MapFrom(s => s["SHIPTO"]));
+            mappingExpression.ForMember(d => d.RunningTime, o => o.MapFrom(s => s["RunningTime"]));
+            mappingExpression.ForMember(d => d.ProductRevision, o => o.MapFrom(s => s["ProductRevision"]));
+            mappingExpression.ForMember(d => d.ProductDefinition, o => o.MapFrom(s => s["ProductDefinition"]));
+            mappingExpression.ForMember(d => d.SPECNR, o => o.MapFrom(s => s["SPECNR"]));
+            mappingExpression.ForMember(d => d.STATE, o => o.MapFrom(s => s["STATE"]));
+            mappingExpression.ForMember(d => d.SUPDA, o => o.MapFrom(s => s["SUPDA"]));
+            mappingExpression.ForMember(d => d.SqareMeter, o => o.MapFrom(s => s["SqareMeter"]));
+            mappingExpression.ForMember(d => d.StripQty, o => o.MapFrom(s => s["StripQty"]));
+            mappingExpression.ForMember(d => d.WORK_SEQ, o => o.MapFrom(s => s["WORK_SEQ"]));
+            mappingExpression.ForMember(d => d.TRANSFERPROC, o => o.MapFrom(s => s["TRANSFERPROC"]));
+            mappingExpression.ForMember(d => d.TRANSFERTIME, o => o.MapFrom(s => s["TRANSFERTIME"]));
+            mappingExpression.ForMember(d => d.WaitingTime, o => o.MapFrom(s => s["WaitingTime"]));
+            mappingExpression.ForMember(d => d.WTTIME, o => o.MapFrom(s => s["WTTIME"]));
+            mappingExpression.ForMember(d => d.WORK_SEQ_ASC, o => o.MapFrom(s => s["WORK_SEQ_ASC"]));
+
+        }
+    }
+
     public partial class TrackInWindowDepkg : ChromelessWindow
     {
 
         public TrackInWindowDepkgViewModel TrackinDepkgViewmodel = new TrackInWindowDepkgViewModel();
         DepkgHelper _depkgHelper = new DepkgHelper();
+        Regex _reDelot = new Regex(@".[0-9]{6}[-]?[0-9]{1}.[0-9]{2}.");
         private List<string> notRegistedTool = new List<string>();
-        public TrackInWindowDepkg()
+        private IMapper mapper;
+            public TrackInWindowDepkg()
         {
 
             InitializeComponent();
@@ -41,6 +95,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             var result = registed.Contains(tool);
             return result;
         }
+        public List<T> ReadData<T>(DataTable dt)
+        {
+            var configuration = new MapperConfiguration(a => { a.AddProfile(new AutoMapperProfileDePkg()); });
+            mapper = configuration.CreateMapper();
+            return mapper.Map<IEnumerable<DataRow>, List <T>>(dt.Rows.ToList<DataRow>());
+        }
         private void cmb_input_segment_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             var rcvdt = _depkgHelper.getRcvlotListDataTable();
@@ -55,7 +115,9 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     .ForEach(r => r["IsRegist"] = GetRegist(item));
             }
 
-            GridRcv.ItemsSource = rcvdt;
+            TrackinDepkgViewmodel.RcvLotList = ReadData<DePkgRcvModelAfterValidation>(rcvdt);
+
+            //GridRcv.ItemsSource = rcvdt;
 
             //Binding bindbg = new Binding();
             //bindbg.Converter = new GridTrackinDepkgColorConverter();           
@@ -712,5 +774,27 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         }
 
 
+        private void TboxLot_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (_reDelot.IsMatch(e.Key.ToString())) e.Handled = true;
+            var lot = _reDelot.Match(TboxLot.Text).Value;
+
+            foreach (var item in TrackinDepkgViewmodel.RcvLotList)
+            {
+                var record = item;
+                if (lot.Contains("-"))
+                {
+                    lot.Replace("-", "");
+                }
+                if (record.LOTID == lot)
+                {
+                    GridRcv.SelectedItems.Add(item);
+                    TboxLot.Text = string.Empty;
+                    TboxLot.Focus();
+                    break;
+                }
+
+            }
+        }
     }
 }

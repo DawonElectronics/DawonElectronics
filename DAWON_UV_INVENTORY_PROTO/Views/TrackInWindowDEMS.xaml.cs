@@ -1,5 +1,4 @@
 ﻿using ConnectorDEMS;
-using ConnectorDEMS.Models;
 using DAWON_UV_INVENTORY_PROTO.Models;
 using DAWON_UV_INVENTORY_PROTO.ViewModels;
 using Syncfusion.Windows.Shared;
@@ -10,20 +9,96 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
+using AutoMapper;
+using ConnectorDEMS.Models;
+using ConnectorDEPKG.Models;
+using Syncfusion.Data.Extensions;
+using MesLotDetailInfo = ConnectorDEMS.Models.MesLotDetailInfo;
 
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
     /// <summary>
     /// Interaction logic for TrackInWindow.xaml
     /// </summary>
+    ///
+    public class AutoMapperProfileDeMs : Profile
+    {
+
+        public AutoMapperProfileDeMs()
+        {
+            //源类=>目标类
+            //CreateMap<DogModel, Dog2Model>();
+
+            //DataTable=>Model
+            IMappingExpression<DataRow, DeMsRcvModelAfterValidation> mappingExpression;
+            mappingExpression = CreateMap<DataRow, DeMsRcvModelAfterValidation>();
+            mappingExpression.ForMember(d => d.IsRegist, o => o.MapFrom(s => s["IsRegist"]));
+            mappingExpression.ForMember(d => d.Businessunit, o => o.MapFrom(s => s["Businessunit"]));
+            mappingExpression.ForMember(d => d.Chk, o => o.MapFrom(s => s["Chk"]));
+            mappingExpression.ForMember(d => d.Confirm, o => o.MapFrom(s => s["Confirm"]));
+            mappingExpression.ForMember(d => d.ProductCode, o => o.MapFrom(s => s["ProductCode"]));
+            mappingExpression.ForMember(d => d.Defectpcsqty, o => o.MapFrom(s => s["Defectpcsqty"]));
+            mappingExpression.ForMember(d => d.Defectpnlqty, o => o.MapFrom(s => s["Defectpnlqty"]));
+            mappingExpression.ForMember(d => d.Defectsqaremeter, o => o.MapFrom(s => s["Defectsqaremeter"]));
+            mappingExpression.ForMember(d => d.Defectstripqty, o => o.MapFrom(s => s["Defectstripqty"]));
+            mappingExpression.ForMember(d => d.Duedate, o => o.MapFrom(s => s["Duedate"]));
+            mappingExpression.ForMember(d => d.FInsite, o => o.MapFrom(s => s["F_Insite"]));
+            mappingExpression.ForMember(d => d.FromVendorId, o => o.MapFrom(s => s["FromVendorId"]));
+            mappingExpression.ForMember(d => d.Fromlocation, o => o.MapFrom(s => s["Fromlocation"]));
+            mappingExpression.ForMember(d => d.Ftrmi, o => o.MapFrom(s => s["Ftrmi"]));
+            mappingExpression.ForMember(d => d.Hottype, o => o.MapFrom(s => s["Hottype"]));
+            mappingExpression.ForMember(d => d.Hottype1, o => o.MapFrom(s => s["Hottype1"]));
+            mappingExpression.ForMember(d => d.Inspectionmethod, o => o.MapFrom(s => s["Inspectionmethod"]));
+            
+            mappingExpression.ForMember(d => d.Ishold, o => o.MapFrom(s => s["Ishold"]));
+            mappingExpression.ForMember(d => d.Isinspectionactualresult, o => o.MapFrom(s => s["Isinspectionactualresult"]));
+            mappingExpression.ForMember(d => d.Isrepair, o => o.MapFrom(s => s["Isrepair"]));
+            
+            mappingExpression.ForMember(d => d.NInsite, o => o.MapFrom(s => s["N_Insite"]));
+            mappingExpression.ForMember(d => d.ToVendorId, o => o.MapFrom(s => s["ToVendorId"]));
+            mappingExpression.ForMember(d => d.Kname, o => o.MapFrom(s => s["Kname"]));
+            mappingExpression.ForMember(d => d.Kunnr, o => o.MapFrom(s => s["Kunnr"]));
+            mappingExpression.ForMember(d => d.Lotno, o => o.MapFrom(s => s["Lotno"]));
+            mappingExpression.ForMember(d => d.Lastsendtime, o => o.MapFrom(s => s["Lastsendtime"]));
+            mappingExpression.ForMember(d => d.Layer, o => o.MapFrom(s => s["Layer"]));
+            mappingExpression.ForMember(d => d.Lotid, o => o.MapFrom(s => s["Lotid"]));
+            mappingExpression.ForMember(d => d.Lotname, o => o.MapFrom(s => s["Lotname"]));
+            mappingExpression.ForMember(d => d.Mesprocessstate, o => o.MapFrom(s => s["Mesprocessstate"]));
+            mappingExpression.ForMember(d => d.Nextprocesssegmentid, o => o.MapFrom(s => s["Nextprocesssegmentid"]));
+            mappingExpression.ForMember(d => d.Nextprocesssegmentname, o => o.MapFrom(s => s["Nextprocesssegmentname"]));
+            mappingExpression.ForMember(d => d.Outsourcingcompany, o => o.MapFrom(s => s["Outsourcingcompany"]));
+            mappingExpression.ForMember(d => d.Pannelqty, o => o.MapFrom(s => s["Pannelqty"]));
+            mappingExpression.ForMember(d => d.Pieceqty, o => o.MapFrom(s => s["Pieceqty"]));
+            mappingExpression.ForMember(d => d.ProcessState, o => o.MapFrom(s => s["ProcessState"]));
+            mappingExpression.ForMember(d => d.Processsegment, o => o.MapFrom(s => s["Processsegment"]));
+            mappingExpression.ForMember(d => d.Processsegmentname, o => o.MapFrom(s => s["Processsegmentname"]));
+            mappingExpression.ForMember(d => d.Productdefinition, o => o.MapFrom(s => s["Productdefinition"]));
+            mappingExpression.ForMember(d => d.Productrevision, o => o.MapFrom(s => s["Productrevision"]));
+            mappingExpression.ForMember(d => d.Receivewaittime, o => o.MapFrom(s => s["Receivewaittime"]));
+            mappingExpression.ForMember(d => d.Spectype2, o => o.MapFrom(s => s["Spectype2"]));
+            mappingExpression.ForMember(d => d.Setlocation, o => o.MapFrom(s => s["Setlocation"]));
+            mappingExpression.ForMember(d => d.Sqaremeter, o => o.MapFrom(s => s["Sqaremeter"]));
+            mappingExpression.ForMember(d => d.State, o => o.MapFrom(s => s["State"]));
+            mappingExpression.ForMember(d => d.Stripqty, o => o.MapFrom(s => s["Stripqty"]));
+            mappingExpression.ForMember(d => d.Sublotmaterialid, o => o.MapFrom(s => s["Sublotmaterialid"]));
+            mappingExpression.ForMember(d => d.Tolocation, o => o.MapFrom(s => s["Tolocation"]));
+            mappingExpression.ForMember(d => d.Toolnumber, o => o.MapFrom(s => s["Toolnumber"]));
+            mappingExpression.ForMember(d => d.Usr02, o => o.MapFrom(s => s["Usr02"]));
+            mappingExpression.ForMember(d => d.Usr03, o => o.MapFrom(s => s["Usr03"]));
+            mappingExpression.ForMember(d => d.Vtext, o => o.MapFrom(s => s["Vtext"]));
+        }
+    }
     public partial class TrackInWindowDems : ChromelessWindow
     {
 
         public TrackInWindowDemsViewModel TrackinDemsViewmodel = new TrackInWindowDemsViewModel();
         DemsHelper _demsClient = new DemsHelper();
+        Regex _reDelot = new Regex(@".[0-9]{6}[-]?[0-9]{1}.[0-9]{2}.");
+        private IMapper mapper;
         public TrackInWindowDems()
         {
 
@@ -108,6 +183,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             var result = registed.Contains(tool);
             return result;
         }
+
+        public List<T> ReadData<T>(DataTable dt)
+        {
+            var configuration = new MapperConfiguration(a => { a.AddProfile(new AutoMapperProfileDeMs()); });
+            mapper = configuration.CreateMapper();
+            return mapper.Map<IEnumerable<DataRow>, List<T>>(dt.Rows.ToList<DataRow>());
+        }
         private void cmb_input_segment_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
@@ -121,8 +203,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 rcvdt.Select(string.Format("[TOOLNUMBER] = '{0}'", item)).ToList<DataRow>()
                     .ForEach(r => r["IsRegist"] = GetRegist(item));
             }
-
-            GridRcv.ItemsSource = rcvdt;
+            TrackinDemsViewmodel.RcvLotList = ReadData<DeMsRcvModelAfterValidation>(rcvdt);
+            //GridRcv.ItemsSource = rcvdt;
 
         }
         private void UpdateGridRcv()
@@ -283,6 +365,7 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             BtnAddOnly.IsEnabled = false;
             var selectedlist = GridRcv.SelectionController.SelectedRows;
             var rcvlist = new List<string>();
+
             string lot = string.Empty;
             var tool_prcname = string.Empty;
             var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
@@ -897,6 +980,25 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             //{ MessageBox.Show(ex.Message); }
 
             return tempTool;
+        }
+        private void TboxLot_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (_reDelot.IsMatch(e.Key.ToString())) e.Handled = true;
+            var lot = _reDelot.Match(TboxLot.Text).Value;
+
+            foreach (var item in TrackinDemsViewmodel.RcvLotList)
+            {
+                var record = item;
+
+                if (record.Lotid == lot || record.Lotno == lot)
+                {
+                    GridRcv.SelectedItems.Add(item);
+                    TboxLot.Text = string.Empty;
+                    TboxLot.Focus();
+                    break;
+                }
+
+            }
         }
 
 

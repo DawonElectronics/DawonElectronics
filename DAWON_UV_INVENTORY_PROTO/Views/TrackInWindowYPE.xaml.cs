@@ -433,9 +433,6 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             }
         }
 
-        private void TboxLot_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

@@ -2,6 +2,7 @@
 using Syncfusion.UI.Xaml.Grid;
 using System.Linq;
 using System.Windows;
+using DAWON_UV_INVENTORY_PROTO.Views;
 
 namespace DAWON_UV_INVENTORY_PROTO.ViewModels
 {
@@ -65,6 +66,32 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
         }
         #endregion
 
+        #region 출고 작업자 수정
 
+        static BaseCommand _editUserCommand;
+        public static BaseCommand EditUserCommand
+        {
+            get
+            {
+                _editUserCommand = new BaseCommand(EditUser);
+                return _editUserCommand;
+            }
+        }
+        private static void EditUser(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo)
+            {
+                var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorderDone;
+
+                if (!Application.Current.Windows.OfType<EditUserWindowFinish>().Any() && record != null)
+                {
+                    var mcWindow = new EditUserWindowFinish(obj);
+                    mcWindow.Topmost = true;
+                    mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                    mcWindow.Show();
+                }
+            }
+        }
+        #endregion
     }
 }

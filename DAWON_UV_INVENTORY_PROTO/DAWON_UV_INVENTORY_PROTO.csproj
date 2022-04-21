@@ -98,6 +98,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\EditUserWindowFinish.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ToolInfoEditorWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

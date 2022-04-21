@@ -702,9 +702,9 @@ namespace DAWON_UV_INVENTORY_PROTO.ViewModels
             {
                 var record = (obj as GridRecordContextMenuInfo).Record as ViewUvWorkorder;
 
-                if (!Application.Current.Windows.OfType<EditUserWindow>().Any() && record != null)
+                if (!Application.Current.Windows.OfType<EditUserWindowWip>().Any() && record != null)
                 {
-                    var mcWindow = new EditUserWindow(obj);
+                    var mcWindow = new EditUserWindowWip(obj);
                     mcWindow.Topmost = true;
                     mcWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                     mcWindow.Show();

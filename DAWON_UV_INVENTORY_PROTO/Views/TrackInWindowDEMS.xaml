@@ -50,27 +50,25 @@
             Margin="10,10"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
-            <syncfusion:SfTextInputLayout
-                Width="150"
-                Margin="5,5"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                Hint="대덕MS 작업장 선택">
-                <ComboBox
-                    x:Name="CmbInputSegment"
-                    Margin="5,5"
-                    HorizontalContentAlignment="Center"
-                    DisplayMemberPath="WORKCENTERNAME"
-                    ItemsSource="{Binding SegementDataTable}"
-                    SelectedValue="{Binding WorkcenterId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValuePath="WORKCENTERID"
-                    SelectionChanged="cmb_input_segment_SelectionChanged" />
-            </syncfusion:SfTextInputLayout>
+
+            <ComboBox
+                x:Name="CmbInputSegment"
+                Width="120"
+                Height="30"
+                Margin="10,10"
+                Padding="5,5"
+                HorizontalContentAlignment="Center"
+                DisplayMemberPath="WORKCENTERNAME"
+                ItemsSource="{Binding SegementDataTable}"
+                SelectedValue="{Binding WorkcenterId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="WORKCENTERID"
+                SelectionChanged="cmb_input_segment_SelectionChanged" />
+
             <Button
                 x:Name="BtnAddOnly"
-                Height="60"
-                Margin="20,5"
-                Padding="5,10"
+                Height="40"
+                Margin="10,10"
+                Padding="5,5"
                 Click="BtnAddOnly_OnClick"
                 Content="장부 등록만"
                 FontSize="16"
@@ -78,14 +76,24 @@
                 IsEnabled="True" />
             <Button
                 x:Name="BtnExeRcv"
-                Height="60"
-                Margin="20,5"
-                Padding="5,10"
+                Height="40"
+                Margin="10,10"
+                Padding="5,5"
                 Click="btn_exe_rcv_Click"
                 Content="장부 등록+MES받기"
                 FontSize="16"
                 FontWeight="Bold"
                 IsEnabled="True" />
+            <syncfusion:SfTextBoxExt
+                x:Name="TboxLot"
+                Width="200"
+                Height="40"
+                Margin="10,10"
+                Padding="5,5"
+                VerticalContentAlignment="Center"
+                FontSize="14"
+                KeyUp="TboxLot_OnKeyUp"
+                TextAlignment="Center" />
         </StackPanel>
 
         <syncfusion:SfDataGrid
@@ -96,7 +104,7 @@
             AutoGenerateColumns="False"
             CanMaintainScrollPosition="True"
             ColumnSizer="AutoWithLastColumnFill"
-            ItemsSource="{Binding RcvLotList}"
+            ItemsSource="{Binding RcvLotList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             MouseDoubleClick="grid_rcv_MouseDoubleClick"
             SelectionMode="Multiple"
             ShowRowHeader="True">

@@ -8,14 +8,14 @@ using System.Windows;
 namespace DAWON_UV_INVENTORY_PROTO.Views
 {
     /// <summary>
-    /// Interaction logic for EditUserWindow.xaml
+    /// Interaction logic for EditUserWindowWip.xaml
     /// </summary>
-    public partial class EditUserWindow : ChromelessWindow
+    public partial class EditUserWindowWip : ChromelessWindow
     {
         ViewUvWorkorder record;
         List<TbUsers> _users = new List<TbUsers>();
         GridRecordContextMenuInfo objsender = new GridRecordContextMenuInfo();
-        public EditUserWindow(object obj)
+        public EditUserWindowWip(object obj)
         {
             InitializeComponent();
 

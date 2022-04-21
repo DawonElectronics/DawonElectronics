@@ -684,7 +684,8 @@
                         SelectionUnit="Cell"
                         ShowRowHeader="True"
                         VirtualizingStackPanel.IsVirtualizing="True"
-                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"
+                        SortClickAction="SingleClick">
 
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="WaitTrackout" SortDirection="Descending" />
@@ -808,7 +809,7 @@
                                 MappingName="CreateTime"
                                 MaximumWidth="80"
                                 Pattern="ShortDate"
-                                TextAlignment="Center" />
+                                TextAlignment="Center"  />
 
                             <syncfusion:GridTextColumn
                                 Width="120"
@@ -1168,6 +1169,7 @@
                         FrozenColumnCount="3"
                         HeaderStyle="{StaticResource HeaderStyle}"
                         ItemsSource="{Binding WorkOrderListSearch, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedGridFinish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         RowHeight="30"
                         RowSelectionBrush="LightCyan"
                         ScrollMode="None"
@@ -1195,6 +1197,10 @@
                                     Command="{Binding Source={x:Static Member=viewmodel:GridFinishContextMenuCommands.CancelTrackoutRecordCommand}}"
                                     CommandParameter="{Binding}"
                                     Header="출고취소" />
+                                <MenuItem
+                                    Command="{Binding Source={x:Static Member=viewmodel:GridFinishContextMenuCommands.EditUserCommand}}"
+                                    CommandParameter="{Binding}"
+                                    Header="작업자 변경" />
                             </ContextMenu>
                         </syncfusion:SfDataGrid.RecordContextMenu>
 
