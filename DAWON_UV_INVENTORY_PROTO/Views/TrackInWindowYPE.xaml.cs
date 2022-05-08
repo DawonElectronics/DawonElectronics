@@ -90,21 +90,107 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
             
         }
 
-        private async void BtnReg_Click(object sender, RoutedEventArgs e)
+        private void GridRcv_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var rowdata = GridRcv.SelectedItem;
+                var pC = GridRcv.View.GetPropertyAccessProvider();
+
+                var tool = pC.GetValue(rowdata, "productdefid").ToString();
+                var lot = pC.GetValue(rowdata, "lotid").ToString();
+                var subrev = pC.GetValue(rowdata, "productrevision").ToString();
+                var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "wiptotalpnl"));
+                var prcname = pC.GetValue(rowdata, "processsegmentname").ToString();
+                bool issample = Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p");
+                var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
+                var isRegist = Convert.ToBoolean(pC.GetValue(rowdata, "IsRegist"));
+                var messeq = pC.GetValue(rowdata, "usersequence").ToString();
+                var state = pC.GetValue(rowdata, "state").ToString();
+                var transitstate = pC.GetValue(rowdata, "transitstate").ToString();
+                if (!isRegist)
+                {
+                    RegistTool(tool, subrev);
+                }
+
+
+
+                using (var context = new Db_Uv_InventoryContext())
+                {
+                    var inputTemp = new TbUvWorkorder();
+
+                    //고객사 선택, 필수항목으로 입력 여부 체크
+
+                    var cust = new TbCustomer();
+                    var selcust = "영풍전자";
+                    cust = context.TbCustomer.Where(x => x.CustName == selcust).FirstOrDefault();
+                    inputTemp.CustId = cust.CustId;
+
+                    //작성자 선택, 필수항목으로 입력 여부 체크
+
+                    var usr = new TbUsers();
+                    var seluser = MainWindow._mainwindowViewModel.SelectedUser;
+                    usr = context.TbUsers.Where(x => x.UserName == seluser).FirstOrDefault();
+                    inputTemp.TrackinUserId = user.UserId;
+
+                    //LOT입력, 필수항목으로 입력 여부 체크
+
+                    inputTemp.Lotid = lot;
+
+                    //툴입력, 필수항목으로 입력 여부 체크                
+                    var pid = context.TbUvToolinfo.Where(w => w.CustToolno == tool&&w.MesSeqCode.Contains(messeq) ).Select(x => x.ProductId).FirstOrDefault();
+
+
+                    inputTemp.ProductId = pid;
+                    inputTemp.SampleOrder = issample;
+                    inputTemp.Pnlqty = pnlqty;
+                    inputTemp.CreateTime = DateTime.Now;
+                    inputTemp.TrackinTime = DateTime.Now;
+                    inputTemp.Txid = Guid.NewGuid();
+                    var lotcount = context.TbUvWorkorder.Where(x => x.Lotid == lot && x.IsDone == false && x.ProductId == pid).Count();
+                    if (lotcount == 0)
+                    {
+                        context.TbUvWorkorder.AddAsync(inputTemp);
+                        context.SaveChanges();
+                        //ExecuteRcv(lot);
+                        UpdateGridRcv();
+                    }
+                    else if (lotcount != 0)
+                    {
+                        if (MessageBox.Show("중복된 LOT가 있습니다 추가하시겠습니까?", "중복 LOT 확인", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            context.TbUvWorkorder.AddAsync(inputTemp);
+                            context.SaveChanges();
+                            //ExecuteRcv(lot);
+                            UpdateGridRcv();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                UpdateGridRcv();
+            }
+        }
+
+
+       
+        private async void RegistTool(string tool, string subrev)
         {
             var itemafter = new YPToolInfo();
             var rowdata = GridRcv.SelectedItem;
             var pC = GridRcv.View.GetPropertyAccessProvider();
 
-            var tool = pC.GetValue(rowdata, "processdefid").ToString();
-            //var tool = "H580035-D";
-            var lot = pC.GetValue(rowdata, "lotid").ToString();
-            var subrev = pC.GetValue(rowdata, "productrevision").ToString();
-            //var subrev = "0";
-            var prccode = pC.GetValue(rowdata, "processsegmentid").ToString();
-            var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "wiptotalpnl"));
+            //var tool = pC.GetValue(rowdata, "processdefid").ToString();
+            
+            //var lot = pC.GetValue(rowdata, "lotid").ToString();
+            //var subrev = pC.GetValue(rowdata, "productrevision").ToString();
+            
+            //var prccode = pC.GetValue(rowdata, "processsegmentid").ToString();
+            //var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "wiptotalpnl"));
             var issample = (pC.GetValue(rowdata, "lottype").ToString() == "양산") ? false : true;
-            var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
+            //var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
             
             var yptoollist = await ypeHelper.QryYPToolinfoList(tool, subrev);
             yptoollist = yptoollist.OrderBy(x => x.MesSeqCode).ToList<YPToolInfo>();
@@ -373,10 +459,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 foreach (var item in TrackinYpeViewmodel.RcvLotList)
                 {
                     WipModelAfterToolValidation record = item;
-                    
-                    
-                    
-                     if (record.lotid == a )
+
+                    if (record.lotid == a )
                     {
                         //TrackinYpeViewmodel.SelectedItem = item;
                         GridRcv.SelectedItems.Add(item);

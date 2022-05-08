@@ -126,31 +126,31 @@
                 <syncfusion:GridTextColumn
                     Width="80"
                     HeaderText="공정명"
-                    MappingName="PROCESSSEGMENTNAME"
+                    MappingName="Processsegmentname"
                     TextAlignment="Center" />
                 <syncfusion:GridTextColumn
                     Width="180"
                     HeaderText="모델명"
-                    MappingName="PRODUCTDEFINITION"
+                    MappingName="Productdefinition"
                     TextAlignment="Center" />
                 <syncfusion:GridTextColumn
                     Width="80"
                     HeaderText="REV"
-                    MappingName="PRODUCTREVISION"
+                    MappingName="Productrevision"
                     TextAlignment="Center" />
                 <syncfusion:GridTextColumn
                     Width="110"
                     HeaderText="TOOL"
-                    MappingName="TOOLNUMBER"
+                    MappingName="Toolnumber"
                     TextAlignment="Center" />
                 <syncfusion:GridTextColumn
                     Width="80"
                     HeaderText="수량"
-                    MappingName="PANNELQTY"
+                    MappingName="Pannelqty"
                     TextAlignment="Center" />
                 <syncfusion:GridTextColumn
                     HeaderText="LOT"
-                    MappingName="LOTNAME"
+                    MappingName="Lotname"
                     TextAlignment="Center" />
             </syncfusion:SfDataGrid.Columns>
 

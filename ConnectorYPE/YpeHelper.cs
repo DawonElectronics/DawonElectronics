@@ -261,5 +261,35 @@ namespace ConnectorYPE
             return resultList;
         }
 
+        private async Task<bool> ExecuteRcv(string lot,string state, string transitstate)
+        {
+            bool result = false;
+
+            if (state == "인수대기")
+            {
+                if (transitstate == "물류창고입고대기")
+                {
+
+                }
+                else if (transitstate == "물류창고입고")
+                {
+
+                }
+                else if (transitstate == "물류창고출고")
+                {
+
+                }
+            }
+
+            //var dt = client.ExecCommandAsync(qrymsg).Result.DATASET.Tables["Reply"].Rows[0]["STATE"];
+            //if ((bool)dt == true)
+            //{ result = true; }
+
+            
+            return result;
+        }
+       
+    
+
     }
 }

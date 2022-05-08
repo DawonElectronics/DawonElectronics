@@ -210,10 +210,23 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
         private void UpdateGridRcv()
         {
 
+            //var rcvdt = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
+
+            //rcvdt.Columns.Add("IsRegist");
+
+            //var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("TOOLNUMBER")).ToList<string>();
+
+            //foreach (var item in toollist)
+            //{
+            //    rcvdt.Select(string.Format("[TOOLNUMBER] = '{0}'", item)).ToList<DataRow>()
+            //        .ForEach(r => r["IsRegist"] = GetRegist(item));
+            //}
+
+            //GridRcv.ItemsSource = rcvdt;
+
             var rcvdt = de_ms_qry_rcv_lotlist(TrackinDemsViewmodel.WorkcenterId);
 
             rcvdt.Columns.Add("IsRegist");
-
             var toollist = rcvdt.AsEnumerable().Select(w => w.Field<string>("TOOLNUMBER")).ToList<string>();
 
             foreach (var item in toollist)
@@ -221,8 +234,8 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 rcvdt.Select(string.Format("[TOOLNUMBER] = '{0}'", item)).ToList<DataRow>()
                     .ForEach(r => r["IsRegist"] = GetRegist(item));
             }
-
-            GridRcv.ItemsSource = rcvdt;
+            TrackinDemsViewmodel.RcvLotList = ReadData<DeMsRcvModelAfterValidation>(rcvdt);
+            //GridRcv.ItemsSource = rcvdt;
 
         }
         private DataTable de_ms_qry_rcv_lotlist(string workcenter)
@@ -278,13 +291,13 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                 var rowdata = GridRcv.SelectedItem;
                 var pC = GridRcv.View.GetPropertyAccessProvider();
 
-                var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
-                var lot = pC.GetValue(rowdata, "LOTID") as String;
-                var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
+                var tool = pC.GetValue(rowdata, "Toolnumber") as String;
+                var lot = pC.GetValue(rowdata, "Lotid") as String;
+                var prcname = pC.GetValue(rowdata, "Processsegmentname") as String;
                 var workcenter = TrackinDemsViewmodel.WorkcenterId;
-                var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
+                var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "Pannelqty"));
                 var lotdetailinfo = _demsClient.MesLotDetailInfoQry(lot, tool);
-                var fromlayer = pC.GetValue(rowdata, "USR02") as String;
+                var fromlayer = pC.GetValue(rowdata, "Usr02") as String;
                 var user = MainWindow._mainwindowViewModel.UserList.Where(x => x.UserName == MainWindow._mainwindowViewModel.SelectedUser).First();
                 bool issample = false;
                 if (Char.IsLetter(lot, 0) && !lot.ToLower().StartsWith("p"))
@@ -377,12 +390,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     {
                         var rowdata = item.RowData;
                         var pC = GridRcv.View.GetPropertyAccessProvider();
-                        var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
-                        lot = pC.GetValue(rowdata, "LOTID") as String;
-                        var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
+                        var tool = pC.GetValue(rowdata, "Toolnumber") as String;
+                        lot = pC.GetValue(rowdata, "Lotid") as String;
+                        var prcname = pC.GetValue(rowdata, "Processsegmentname") as String;
                         var workcenter = TrackinDemsViewmodel.WorkcenterId;
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
-                        var fromlayer = pC.GetValue(rowdata, "USR02") as String;
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "Pannelqty"));
+                        var fromlayer = pC.GetValue(rowdata, "Usr02") as String;
                         var lotdetailinfo = new MesLotDetailInfo();
                         bool issample = false;
 
@@ -490,12 +503,12 @@ namespace DAWON_UV_INVENTORY_PROTO.Views
                     {
                         var rowdata = item.RowData;
                         var pC = GridRcv.View.GetPropertyAccessProvider();
-                        var tool = pC.GetValue(rowdata, "TOOLNUMBER") as String;
-                        lot = pC.GetValue(rowdata, "LOTID") as String;
-                        var prcname = pC.GetValue(rowdata, "PROCESSSEGMENTNAME") as String;
+                        var tool = pC.GetValue(rowdata, "Toolnumber") as String;
+                        lot = pC.GetValue(rowdata, "Lotid") as String;
+                        var prcname = pC.GetValue(rowdata, "Processsegmentname") as String;
                         var workcenter = TrackinDemsViewmodel.WorkcenterId;
-                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "PANNELQTY"));
-                        var fromlayer = pC.GetValue(rowdata, "USR02") as String;
+                        var pnlqty = Convert.ToInt16(pC.GetValue(rowdata, "Pannelqty"));
+                        var fromlayer = pC.GetValue(rowdata, "Usr02") as String;
 
                         var lotdetailinfo = new MesLotDetailInfo();
                         bool issample = false;
